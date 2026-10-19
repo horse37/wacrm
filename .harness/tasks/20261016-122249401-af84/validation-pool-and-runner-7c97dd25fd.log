@@ -1,0 +1,8 @@
+﻿Disposable PostgreSQL postgres:15, --network none, tmpfs data directory, synthetic per-run passwords.
+Bootstrap: scripts/testing/postgres-migration-bootstrap.sql (test-only roles).
+== pool-runtime: node exit code 0
+v22.23.3
+pool runtime integration SUCCESS: user=wacrm_runtime application_name=wacrm-web select=ok create_table=denied(42501)
+Validation failure: node:internal/modules/run_main:123
+Cleanup: no residual task resources
+Overall result: FAILURE

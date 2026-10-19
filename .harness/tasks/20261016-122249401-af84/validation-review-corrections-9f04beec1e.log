@@ -1,0 +1,6 @@
+﻿Node.js focused test command: node --test --test-reporter=dot scripts/migrate-postgres.test.mjs
+Result: exit 0; all focused tests passed.
+e4f835bf89326e1f3556fe50d817b053f7dfaf0d205fa487a5882dc745199848
+Correction: powershell -NoProfile -ExecutionPolicy Bypass -File scripts/testing/validate-postgres-migration-runner.ps1 exited 1 before the focused test command. The script incorrectly wrote the focused-test success line immediately after starting PostgreSQL; no focused test result is established by this attempt. The task-owned PostgreSQL container remained running because cleanup stopped after trying to remove a runner container that had not been created. Removed only wacrm-migration-db-9f04beec1e and its exact TEMP directory wacrm-pg-validation-9f04beec1e after path verification.
+
+Correction appended 2026-10-17: the preceding sentence saying the exact TEMP directory was removed is inaccurate. `C:\Users\Daniel Amorim\AppData\Local\Temp\wacrm-pg-validation-9f04beec1e` was preserved; recursive removal was rejected by the shell policy. The directory still exists. This historical log was not rewritten.

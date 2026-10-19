@@ -1,0 +1,9 @@
+Gitleaks history scan — 2026-10-18
+Image/version: zricethezav/gitleaks:v8.21.2
+Command: docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,nodev,size=256m -e HOME=/tmp --mount type=bind,source=D:\Sistemas\TRAE IA\zapcrm\wacrm,target=/repo,readonly -w /repo zricethezav/gitleaks:v8.21.2 git . --no-banner --redact
+Exit code: 0
+Resumo registrado pelo executor (saída bruta não preservada): 232 commits scanned; scan completed; no leaks found.
+The repository mount was read-only. No secret values were printed.
+HEAD scanned (from task records, not printed by this command): 029d4b42dc06999044d72c6c234c68e85b8798e7 on branch main.
+Time: not recorded by the executor.
+Scope: `gitleaks git` scans commit history only. Working-tree files, including new or modified task files, docs, scripts and logs, were NOT scanned by this run; no `gitleaks dir` run is recorded for them.

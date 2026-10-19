@@ -1,0 +1,5 @@
+Command: powershell -NoProfile -ExecutionPolicy Bypass -File scripts/testing/validate-pool-and-runner.ps1
+
+added 14 packages in 2s
+SUCCESS: pool runtime and runner fixture; log D:\Sistemas\TRAE IA\zapcrm\wacrm\.harness\tasks\20261016-122249401-af84\validation-pool-and-runner-2b82bdadbf.log
+Exit code: 0

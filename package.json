@@ -31,11 +31,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "zap-lead:heartbeat-scheduler": "node scripts/zap-lead-heartbeat-scheduler.mjs",
+    "test:zap-lead:heartbeat-scheduler": "node --test scripts/zap-lead-heartbeat-scheduler.test.mjs",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
+    "test:postgres-migrations": "node --test scripts/migrate-postgres.test.mjs",
+    "db:migrate": "node scripts/migrate-postgres.mjs",
     "test:watch": "vitest"
   },
   "dependencies": {
@@ -53,6 +57,7 @@
     "lucide-react": "^1.18.0",
     "next": "16.2.6",
     "opus-recorder": "^8.0.5",
+    "pg": "^8.16.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.8.1",
@@ -64,6 +69,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^25",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

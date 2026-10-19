@@ -1,0 +1,5 @@
+﻿Node process exit code: 0
+v22.23.3
+pool runtime integration SUCCESS: user=wacrm_runtime application_name=wacrm-web select=ok create_table=denied(42501)
+Cleanup: no residual task resources
+Overall result: SUCCESS

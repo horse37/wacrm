@@ -1,0 +1,10 @@
+﻿Validation failure: docker run failed with exit 71
+
+PowerShell location: No D:\Sistemas\TRAE IA\zapcrm\wacrm\scripts\testing\validate-postgres-migration-runner.ps1:34 caractere:5
++     throw "docker $($Arguments[0]) failed with exit $code`n$detail"
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Primary validation failure: docker run failed with exit 71
+
+Cleanup failures:
+- Could not inspect task-owned container wacrm-migration-runner-a12fb2c786 during cleanup (exit 72).
+- Could not inspect task-owned container wacrm-migration-db-a12fb2c786 during cleanup (exit 72).

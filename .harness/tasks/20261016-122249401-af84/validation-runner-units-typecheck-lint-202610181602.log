@@ -1,0 +1,203 @@
+CI_EXIT=0
+== runner unit tests
+TAP version 13
+# Subtest: discovers SQL migrations in numeric order and hashes their exact contents
+ok 1 - discovers SQL migrations in numeric order and hashes their exact contents
+  ---
+  duration_ms: 24.792073
+  type: 'test'
+  ...
+# Subtest: rejects SQL files without a numeric migration prefix of three to nine digits
+ok 2 - rejects SQL files without a numeric migration prefix of three to nine digits
+  ---
+  duration_ms: 25.095598
+  type: 'test'
+  ...
+# Subtest: accepts current three-digit and future four-digit migration prefixes in numeric order
+ok 3 - accepts current three-digit and future four-digit migration prefixes in numeric order
+  ---
+  duration_ms: 7.584746
+  type: 'test'
+  ...
+# Subtest: rejects a four-digit prefix that duplicates a three-digit version
+ok 4 - rejects a four-digit prefix that duplicates a three-digit version
+  ---
+  duration_ms: 5.986076
+  type: 'test'
+  ...
+# Subtest: rejects duplicate migration versions rather than applying ambiguous order
+ok 5 - rejects duplicate migration versions rather than applying ambiguous order
+  ---
+  duration_ms: 7.68935
+  type: 'test'
+  ...
+# Subtest: applies migrations in order under the advisory lock and records checksums
+ok 6 - applies migrations in order under the advisory lock and records checksums
+  ---
+  duration_ms: 9.027875
+  type: 'test'
+  ...
+# Subtest: replay skips already applied migrations without executing their SQL again
+ok 7 - replay skips already applied migrations without executing their SQL again
+  ---
+  duration_ms: 8.448422
+  type: 'test'
+  ...
+# Subtest: rejects a changed checksum before executing an applied migration
+ok 8 - rejects a changed checksum before executing an applied migration
+  ---
+  duration_ms: 4.960394
+  type: 'test'
+  ...
+# Subtest: rolls back a failed migration and releases the role and advisory lock
+ok 9 - rolls back a failed migration and releases the role and advisory lock
+  ---
+  duration_ms: 7.966426
+  type: 'test'
+  ...
+# Subtest: rejects a superuser migration login before acquiring the advisory lock
+ok 10 - rejects a superuser migration login before acquiring the advisory lock
+  ---
+  duration_ms: 5.036494
+  type: 'test'
+  ...
+# Subtest: rejects migration login membership in roles beyond the migration owner
+ok 11 - rejects migration login membership in roles beyond the migration owner
+  ---
+  duration_ms: 5.091756
+  type: 'test'
+  ...
+# Subtest: rejects migration owner membership in additional roles
+ok 12 - rejects migration owner membership in additional roles
+  ---
+  duration_ms: 4.458274
+  type: 'test'
+  ...
+# Subtest: rejects a superuser migration owner before taking the advisory lock
+ok 13 - rejects a superuser migration owner before taking the advisory lock
+  ---
+  duration_ms: 4.47509
+  type: 'test'
+  ...
+# Subtest: rejects a login-capable migration owner before taking the advisory lock
+ok 14 - rejects a login-capable migration owner before taking the advisory lock
+  ---
+  duration_ms: 5.843822
+  type: 'test'
+  ...
+# Subtest: rejects migration login or owner roles with elevated PostgreSQL attributes
+ok 15 - rejects migration login or owner roles with elevated PostgreSQL attributes
+  ---
+  duration_ms: 35.736628
+  type: 'test'
+  ...
+# Subtest: normalizes CRLF checksums and accepts a legacy raw CRLF checksum
+ok 16 - normalizes CRLF checksums and accepts a legacy raw CRLF checksum
+  ---
+  duration_ms: 10.728091
+  type: 'test'
+  ...
+# Subtest: rejects an unknown migration version already present in the ledger
+ok 17 - rejects an unknown migration version already present in the ledger
+  ---
+  duration_ms: 4.513084
+  type: 'test'
+  ...
+# Subtest: rejects a ledger gap instead of applying later migrations out of order
+ok 18 - rejects a ledger gap instead of applying later migrations out of order
+  ---
+  duration_ms: 5.21349
+  type: 'test'
+  ...
+# Subtest: rejects a migration name mismatch for a version already in the ledger
+ok 19 - rejects a migration name mismatch for a version already in the ledger
+  ---
+  duration_ms: 6.495776
+  type: 'test'
+  ...
+# [postgres-migrations] applied 001_first.sql
+# Subtest: bounds advisory-lock waits and propagates unlock failures
+ok 20 - bounds advisory-lock waits and propagates unlock failures
+  ---
+  duration_ms: 16.952375
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 343.294487
+RUNNER_UNIT_EXIT=0
+== pool vitest
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90m/work[39m
+
+ [32m✓[39m src/lib/db/postgres-pool.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 124[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 19:03:34
+[2m   Duration [22m 572ms[2m (transform 297ms, setup 0ms, import 241ms, tests 124ms, environment 0ms)[22m
+
+POOL_VITEST_EXIT=0
+== typecheck
+
+> wacrm@0.2.2 typecheck
+> tsc --noEmit
+
+TYPECHECK_EXIT=0
+== lint
+
+> wacrm@0.2.2 lint
+> eslint
+
+
+/work/src/app/(dashboard)/inbox/page.tsx
+  11:10  warning  'toast' is defined but never used  @typescript-eslint/no-unused-vars
+
+/work/src/app/(dashboard)/pipelines/page.tsx
+  178:7  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/set-state-in-effect')
+
+/work/src/app/api/whatsapp/webhook/route.ts
+  4:23  warning  'downloadMedia' is defined but never used  @typescript-eslint/no-unused-vars
+
+/work/src/components/contacts/contact-detail-view.tsx
+   8:29  warning  'ContactTag' is defined but never used          @typescript-eslint/no-unused-vars
+   8:67  warning  'ContactCustomValue' is defined but never used  @typescript-eslint/no-unused-vars
+  22:10  warning  'Badge' is defined but never used               @typescript-eslint/no-unused-vars
+  23:10  warning  'ScrollArea' is defined but never used          @typescript-eslint/no-unused-vars
+  34:3   warning  'X' is defined but never used                   @typescript-eslint/no-unused-vars
+
+/work/src/components/contacts/contact-form.tsx
+  25:10  warning  'Badge' is defined but never used                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  80:6   warning  React Hook useEffect has missing dependencies: 'contactTags' and 'fetchTags'. Either include them or remove the dependency array. If 'setSelectedTagIds' needs the current value of 'contactTags', you can also switch to useReducer instead of useState and read 'contactTags' in the reducer  react-hooks/exhaustive-deps
+
+/work/src/components/inbox/contact-sidebar.tsx
+    6:10  warning  'cn' is defined but never used                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   13:3   warning  'User' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  137:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/work/src/components/inbox/conversation-list.tsx
+   16:10  warning  'Button' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  263:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/work/src/components/inbox/message-bubble.tsx
+  110:5  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/work/src/components/inbox/message-composer.tsx
+  115:3  warning  'conversationId' is defined but never used  @typescript-eslint/no-unused-vars
+
+/work/src/components/inbox/message-thread.tsx
+  36:10  warning  'ScrollArea' is defined but never used  @typescript-eslint/no-unused-vars
+
+/work/src/middleware.ts
+  16:48  warning  'options' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 19 problems (0 errors, 19 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+
+LINT_EXIT=0

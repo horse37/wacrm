@@ -1,0 +1,34 @@
+﻿Disposable PostgreSQL container started:
+f46e2df8bec121abac822d21b4b95858bf950b9f0eab56a5a6d456e107d3f653
+Node.js focused test command: node --test --test-reporter=dot scripts/migrate-postgres.test.mjs
+Result: exit 0; all focused tests passed.
+..................
+Disposable PostgreSQL 15: Docker --network none; data directory tmpfs; synthetic bootstrap credentials.
+Bootstrap psql and every probe used -X -v ON_ERROR_STOP=1.
+Lock holder was observed active in pg_stat_activity before starting the runner contender.
+The lock contender waited at least two seconds, then applied migrations; the next invocation replayed.
+lock contender exit 0 after 4.72s: [postgres-migrations] applied 001_initial_schema.sql [postgres-migrations] applied 002_pipelines_enhancements.sql [postgres-migrations] applied 003_broadcast_recipient_wamid.sql [postgres-migrations] applied 004_contact_delete_set_null.sql [postgres-migrations] applied 005_broadcast_counts_incremental.sql [postgres-migrations] applied 006_automations.sql [postgres-migrations] applied 007_automations_increment_counter.sql [postgres-migrations] applied 008_profile_avatars_storage.sql [postgres-migrations] applied 009_message_actions.sql [postgres-migrations] applied 010_flows.sql [postgres-migrations] applied 011_profile_beta_features.sql [postgres-migrations] applied 012_flows_increment_counter.sql [postgres-migrations] applied 013_whatsapp_config_phone_number_id_unique.sql [postgres-migrations] applied 014_message_templates_meta_integration.sql [postgres-migrations] applied 015_whatsapp_config_registration.sql [postgres-migrations] applied 016_flow_media.sql [postgres-migrations] applied 017_account_sharing.sql [postgres-migrations] applied 018_account_member_rpcs.sql [postgres-migrations] applied 019_invitation_rpcs.sql [postgres-migrations] applied 020_account_sharing_followups.sql [postgres-migrations] applied 021_account_default_currency.sql [postgres-migrations] applied 022_contact_phone_dedup.sql [postgres-migrations] applied 023_chat_media.sql [postgres-migrations] applied 024_zap_lead_integrations.sql [postgres-migrations] applied 025_zap_lead_events_and_heartbeat.sql [postgres-migrations] applied 026_zap_lead_generation_safe_heartbeat.sql [postgres-migrations] applied 027_restrict_broadcast_recompute_execute.sql [postgres-migrations] complete: applied=27, skipped=0, total=27
+replay exit 0: [postgres-migrations] complete: applied=0, skipped=27, total=27
+Role-boundary probe output:
+DO
+DO
+psql:/source/.harness/tasks/20261016-122249401-af84/role-boundary-probe.sql:121: NOTICE:  runtime/job SUCCESS: explicit bootstrap CONNECT grant present; selected effective ACL checks passed; PUBLIC defaults are reported separately
+wacrm_runtime|t|t|f|f|12
+wacrm_job|t|t|f|f|12
+psql:/source/.harness/tasks/20261016-122249401-af84/role-boundary-probe.sql:181: NOTICE:  function ACL matrix SUCCESS: helper grants and direct trigger/recompute denials match policy
+DO
+BEGIN
+GRANT
+SET
+DO
+psql:/source/.harness/tasks/20261016-122249401-af84/role-boundary-probe.sql:201: NOTICE:  anon query denied at is_account_member as expected
+ROLLBACK
+BEGIN
+psql:/source/.harness/tasks/20261016-122249401-af84/role-boundary-probe.sql:255: NOTICE:  auth and broadcast trigger execution SUCCESS after direct EXECUTE revocations
+DO
+ROLLBACK
+pg_dump/pg_restore: full database dump included public, auth, storage, and publication objects; restore used --no-owner --clean --if-exists --exit-on-error.
+Restore comparison: exact sorted manifest match for migration ledger/checksums, tables, columns/defaults, RLS policy definitions, auth.users trigger definitions, and publications.
+Auth trigger manifest:
+auth-trigger|on_auth_user_created|CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION handle_new_user()|handle_new_user()
+Overall result: SUCCESS; all task-owned containers removed and data existed only in tmpfs.

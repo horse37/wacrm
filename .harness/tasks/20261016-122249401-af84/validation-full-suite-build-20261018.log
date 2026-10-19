@@ -1,0 +1,112 @@
+CI_EXIT=0
+== npm test
+
+> wacrm@0.2.2 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90m/work[39m
+
+ [32m✓[39m src/lib/flows/edges.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/template-validators.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/lib/automations/validate.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+[90mstderr[2m | src/lib/automations/engine.test.ts[2m > [22m[2mrunAutomationsForTrigger — tenant isolation[2m > [22m[2mrefuses to dispatch when the contact is not in the account (GHSA-63cv-2c49-m5v3)
+[22m[39m[automations] contact not in account, refusing dispatch victim-contact-uuid
+
+ [32m✓[39m src/lib/whatsapp/phone-utils.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/client.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+ [32m✓[39m src/lib/automations/engine.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/template-send-builder.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/template-webhook.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/lib/flows/validate.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/template-lifecycle.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/meta-api.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/credentials.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m src/app/api/zap-lead/events/stream/route.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 87[2mms[22m[39m
+ [32m✓[39m src/app/api/zap-lead/webhook/route.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 64[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/registration.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/encryption.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/lib/auth/invitations.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/lib/flows/fallback.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/analysis-matrix.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/lib/flows/engine.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/lib/auth/roles.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/template-components.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/app/api/zap-lead/registration/route.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/leads.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/lib/db/postgres-pool.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 165[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/events.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/realtime.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/lib/dashboard/date-utils.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/lib/flows/layout.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+ [32m✓[39m src/lib/contacts/dedupe.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/heartbeat.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/lib/rate-limit.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/meta-api.resumable.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+[90mstderr[2m | src/lib/whatsapp/webhook-signature.test.ts[2m > [22m[2mverifyMetaWebhookSignature[2m > [22m[2mfail-closed when secret is missing[2m > [22m[2mrejects even a correctly-formed signature when no secret is configured
+[22m[39m[webhook] META_APP_SECRET is not set — rejecting request. Configure the env var (Meta → App Settings → Basic → App Secret) to enable signature verification.
+
+ [32m✓[39m src/lib/whatsapp/webhook-signature.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/indicators.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/template-header-handle.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/app/api/zap-lead/indicators/route.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/components/flows/flow-editor-state.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/app/api/zap-lead/leads/route.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/app/api/zap-lead/analysis-matrix/route.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/meta-api.media.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/zap-lead-analysis-matrix.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 231[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/registration.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/zap-lead-indicators.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m src/lib/zap-lead/webhook.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/lib/broadcast-status.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/lib/currency.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m src/lib/contacts/parse-contact-csv.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/lib/whatsapp/template-status-normalize.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/lib/storage/upload-media.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/app/api/zap-lead/heartbeat/cron/route.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/zap-lead-lead-form.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/app/(dashboard)/leads/page.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m53 passed[39m[22m[90m (53)[39m
+[2m      Tests [22m [1m[32m554 passed[39m[22m[90m (554)[39m
+[2m   Start at [22m 18:06:38
+[2m   Duration [22m 3.46s[2m (transform 15.41s, setup 0ms, import 22.31s, tests 1.96s, environment 11ms)[22m
+
+TEST_EXIT=0
+== npm run build
+
+> wacrm@0.2.2 build
+> next build
+
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+▲ Next.js 16.2.6 (Turbopack)
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 17.5s
+  Running TypeScript ...
+  Finished TypeScript in 20.1s ...
+  Collecting page data using 15 workers ...
+⚠ Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 15 workers (0/37) ...
+  Generating static pages using 15 workers (9/37) 
+  Generating static pages using 15 workers (18/37) 
+Error occurred prerendering page "/forgot-password". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: @supabase/ssr: Your project's URL and API key are required to create a Supabase client!
+
+Check your Supabase project's API settings to find these values
+
+https://supabase.com/dashboard/project/_/settings/api
+    at <unknown> (https://supabase.com/dashboard/project/_/settings/api)
+    at <unknown> (.next/server/chunks/ssr/_05ufb75._.js:55:30)
+    at <unknown> (.next/server/chunks/ssr/_05ufb75._.js:59:4496)
+    at <unknown> (.next/server/chunks/ssr/_0ri8h9.._.js:1:6286) {
+  digest: '3966662168'
+}
+Export encountered an error on /(auth)/forgot-password/page: /forgot-password, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+BUILD_EXIT=1

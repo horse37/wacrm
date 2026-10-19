@@ -1,0 +1,9 @@
+# Gitleaks 8.21.2 — árvore de trabalho — 2026-10-18 (horário do log do gitleaks: 6:05PM, fuso do container)
+Imagem: zricethezav/gitleaks:v8.21.2, container --rm, --network none, --read-only, tmpfs em /tmp.
+Origem: bind mount somente leitura do repo em /source; cópia por tar para /tmp/work excluindo ./node_modules, ./.next e ./.git. Demais pastas (.harness, .claude, .serena, docs, scripts, src) entraram na cópia.
+Comando: gitleaks dir . --no-banner --redact
+Limitação: arquivos criados ou alterados depois do scan (inclusive os registros de task.md e os logs gerados após este horário) não estão cobertos; é preciso repetir o scan para incluí-los.
+---
+[90m6:05PM[0m [32mINF[0m scan completed in 647ms
+[90m6:05PM[0m [32mINF[0m no leaks found
+GITLEAKS_EXIT=0

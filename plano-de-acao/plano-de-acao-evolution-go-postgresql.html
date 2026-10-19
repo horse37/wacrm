@@ -1,0 +1,1295 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plano de Acao - Evolution Go + PostgreSQL Self-host</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --panel: #111827;
+        --panel-2: #172033;
+        --ink: #e5e7eb;
+        --muted: #9ca3af;
+        --line: #334155;
+        --accent: #22c55e;
+        --accent-2: #38bdf8;
+        --warn: #f59e0b;
+        --danger: #ef4444;
+        --ok-bg: rgba(34, 197, 94, 0.12);
+        --warn-bg: rgba(245, 158, 11, 0.12);
+        --danger-bg: rgba(239, 68, 68, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        line-height: 1.55;
+      }
+
+      header {
+        border-bottom: 1px solid var(--line);
+        background: #0b1120;
+      }
+
+      .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 28px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 18px;
+      }
+
+      .eyebrow {
+        color: var(--accent-2);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0;
+        line-height: 1.15;
+      }
+
+      h1 {
+        font-size: clamp(30px, 5vw, 54px);
+        max-width: 980px;
+      }
+
+      h2 {
+        margin-top: 38px;
+        font-size: 28px;
+      }
+
+      h3 {
+        font-size: 21px;
+      }
+
+      h4 {
+        font-size: 16px;
+        color: var(--accent-2);
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .lead {
+        color: var(--muted);
+        max-width: 920px;
+        font-size: 17px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .card,
+      .phase,
+      .task {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .phase {
+        margin-top: 18px;
+        overflow: hidden;
+      }
+
+      .phase-head {
+        display: grid;
+        gap: 8px;
+        padding: 18px;
+        border-bottom: 1px solid var(--line);
+        background: var(--panel-2);
+      }
+
+      .phase-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 26px;
+        padding: 3px 9px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .pill.ok {
+        border-color: rgba(34, 197, 94, 0.45);
+        color: #86efac;
+        background: var(--ok-bg);
+      }
+
+      .pill.warn {
+        border-color: rgba(245, 158, 11, 0.45);
+        color: #fbbf24;
+        background: var(--warn-bg);
+      }
+
+      .pill.danger {
+        border-color: rgba(239, 68, 68, 0.45);
+        color: #fca5a5;
+        background: var(--danger-bg);
+      }
+
+      .phase-body {
+        padding: 18px;
+      }
+
+      .task {
+        margin-top: 14px;
+        padding: 16px;
+      }
+
+      .task-title {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .task-id {
+        color: #86efac;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+          monospace;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .subtasks {
+        margin: 10px 0 0;
+        padding-left: 20px;
+      }
+
+      .subtasks li {
+        margin: 5px 0;
+      }
+
+      .label {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .mini-grid {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 8px 12px;
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .mini-grid strong {
+        color: var(--ink);
+      }
+
+      code {
+        padding: 2px 5px;
+        border-radius: 5px;
+        background: #020617;
+        color: #bae6fd;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+          monospace;
+        font-size: 0.92em;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 14px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      th,
+      td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: var(--panel-2);
+        color: #cbd5e1;
+        font-size: 13px;
+      }
+
+      td {
+        color: var(--muted);
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .callout {
+        margin-top: 14px;
+        padding: 14px;
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        border-radius: 8px;
+        background: var(--warn-bg);
+      }
+
+      .callout strong {
+        color: #fbbf24;
+      }
+
+      .footer {
+        margin-top: 42px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      @media (max-width: 860px) {
+        .wrap {
+          padding: 20px;
+        }
+
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+
+        .mini-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap hero">
+        <div class="eyebrow">Harness plan artifact</div>
+        <h1>Plano de acao: Evolution Go + PostgreSQL self-host</h1>
+        <p class="lead">
+          Objetivo: migrar o WACRM de Meta Cloud API + Supabase para Evolution Go
+          + PostgreSQL self-host, com fases pequenas, tasks rastreaveis,
+          sub-tasks verificaveis, gates de aceite e handoff claro para agentes.
+        </p>
+        <div class="phase-meta">
+          <span class="pill ok">Tipo: migration</span>
+          <span class="pill warn">Escopo: arquitetura + execucao futura</span>
+          <span class="pill">Repo: wacrm</span>
+          <span class="pill danger">Nao executar sem aprovacao</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="grid grid-3">
+        <article class="card">
+          <div class="label">Fonte de verdade</div>
+          <p>
+            Este arquivo define plano macro. Durante execucao, criar task Harness
+            real apos adotar <code>.harness/</code> no repo.
+          </p>
+        </article>
+        <article class="card">
+          <div class="label">Ordem recomendada</div>
+          <p>
+            Primeiro desacoplar providers e DB. Depois trocar conexoes. Corte
+            direto aumenta risco de regressao em auth, inbox, flows e mídia.
+          </p>
+        </article>
+        <article class="card">
+          <div class="label">Gate global</div>
+          <p>
+            Nenhuma fase fecha sem evidencia: testes focados, smoke manual,
+            rollback conhecido e impacto documentado.
+          </p>
+        </article>
+      </section>
+
+      <section>
+        <h2>Resumo executivo</h2>
+        <div class="card">
+          <p>
+            A migracao tem dois eixos independentes, mas conectados:
+            <strong>WhatsApp provider</strong> e <strong>infra de dados</strong>.
+            Supabase hoje entrega banco, auth, RLS, storage, realtime e service
+            role. PostgreSQL self-host cobre apenas banco; os outros recursos
+            precisam substitutos explicitos. Evolution Go troca o modelo
+            Meta/WABA/token/PIN por instancia/API key/QR/webhook/eventos.
+          </p>
+          <div class="callout">
+            <strong>Decisao critica:</strong> executar em fatias. Manter sistema
+            rodando com provider antigo enquanto novos adapters e repositorios
+            entram por tras de contratos internos.
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Mapa Harness</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Campo</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tipo</td>
+              <td><code>migration</code></td>
+            </tr>
+            <tr>
+              <td>Slug sugerido</td>
+              <td><code>evolution-go-postgresql-selfhost</code></td>
+            </tr>
+            <tr>
+              <td>Goal</td>
+              <td>
+                Remover dependencia operacional de Meta Cloud API e Supabase,
+                mantendo CRM, inbox, automations, flows, broadcasts e arquivos.
+              </td>
+            </tr>
+            <tr>
+              <td>In scope</td>
+              <td>
+                Provider Evolution Go, PostgreSQL self-host, auth replacement,
+                storage replacement, realtime replacement, migrations e testes.
+              </td>
+            </tr>
+            <tr>
+              <td>Out of scope inicial</td>
+              <td>
+                Refactor visual amplo, nova regra de negocio de CRM, multi-numero
+                por conta, feature nova de vendas.
+              </td>
+            </tr>
+            <tr>
+              <td>Validation</td>
+              <td>
+                Unit tests, typecheck, smoke inbound/outbound, backup/restore,
+                teste de permissao por conta e roles.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 00 - Preparacao Harness e baseline</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: controle</span>
+            <span class="pill warn">Bloqueia execucao se ignorada</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <p>
+            Criar trilha auditavel antes de alterar integracao e banco. Repo atual
+            nao possui <code>.harness/</code>; se for executar pelo framework,
+            adotar Harness antes de abrir tasks reais.
+          </p>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-MIG-000</span>
+              <h4>Adotar Harness no repo</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Rodar fluxo de adocao Harness aprovado pelo usuario.</li>
+              <li>Criar <code>.harness/current-task.md</code>, preset e checklists.</li>
+              <li>Registrar task principal <code>migration/evolution-go-postgresql-selfhost</code>.</li>
+              <li>Definir branch isolada com prefixo <code>codex/</code>, se usuario aprovar.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>.harness/*</code></span>
+              <strong>Validacao</strong><span>Harness status aponta task atual e checklist aplicavel.</span>
+              <strong>Risco</strong><span>Baixo. Apenas governanca.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-MIG-001</span>
+              <h4>Baseline funcional atual</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Rodar <code>npm run test</code> para saber estado inicial.</li>
+              <li>Rodar <code>npm run typecheck</code>.</li>
+              <li>Registrar falhas preexistentes sem corrigir fora do escopo.</li>
+              <li>Mapear rotas WhatsApp e chamadas Supabase criticas.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Nenhum esperado; apenas evidencia.</span>
+              <strong>Validacao</strong><span>Relatorio baseline salvo no handoff da task.</span>
+              <strong>Risco</strong><span>Baixo. Pode revelar falhas antigas.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 01 - Descoberta tecnica Evolution Go</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: contrato real</span>
+            <span class="pill warn">Nao assumir endpoints</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <p>
+            Evolution Go tem variacao por versao. Confirmar Swagger da instancia
+            real antes de escrever adapter. Diferenca conhecida: docs e issues
+            citam caminhos diferentes para envio.
+          </p>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-EVO-001</span>
+              <h4>Inventariar instancia Evolution Go</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Registrar versao Evolution Go.</li>
+              <li>Confirmar <code>GLOBAL_API_KEY</code> e header exigido.</li>
+              <li>Confirmar URL base e health check.</li>
+              <li>Confirmar estado de licenca e Manager.</li>
+              <li>Confirmar suporte a proxy, MinIO e webhooks por evento.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Handoff/documento de descoberta.</span>
+              <strong>Validacao</strong><span>Health endpoint responde; Swagger acessivel.</span>
+              <strong>Risco</strong><span>Medio. Licenca ou deploy pode bloquear tudo.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-EVO-002</span>
+              <h4>Mapear endpoints de instancia</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Confirmar criar instancia.</li>
+              <li>Confirmar conectar via QR/pairing code.</li>
+              <li>Confirmar status/connection state.</li>
+              <li>Confirmar restart/logout/delete.</li>
+              <li>Definir nome de instancia por conta.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Contrato Evolution em Markdown ou JSON.</span>
+              <strong>Validacao</strong><span>Instancia teste criada, conectada, status lido.</span>
+              <strong>Risco</strong><span>Medio. QR/session pode ser instavel.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-EVO-003</span>
+              <h4>Mapear endpoints de mensagem e webhook</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Confirmar send text.</li>
+              <li>Confirmar send media: image, video, document, audio.</li>
+              <li>Confirmar send reaction.</li>
+              <li>Confirmar buttons e list.</li>
+              <li>Confirmar suporte ou ausencia de quoted replies.</li>
+              <li>Capturar payload inbound: text, media, reaction, interactive reply.</li>
+              <li>Capturar payload receipt: sent, delivered, read, failed.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Fixtures JSON de payloads reais.</span>
+              <strong>Validacao</strong><span>Payloads versionados e normalizaveis.</span>
+              <strong>Risco</strong><span>Alto. Sem payload real, webhook vira chute.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 02 - Inventario Supabase e estrategia self-host</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: mapa de substituicao</span>
+            <span class="pill danger">Maior risco do projeto</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <p>
+            Supabase hoje nao e apenas banco. Ele fornece auth, RLS, storage,
+            realtime, service role e SDK. PostgreSQL self-host substitui apenas
+            camada SQL. Restante precisa desenho explicito.
+          </p>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-DB-001</span>
+              <h4>Inventariar chamadas Supabase</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Mapear <code>src/lib/supabase/client.ts</code>.</li>
+              <li>Mapear <code>src/lib/supabase/server.ts</code>.</li>
+              <li>Listar todos <code>.from(...)</code>, <code>.rpc(...)</code>, <code>.auth.*</code>.</li>
+              <li>Separar por dominio: auth, account, contacts, inbox, messages, flows, automations, broadcasts, settings.</li>
+              <li>Classificar cada uso: client-side, server route, job/webhook, realtime, storage.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Documento matriz Supabase -> substituto.</span>
+              <strong>Validacao</strong><span>Nenhum uso Supabase sem dono.</span>
+              <strong>Risco</strong><span>Medio. Uso client-side espalhado aumenta custo.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-DB-002</span>
+              <h4>Desenhar PostgreSQL self-host</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Definir host, porta, database, schema e usuario app.</li>
+              <li>Definir usuario admin para webhook/jobs.</li>
+              <li>Definir pool de conexao.</li>
+              <li>Definir migration runner: SQL puro versionado ou ferramenta dedicada.</li>
+              <li>Definir backup, restore e retention.</li>
+              <li>Definir estrategia de secrets.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>.env.example</code>, docs, migration config futura.</span>
+              <strong>Validacao</strong><span>Conexao local e teste de migration em DB vazio.</span>
+              <strong>Risco</strong><span>Alto. Sem backup/restore testado, sem corte.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-DB-003</span>
+              <h4>Definir substitutos Supabase</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Auth: escolher Auth.js, custom auth ou Keycloak.</li>
+              <li>Storage: escolher MinIO ou filesystem.</li>
+              <li>Realtime: escolher polling MVP, SSE/WebSocket ou LISTEN/NOTIFY.</li>
+              <li>RLS: manter no Postgres com contexto por request ou migrar para app-layer authorization.</li>
+              <li>Service role: substituir por admin DB client isolado.</li>
+            </ul>
+            <div class="mini-grid">
+ <strong>Recomendacao</strong><span>Better Auth + PostgreSQL, MinIO, polling MVP, autorizacao server-side com RLS PostgreSQL como defesa em profundidade.</span>
+ <strong>Validacao</strong><span>ADR, protecao de sessao, isolamento entre contas e testes negativos aprovados antes do codigo.</span>
+              <strong>Risco</strong><span>Alto. Auth/RLS mal migrado vaza dados entre contas.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 03 - Camada de dados e autorizacao</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: desacoplar SDK</span>
+            <span class="pill warn">Small diffs</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <p>
+            Criar repositorios por dominio para remover dependencia direta do
+            Supabase SDK. Primeiro manter comportamento atual; depois trocar
+            implementacao por PostgreSQL.
+          </p>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-DATA-001</span>
+              <h4>Criar contrato DB interno</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Criar client server-side para queries.</li>
+              <li>Criar helper de transacao.</li>
+              <li>Criar tipos de erro: unauthorized, forbidden, not_found, conflict, db_error.</li>
+              <li>Definir padrao de retorno consistente.</li>
+              <li>Adicionar testes unitarios de helpers sem banco real quando possivel.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/db/*</code></span>
+              <strong>Validacao</strong><span>Typecheck e testes dos helpers.</span>
+              <strong>Risco</strong><span>Medio. Abstracao grande demais atrapalha.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-DATA-002</span>
+              <h4>Centralizar account/role guard</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Criar helper <code>requireAccount()</code>.</li>
+              <li>Criar helper <code>requireRole(minRole)</code>.</li>
+              <li>Garantir que toda operacao com dados use <code>account_id</code>.</li>
+              <li>Adicionar testes contra acesso cross-account.</li>
+              <li>Registrar regra: nunca consultar dominio sem account scope.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/auth/*</code>, repositorios futuros.</span>
+              <strong>Validacao</strong><span>Teste cross-account falha corretamente.</span>
+              <strong>Risco</strong><span>Alto. Substitui parte da protecao RLS.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-DATA-003</span>
+              <h4>Migrar repositorios por prioridade</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Repositorio profile/account.</li>
+              <li>Repositorio whatsapp_config.</li>
+              <li>Repositorio conversations/messages.</li>
+              <li>Repositorio contacts/tags/custom fields.</li>
+              <li>Repositorio automations/flows.</li>
+              <li>Repositorio broadcasts/templates.</li>
+              <li>Remover Supabase direto das rotas migradas.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/repositories/*</code> e rotas por dominio.</span>
+              <strong>Validacao</strong><span>Testes por dominio + smoke manual.</span>
+              <strong>Risco</strong><span>Alto. Mudanca ampla; dividir em PRs/tasks.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 04 - PostgreSQL, auth, storage e realtime</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: substituir Supabase</span>
+            <span class="pill danger">Corte controlado</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-SELF-001</span>
+              <h4>Migrar schema Supabase para PostgreSQL</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Consolidar migrations existentes em ordem.</li>
+              <li>Remover dependencias Supabase-only quando existirem.</li>
+              <li>Manter constraints, indexes e FKs.</li>
+              <li>Validar schema em DB vazio.</li>
+              <li>Validar dump/restore de base existente.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>database/migrations/*</code> ou equivalente.</span>
+              <strong>Validacao</strong><span>DB vazio sobe; dados migrados passam smoke.</span>
+              <strong>Risco</strong><span>Alto. DDL incorreto quebra tudo.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-SELF-002</span>
+              <h4>Substituir Supabase Auth</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Implementar Auth.js + adapter PostgreSQL ou alternativa aprovada.</li>
+              <li>Migrar users/profiles mantendo IDs ou criar mapeamento.</li>
+              <li>Preservar roles owner/admin/agent/viewer.</li>
+              <li>Atualizar middleware e hooks de auth.</li>
+              <li>Validar login, logout, signup, reset senha se aplicavel.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/auth/*</code>, <code>src/middleware.ts</code>, rotas auth.</span>
+              <strong>Validacao</strong><span>Sessao funciona em server/client e roles batem.</span>
+              <strong>Risco</strong><span>Alto. Auth e tenancy sao superficie sensivel.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-SELF-003</span>
+              <h4>Substituir Supabase Storage</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Escolher MinIO como padrao self-host.</li>
+              <li>Criar buckets equivalentes: avatars, flow-media, chat-media.</li>
+              <li>Definir path por <code>account_id</code>.</li>
+              <li>Migrar upload/download URLs.</li>
+              <li>Validar permissao por conta.</li>
+              <li>Planejar migracao de arquivos existentes.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/storage/*</code>, upload routes.</span>
+              <strong>Validacao</strong><span>Upload e leitura de avatar, flow media e chat media.</span>
+              <strong>Risco</strong><span>Medio. URLs publicas precisam expirar ou validar acesso.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-SELF-004</span>
+              <h4>Substituir Supabase Realtime</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Mapear telas que dependem de realtime.</li>
+              <li>Implementar polling MVP para inbox e counters.</li>
+              <li>Planejar SSE/WebSocket com LISTEN/NOTIFY como fase posterior.</li>
+              <li>Garantir que UX nao fique travada sem websocket.</li>
+              <li>Testar mensagens inbound aparecendo sem reload completo.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/hooks/use-realtime.ts</code>, inbox hooks/pages.</span>
+              <strong>Validacao</strong><span>Inbox atualiza dentro de janela aceitavel.</span>
+              <strong>Risco</strong><span>Medio. Polling aumenta carga se mal configurado.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 05 - Provider WhatsApp interno</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: desacoplar Meta</span>
+            <span class="pill ok">Permite rollback</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <p>
+            Antes de remover Meta, criar contrato unico de provider. Meta vira
+            implementacao legada. Evolution Go vira implementacao nova.
+          </p>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-WA-001</span>
+              <h4>Criar interface WhatsAppProvider</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Definir tipos internos: text, media, template/local-template, reaction, buttons, list.</li>
+              <li>Definir retorno padrao: <code>{ providerMessageId, raw }</code>.</li>
+              <li>Definir erro padrao: auth, not_connected, invalid_recipient, provider_error.</li>
+              <li>Definir normalizador de status.</li>
+              <li>Definir normalizador de webhook.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/whatsapp/provider/*</code></span>
+              <strong>Validacao</strong><span>Typecheck e testes de contrato.</span>
+              <strong>Risco</strong><span>Medio. Contrato pobre vira remendo depois.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-WA-002</span>
+              <h4>Encapsular Meta atual</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Manter <code>meta-api.ts</code> funcional.</li>
+              <li>Criar adapter Meta chamando helpers existentes.</li>
+              <li>Migrar chamadas de send route para provider sem mudar comportamento.</li>
+              <li>Adicionar testes de regressao para payload Meta existente.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/whatsapp/provider/meta-provider.ts</code></span>
+              <strong>Validacao</strong><span>Testes Meta atuais continuam passando.</span>
+              <strong>Risco</strong><span>Medio. Alterar comportamento antes do provider novo e erro.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-WA-003</span>
+              <h4>Criar Evolution Go provider</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Implementar client HTTP com base URL e API key.</li>
+              <li>Implementar status/QR/connect.</li>
+              <li>Implementar send text.</li>
+              <li>Implementar send media.</li>
+              <li>Implementar reaction, buttons e list se suportado pela versao.</li>
+              <li>Implementar fallback explicito quando recurso nao existir.</li>
+              <li>Adicionar testes com fetch mock e fixtures reais.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/whatsapp/provider/evolution-go-provider.ts</code></span>
+              <strong>Validacao</strong><span>Payloads batem com Swagger real.</span>
+              <strong>Risco</strong><span>Alto. Endpoint divergente por versao.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 06 - Configuracao Evolution Go no app</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: conexao por conta</span>
+            <span class="pill warn">UI e DB juntos</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-CONFIG-001</span>
+              <h4>Migrar schema de whatsapp_config</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Adicionar <code>provider</code>.</li>
+              <li>Adicionar <code>evolution_base_url</code>.</li>
+              <li>Adicionar <code>evolution_instance_name</code>.</li>
+              <li>Adicionar <code>evolution_api_key</code> criptografada.</li>
+              <li>Adicionar <code>evolution_instance_token</code> criptografado, se necessario.</li>
+              <li>Adicionar <code>evolution_jid</code>, <code>evolution_status</code>, <code>evolution_webhook_secret</code>.</li>
+              <li>Manter colunas Meta enquanto rollback existir.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Migrations PostgreSQL/Supabase temporarias.</span>
+              <strong>Validacao</strong><span>Config antiga continua legivel; nova config salva.</span>
+              <strong>Risco</strong><span>Medio. Constraint errada bloqueia contas existentes.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-CONFIG-002</span>
+              <h4>Refazer tela Settings -> WhatsApp</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Trocar textos Meta por Evolution Go.</li>
+              <li>Campos: API URL, API key, instance name, webhook URL.</li>
+              <li>Botao testar conexao.</li>
+              <li>Botao buscar QR/pairing code.</li>
+              <li>Estado visual: disconnected, connecting, open/connected, failed.</li>
+              <li>Remover WABA, Phone Number ID, PIN e App Secret da jornada Evolution.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/components/settings/whatsapp-config.tsx</code></span>
+              <strong>Validacao</strong><span>Admin salva config, testa, visualiza QR/status.</span>
+              <strong>Risco</strong><span>Medio. Texto falso causa erro operacional.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 07 - Webhook Evolution Go e inbound pipeline</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: receber mensagens</span>
+            <span class="pill danger">Critico para CRM</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-IN-001</span>
+              <h4>Criar endpoint webhook Evolution</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Criar rota separada <code>/api/whatsapp/webhook/evolution</code>.</li>
+              <li>Validar secret proprio via header/query/body conforme configurado.</li>
+              <li>Resolver conta por instance name.</li>
+              <li>Ignorar eventos nao mapeados com log seguro.</li>
+              <li>Responder rapido para evitar retry.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/app/api/whatsapp/webhook/evolution/route.ts</code></span>
+              <strong>Validacao</strong><span>Webhook falso sem secret falha; com secret aceita.</span>
+              <strong>Risco</strong><span>Alto. Endpoint publico precisa fail-closed.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-IN-002</span>
+              <h4>Normalizar eventos inbound</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Normalizar texto.</li>
+              <li>Normalizar imagem, video, documento, audio e sticker.</li>
+              <li>Normalizar reaction.</li>
+              <li>Normalizar button/list reply.</li>
+              <li>Normalizar sender JID para telefone canonical.</li>
+              <li>Persistir <code>providerMessageId</code> em <code>messages.message_id</code>.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/whatsapp/provider/evolution-webhook.ts</code></span>
+              <strong>Validacao</strong><span>Fixtures reais geram modelo interno esperado.</span>
+              <strong>Risco</strong><span>Alto. JID/LID errado duplica contatos.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-IN-003</span>
+              <h4>Reusar pipeline atual de contato/conversa/mensagem</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Extrair logica comum do webhook Meta atual.</li>
+              <li>Processar inbound normalizado: find/create contact.</li>
+              <li>Find/create conversation.</li>
+              <li>Insert message.</li>
+              <li>Atualizar last_message/unread_count.</li>
+              <li>Disparar flows e automations.</li>
+              <li>Marcar reply de broadcast quando aplicavel.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Webhook atual + service novo de inbound.</span>
+              <strong>Validacao</strong><span>Inbound real aparece na inbox e dispara automacao.</span>
+              <strong>Risco</strong><span>Alto. Fluxos dependem de idempotencia.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 08 - Outbound, automations, flows e broadcasts</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: enviar por Evolution</span>
+            <span class="pill warn">Migrar por dominio</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-OUT-001</span>
+              <h4>Migrar envio manual da inbox</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Trocar chamadas diretas Meta por provider resolver.</li>
+              <li>Manter validacao de telefone.</li>
+              <li>Enviar texto, midia e reply quando suportado.</li>
+              <li>Persistir mensagem agent.</li>
+              <li>Pausar flow ativo quando agente responde.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/app/api/whatsapp/send/route.ts</code></span>
+              <strong>Validacao</strong><span>Texto e midia saem via Evolution e aparecem na conversa.</span>
+              <strong>Risco</strong><span>Medio. Reply context pode nao existir na versao Go.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-OUT-002</span>
+              <h4>Migrar automations e flows</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Substituir <code>src/lib/automations/meta-send.ts</code>.</li>
+              <li>Substituir <code>src/lib/flows/meta-send.ts</code>.</li>
+              <li>Enviar text/media/buttons/list por provider.</li>
+              <li>Tratar recurso nao suportado como erro claro no log da automacao/flow.</li>
+              <li>Garantir DB insert bot com status correto.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>src/lib/automations/*</code>, <code>src/lib/flows/*</code></span>
+              <strong>Validacao</strong><span>Flow com botao/lista avanca com reply real.</span>
+              <strong>Risco</strong><span>Alto. Bots quebram silenciosamente se status nao for logado.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-OUT-003</span>
+              <h4>Redefinir templates e broadcasts</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Decidir: templates Meta desativados ou modelos locais.</li>
+              <li>Recomendado: converter para modelos locais sem approval Meta.</li>
+              <li>Remover sync/submit/edit/delete Meta da UI Evolution.</li>
+              <li>Manter variaveis por destinatario.</li>
+              <li>Enviar broadcast via provider Evolution com rate control.</li>
+              <li>Persistir status por recipient.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Template manager, broadcast routes, schema templates.</span>
+              <strong>Validacao</strong><span>Broadcast teste envia para contatos e status atualiza.</span>
+              <strong>Risco</strong><span>Alto. Politica WhatsApp e anti-spam fora da Meta oficial.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 09 - Cutover Supabase -> PostgreSQL self-host</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: corte controlado</span>
+            <span class="pill danger">Janela operacional</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-CUT-001</span>
+              <h4>Plano de migracao de dados</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Congelar escrita durante janela.</li>
+              <li>Exportar Supabase Postgres.</li>
+              <li>Importar em PostgreSQL self-host.</li>
+              <li>Rodar checks de contagem por tabela.</li>
+              <li>Validar FKs, indexes e constraints.</li>
+              <li>Validar amostras de dados sensiveis criptografados.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Runbook SQL e scripts de verificacao.</span>
+              <strong>Validacao</strong><span>Contagens batem e app le dados migrados.</span>
+              <strong>Risco</strong><span>Alto. Sem rollback, nao cortar.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-CUT-002</span>
+              <h4>Trocar env e runtime</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Remover obrigatoriedade de <code>NEXT_PUBLIC_SUPABASE_URL</code>.</li>
+              <li>Adicionar <code>DATABASE_URL</code>.</li>
+              <li>Adicionar secrets de auth.</li>
+              <li>Adicionar MinIO/S3 envs.</li>
+              <li>Adicionar Evolution Go envs defaults.</li>
+              <li>Atualizar deploy docs.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span><code>.env.local.example</code>, README/docs.</span>
+              <strong>Validacao</strong><span>App sobe sem Supabase envs.</span>
+              <strong>Risco</strong><span>Medio. Env incompleto causa erro em runtime.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-CUT-003</span>
+              <h4>Rollback operacional</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Documentar como voltar para Supabase antes do corte.</li>
+              <li>Documentar como voltar provider para Meta se mantido.</li>
+              <li>Definir limite de tempo para rollback.</li>
+              <li>Preservar backup pre-corte.</li>
+              <li>Validar rollback em ambiente staging.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Runbook de rollback.</span>
+              <strong>Validacao</strong><span>Rollback testado ao menos uma vez fora de producao.</span>
+              <strong>Risco</strong><span>Alto. Rollback nao testado nao conta.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="phase">
+        <div class="phase-head">
+          <h3>Fase 10 - Qualidade, aceite e fechamento</h3>
+          <div class="phase-meta">
+            <span class="pill">Objetivo: prova</span>
+            <span class="pill ok">Gate final</span>
+          </div>
+        </div>
+        <div class="phase-body">
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-QA-001</span>
+              <h4>Testes automatizados minimos</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Unit: Evolution client.</li>
+              <li>Unit: webhook normalizer.</li>
+              <li>Unit: account/role guards.</li>
+              <li>Unit/integration: repositories criticos.</li>
+              <li>Regression: phone utils, template/local model, flow validation.</li>
+              <li>Rodar <code>npm run test</code>.</li>
+              <li>Rodar <code>npm run typecheck</code>.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Testes em <code>src/**/*.test.ts</code>.</span>
+              <strong>Validacao</strong><span>Testes passam ou falhas preexistentes documentadas.</span>
+              <strong>Risco</strong><span>Medio. Sem testes, risco de cross-account sobe.</span>
+            </div>
+          </article>
+
+          <article class="task">
+            <div class="task-title">
+              <span class="task-id">H-QA-002</span>
+              <h4>Smoke manual ponta a ponta</h4>
+            </div>
+            <ul class="subtasks">
+              <li>Login owner/admin/agent/viewer.</li>
+              <li>Configurar Evolution Go.</li>
+              <li>Conectar QR.</li>
+              <li>Receber texto inbound.</li>
+              <li>Enviar texto outbound.</li>
+              <li>Receber/enviar midia.</li>
+              <li>Reacao inbound/outbound.</li>
+              <li>Flow com botao/lista.</li>
+              <li>Automation keyword.</li>
+              <li>Broadcast pequeno.</li>
+              <li>Upload avatar/flow-media/chat-media.</li>
+              <li>Realtime/polling na inbox.</li>
+            </ul>
+            <div class="mini-grid">
+              <strong>Arquivos</strong><span>Checklist de smoke no handoff.</span>
+              <strong>Validacao</strong><span>Todos passos com evidencia objetiva.</span>
+              <strong>Risco</strong><span>Alto. Este e gate de aceite real.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Critérios de aceite globais</h2>
+        <div class="grid grid-2">
+          <article class="card">
+            <h3>Funcionais</h3>
+            <ul class="subtasks">
+              <li>Admin configura Evolution Go sem campos Meta obrigatorios.</li>
+              <li>QR/pairing conecta instancia.</li>
+              <li>Inbound cria contato, conversa e mensagem.</li>
+              <li>Outbound manual salva e envia.</li>
+              <li>Automations e flows continuam operando.</li>
+              <li>Broadcast funciona com modelo local ou politica aprovada.</li>
+              <li>App roda sem variaveis Supabase obrigatorias apos corte.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Nao funcionais</h3>
+            <ul class="subtasks">
+              <li>Nenhum acesso cross-account em testes.</li>
+              <li>Secrets criptografados ou fora do client.</li>
+              <li>Backup/restore PostgreSQL testado.</li>
+              <li>Storage isolado por conta.</li>
+              <li>Webhook publico valida segredo.</li>
+              <li>Logs nao expõem API key, token, telefone completo quando evitavel.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Riscos principais</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Risco</th>
+              <th>Impacto</th>
+              <th>Mitigacao</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Auth/RLS mal substituido</td>
+              <td>Vazamento entre contas</td>
+              <td>Guards centrais, testes cross-account, revisao focada.</td>
+            </tr>
+            <tr>
+              <td>Endpoint Evolution divergente</td>
+              <td>Envio/webhook falha</td>
+              <td>Swagger real e fixtures antes do adapter.</td>
+            </tr>
+            <tr>
+              <td>Templates Meta sem paridade</td>
+              <td>Broadcast muda comportamento</td>
+              <td>Decisao explicita: desativar ou modelo local.</td>
+            </tr>
+            <tr>
+              <td>Realtime removido sem substituto</td>
+              <td>Inbox parece travada</td>
+              <td>Polling MVP; SSE/WebSocket posterior.</td>
+            </tr>
+            <tr>
+              <td>Migracao de storage incompleta</td>
+              <td>Midia/avatar quebrados</td>
+              <td>Inventario de buckets e runbook MinIO.</td>
+            </tr>
+            <tr>
+              <td>Cutover sem rollback</td>
+              <td>Indisponibilidade prolongada</td>
+              <td>Backup, restore e rollback testados em staging.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Ordem sugerida de execucao</h2>
+        <div class="card">
+          <ol class="subtasks">
+            <li>Adotar Harness no repo.</li>
+            <li>Baseline de testes e typecheck.</li>
+            <li>Descobrir Evolution Go real e salvar fixtures.</li>
+            <li>Inventariar Supabase inteiro.</li>
+            <li>Definir ADRs: auth, storage, realtime, RLS/app-layer.</li>
+            <li>Criar camada DB/repository mantendo comportamento atual.</li>
+            <li>Criar provider WhatsApp mantendo Meta funcional.</li>
+            <li>Implementar Evolution provider e webhook paralelo.</li>
+            <li>Migrar config UI para Evolution.</li>
+            <li>Migrar outbound/inbound/flows/automations/broadcasts.</li>
+            <li>Migrar PostgreSQL/auth/storage/realtime.</li>
+            <li>Executar cutover com rollback testado.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <h2>Handoff para agente executor</h2>
+        <div class="card">
+          <p>
+            Antes de qualquer codigo: ler este plano, AGENTS.md, package.json,
+            rotas WhatsApp, migrations Supabase e componentes de settings. Nao
+            alterar tudo em um PR. Criar task pequena por fase. Sempre registrar:
+            objetivo, contexto, arquivos impactados, validacao, riscos e
+            rollback. Quando houver duvida de endpoint Evolution, usar Swagger
+            real, nao memoria nem exemplo solto da internet.
+          </p>
+        </div>
+      </section>
+
+      <p class="footer">
+        Artefato gerado para planejamento. Nao representa execucao iniciada.
+        Proxima acao recomendada: aprovar adocao Harness ou criar task formal de
+        discovery.
+      </p>
+    </main>
+  </body>
+</html>

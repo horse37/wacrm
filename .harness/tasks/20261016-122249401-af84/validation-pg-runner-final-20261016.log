@@ -1,0 +1,32 @@
+WACRM HARNESS 20261016-122249401-af84 — final runner validation, 2026-10-16
+Repository: D:\Sistemas\TRAE IA\zapcrm\wacrm; branch main; HEAD e714fb0db5cd60cc797534a3e8d7c53e9986aac1.
+Git preflight: six required RTK checks all exit 0; both Zap Lead and WACRM diff --check exit 0. Trees were already dirty; see current-session transcript for full preexisting paths. No Git mutation.
+
+Docker isolation: PostgreSQL 15 image wacrm-postgres-node-runner:20261016-codex; containers wacrm-pg-runner-final-20261016 and wacrm-pg-runner-restore-20261016; --network none; tmpfs /var/lib/postgresql/data; read-only WACRM bind mount; no named volume. Containers were created without --rm so evidence could be copied/inspected; both were manually stopped and removed by exact name, each stop/rm exit 0. Existing task container wacrm-pg-runner-codex-test-20261016 untouched.
+
+Commands/results:
+1. psql -U bootstrap_admin -d postgres -v ON_ERROR_STOP=1 -f /workspace/scripts/testing/postgres-migration-bootstrap.sql — SUCCESS exit 0 on fresh cluster. Bootstrap used POSTGRES_USER=bootstrap_admin and synthetic credentials.
+2. Two concurrent invocations: docker exec -e DATABASE_URL_MIGRATIONS=postgres://wacrm_migrator:[synthetic]@127.0.0.1:5432/postgres wacrm-pg-runner-final-20261016 node /opt/wacrm/scripts/migrate-postgres.mjs — both SUCCESS exit 0; one applied=26 skipped=0 total=26; other applied=0 skipped=26 total=26.
+3. docker exec -e DATABASE_URL_MIGRATIONS=postgres://wacrm_migrator:[synthetic]@127.0.0.1:5432/postgres wacrm-pg-runner-final-20261016 node /opt/wacrm/scripts/failure-recovery.mjs — SUCCESS exit 0; failure rolled back DDL/ledger; retry applied migration once.
+4. docker exec wacrm-pg-runner-final-20261016 node --test /workspace/scripts/migrate-postgres.test.mjs — SUCCESS exit 0, 8/8.
+5. Bootstrap SQL role grant inspection — SUCCESS exit 0. migrator LOGIN/NOSUPERUSER, CONNECT yes, public USAGE yes/CREATE no; postgres NOLOGIN/NOSUPERUSER, public USAGE/CREATE yes; anon/authenticated/service_role NOLOGIN/NOSUPERUSER and public CREATE no.
+6. Direct CREATE TABLE as wacrm_migrator — EXPECTED DENIAL, psql exit 1: permission denied for schema public.
+7. Catalog snapshot after chain — SUCCESS exit 0: ledger 26; public RLS tables 31; public policies 79; Storage policies 12; public SECURITY DEFINER functions 18; publication supabase_realtime count 1.
+8. psql -f /workspace/.harness/tasks/20261016-122249401-af84/account-isolation-probe.sql — SUCCESS exit 0 on migrated and restored databases; account A sees two same-account profiles, zero account-B profiles. Probe uses compatibility auth.uid() GUC shim and temporary SELECT grant rolled back with fixture transaction; not Supabase Auth proof.
+9. pg_dump -U bootstrap_admin -d postgres -Fc -n public -n storage -f /tmp/wacrm-final.dump — SUCCESS exit 0.
+10. First pg_restore without --clean — FAILURE exit 1 due duplicate storage.foldername already created by fixture bootstrap. Retried pg_restore -U bootstrap_admin -d postgres --no-owner --role=postgres --clean --if-exists --exit-on-error -n public -n storage /tmp/wacrm-final.dump — SUCCESS exit 0. Restored counts equal source: ledger 26; public RLS tables 31; public policies 79; Storage policies 12; SECURITY DEFINER functions 18; publication 1; Storage foldername 1.
+
+Serena: initial instructions/project activation called, return payload opaque; symbol overview/body/reference on getPostgresPool worked, no consumers found. SQL file diagnostics incorrectly treated SQL as TS; postgres-pool.ts diagnostics reported missing host pg declarations (module is in package manifest/lock; host dependency tree not installed). TypeScript and lint not rerun this session; historical TypeScript/ESLint failures remain as recorded in task.md. No independent reviewer ran; Ruflo ignored per user instruction, no local review tool exposed. Manual read-only inspection only.
+
+Task remains in_progress for runtime/job role design, independent review availability, and dependency-complete TypeScript/lint. No code migrations or app consumers changed. No stage/commit/push/deploy. No Supabase, production, VPS, homologation, real data, or real chips.
+
+SECOND PASS after adding test-only runtime/job placeholders:
+- Fresh container wacrm-pg-role-matrix-20261016; PostgreSQL 15 image tag wacrm-postgres-node-runner:20261016-codex; --network none, tmpfs PGDATA, read-only WACRM mount. Bootstrap applied exit 0.
+- Two concurrent `docker exec -e DATABASE_URL_MIGRATIONS=postgres://wacrm_migrator:[synthetic]@127.0.0.1:5432/postgres ... node /opt/wacrm/scripts/migrate-postgres.mjs` calls: both exit 0, one applied=26/skipped=0, other applied=0/skipped=26.
+- `docker exec ... node --test /workspace/scripts/migrate-postgres.test.mjs`: exit 0, 8/8.
+- `psql -f /tmp/role-boundary-probe.sql`: exit 0; runtime/job both CONNECT-only, no role membership, owner, DDL, RLS bypass, or table DML.
+- `psql -f /tmp/account-isolation-probe.sql`: exit 0; same-account profiles visible 2, other-account profiles visible 0.
+- `node /opt/wacrm/scripts/failure-recovery.mjs`: exit 0; rollback and corrected retry succeeded.
+- Migrator direct CREATE probe: expected exit 1, permission denied for schema public.
+- pg_dump custom-format exit 0. Fresh restore container wacrm-pg-role-restore-20261016 used same isolation/tmpfs; bootstrap, uuid-ossp setup, pg_restore with --clean/--if-exists, role probe, and account RLS probe all exit 0. Catalog counts: ledger 26; public RLS tables 31; public policies 79; Storage policies 12; public SECURITY DEFINER 18; supabase_realtime 1; storage.foldername 1.
+- Both containers stopped/removed by exact name after validation (each exit 0); existing wacrm-pg-runner-codex-test-20261016 left untouched. Dump artifact remains under `%TEMP%\wacrm-pg-runner-codex-20261016\wacrm-role-matrix.dump` for this task.

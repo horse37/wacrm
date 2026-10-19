@@ -1,0 +1,87 @@
+# Verificação: typecheck, lint e Vitest do pool — 2026-10-18 (~17:57 UTC, relógio do container)
+Imagem: node:22-bookworm (Linux), container --rm, nome wacrm-verify-<sufixo de data>.
+Rede: bridge padrão (necessária ao registro npm); sem volumes.
+Origem: bind mount somente leitura do repo em /source, copiado por tar para /work excluindo node_modules, .next e .git.
+Instalação: npm ci --ignore-scripts --no-audit --no-fund (sem scripts de pós-instalação).
+Estado do repo: HEAD 029d4b42dc06999044d72c6c234c68e85b8798e7 na branch main, com alterações não commitadas copiadas (incluindo package.json com 6 inserções, sendo 4 da task e 2 de outro trabalho do Zap Lead, e package-lock.json com 160 inserções e 0 remoções, todas da stack pg desta task).
+Comandos: npm run typecheck; npm run lint; npx vitest run src/lib/db/postgres-pool.test.ts.
+Saída bruta abaixo (cópia integral do stdout/stderr redirecionado).
+---
+== npm ci (ignore-scripts)
+npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+
+added 695 packages in 59s
+npm notice
+npm notice New major version of npm available! 10.9.9 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+== typecheck
+
+> wacrm@0.2.2 typecheck
+> tsc --noEmit
+
+TYPECHECK_EXIT=0
+== lint
+
+> wacrm@0.2.2 lint
+> eslint
+
+
+/work/src/app/(dashboard)/inbox/page.tsx
+  11:10  warning  'toast' is defined but never used  @typescript-eslint/no-unused-vars
+
+/work/src/app/(dashboard)/pipelines/page.tsx
+  178:7  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/set-state-in-effect')
+
+/work/src/app/api/whatsapp/webhook/route.ts
+  4:23  warning  'downloadMedia' is defined but never used  @typescript-eslint/no-unused-vars
+
+/work/src/components/contacts/contact-detail-view.tsx
+   8:29  warning  'ContactTag' is defined but never used          @typescript-eslint/no-unused-vars
+   8:67  warning  'ContactCustomValue' is defined but never used  @typescript-eslint/no-unused-vars
+  22:10  warning  'Badge' is defined but never used               @typescript-eslint/no-unused-vars
+  23:10  warning  'ScrollArea' is defined but never used          @typescript-eslint/no-unused-vars
+  34:3   warning  'X' is defined but never used                   @typescript-eslint/no-unused-vars
+
+/work/src/components/contacts/contact-form.tsx
+  25:10  warning  'Badge' is defined but never used                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  80:6   warning  React Hook useEffect has missing dependencies: 'contactTags' and 'fetchTags'. Either include them or remove the dependency array. If 'setSelectedTagIds' needs the current value of 'contactTags', you can also switch to useReducer instead of useState and read 'contactTags' in the reducer  react-hooks/exhaustive-deps
+
+/work/src/components/inbox/contact-sidebar.tsx
+    6:10  warning  'cn' is defined but never used                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   13:3   warning  'User' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  137:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/work/src/components/inbox/conversation-list.tsx
+   16:10  warning  'Button' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  263:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/work/src/components/inbox/message-bubble.tsx
+  110:5  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/work/src/components/inbox/message-composer.tsx
+  115:3  warning  'conversationId' is defined but never used  @typescript-eslint/no-unused-vars
+
+/work/src/components/inbox/message-thread.tsx
+  36:10  warning  'ScrollArea' is defined but never used  @typescript-eslint/no-unused-vars
+
+/work/src/middleware.ts
+  16:48  warning  'options' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 19 problems (0 errors, 19 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+
+LINT_EXIT=0
+== pool vitest
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90m/work[39m
+
+ [32m✓[39m src/lib/db/postgres-pool.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 164[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 17:57:03
+[2m   Duration [22m 1.47s[2m (transform 323ms, setup 0ms, import 219ms, tests 164ms, environment 0ms)[22m
+
+VITEST_EXIT=0

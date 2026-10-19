@@ -1,0 +1,3 @@
+﻿Disposable PostgreSQL container started:
+46f3d55ba5487fc2c842d5176d16f6400ae74369c11e7f7f43e5f17553f89532
+Correction: validation attempt exited 1 during execution of the task-owned PostgreSQL bootstrap. PowerShell treated the expected PostgreSQL 15 logical-replication warning on stderr as a terminating native-command error even though psql completed. Focused tests and migration-runner validation did not execute. The exact task-owned container and TEMP dependency directory from this attempt were removed by finally.

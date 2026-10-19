@@ -1,0 +1,9 @@
+# Gitleaks 8.21.2 — árvore de trabalho (scan final 3, após as correções das seis ressalvas) — 2026-10-18
+Imagem: zricethezav/gitleaks:v8.21.2, container --rm, --network none, --read-only, tmpfs em /tmp.
+Origem: bind mount somente leitura do repo em /source; cópia por tar para /tmp/work excluindo ./node_modules, ./.next e ./.git.
+Comando: gitleaks dir . --no-banner --redact
+Escopo temporal: arquivos gravados depois do início deste scan são listados ao fim deste log.
+---
+7:07PM INF scan completed in 966ms
+7:07PM INF no leaks found
+GITLEAKS_EXIT=0

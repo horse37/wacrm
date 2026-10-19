@@ -1,0 +1,5 @@
+﻿Disposable PostgreSQL container started:
+3ab33c3c46d4497545c2f903459abc0b66ac45009a07619a5917bc4521e45de4
+Node.js focused test command: node --test --test-reporter=dot scripts/migrate-postgres.test.mjs
+Result: exit 0; all focused tests passed.
+..................

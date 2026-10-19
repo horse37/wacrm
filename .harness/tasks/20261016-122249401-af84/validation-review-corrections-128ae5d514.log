@@ -1,0 +1,10 @@
+﻿Disposable PostgreSQL container started:
+3a8e31915107835064d446d313c93309a92f924c4a2342fee0cb6153be99c250
+Node.js focused test command: node --test --test-reporter=dot scripts/migrate-postgres.test.mjs
+Result: exit 0; all focused tests passed.
+..................
+Validation failure: docker exec failed with exit 1
+[postgres-migrations] Invalid package config /workspace/package.json.
+PowerShell location: No D:\Sistemas\TRAE IA\zapcrm\wacrm\scripts\testing\validate-postgres-migration-runner.ps1:33 caractere:5
++     throw "docker $($Arguments[0]) failed with exit $code`n$detail"
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

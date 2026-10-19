@@ -1,0 +1,2 @@
+﻿Validation failure: docker network failed with exit 1
+Error response from daemon: all predefined address pools have been fully subnetted

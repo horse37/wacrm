@@ -170,6 +170,11 @@ export function SettingsOverview({
       ),
     },
     {
+      section: 'agency',
+      loading: false,
+      subtitle: 'Connect a Zap Lead installation',
+    },
+    {
       section: 'members',
       loading: countsLoading,
       subtitle:

@@ -1,0 +1,35 @@
+
+> wacrm@0.2.2 test:postgres-migrations
+> node --test scripts/migrate-postgres.test.mjs
+
+✔ discovers SQL migrations in numeric order and hashes their exact contents (16.1752ms)
+✔ rejects SQL files without a numeric migration prefix of three to nine digits (16.8948ms)
+✔ accepts current three-digit and future four-digit migration prefixes in numeric order (6.4156ms)
+✔ rejects a four-digit prefix that duplicates a three-digit version (4.4045ms)
+✔ rejects duplicate migration versions rather than applying ambiguous order (5.5957ms)
+✔ applies migrations in order under the advisory lock and records checksums (6.6302ms)
+✔ replay skips already applied migrations without executing their SQL again (5.5039ms)
+✔ rejects a changed checksum before executing an applied migration (4.3117ms)
+✔ rolls back a failed migration and releases the role and advisory lock (4.0769ms)
+✔ rejects a superuser migration login before acquiring the advisory lock (5.5555ms)
+✔ rejects migration login membership in roles beyond the migration owner (4.9403ms)
+✔ rejects migration owner membership in additional roles (4.351ms)
+✔ rejects a superuser migration owner before taking the advisory lock (4.5685ms)
+✔ rejects a login-capable migration owner before taking the advisory lock (5.0585ms)
+✔ rejects migration login or owner roles with elevated PostgreSQL attributes (30.7753ms)
+✔ normalizes CRLF checksums and accepts a legacy raw CRLF checksum (10.7627ms)
+✔ rejects an unknown migration version already present in the ledger (5.5923ms)
+✔ rejects a ledger gap instead of applying later migrations out of order (6.2577ms)
+✔ rejects a migration name mismatch for a version already in the ledger (6.9886ms)
+[postgres-migrations] applied 001_first.sql
+✔ bounds advisory-lock waits and propagates unlock failures (16.6692ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 300.4208
+
+EXIT=0

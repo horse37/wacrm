@@ -1,0 +1,28 @@
+Container: wacrm-hdb002-aa6d7f23
+Image: postgres:16-alpine (local image id sha256:57c72fd2a128e416c7fcc499958864df5301e940bca0a56f58fddf30ffc07777)
+Isolation: --network none; data directory tmpfs; --rm; no named volume; synthetic fixture only
+Readiness: pg_isready exit 0
+Task-owned container stop exit: 0 (auto-removed by --rm)
+
+Attempt 2 container: wacrm-hdb002-ea44ddbb
+Image: postgres:16-alpine; --network none; tmpfs data; --rm; SQL source bind-mounted read-only; no named volume
+Readiness: pg_isready exit 0
+Synthetic SQL role/RLS/replay/rollback proof exit: 0
+Concurrent advisory-lock probe='f'; exit=0
+Dump/restore synthetic row count='2'; exit=0
+STATUS: SUCCESS for synthetic PostgreSQL roles/RLS/history-row-deduplication/rollback/advisory-lock/dump-restore probe; no migration-runner or WACRM application integration.
+Task-owned container stop/auto-remove exit: 0
+Command/result record:
+FAILURE attempt 1; exit 1: runner used Resolve-Path on the not-yet-created log path before SQL; container wacrm-hdb002-aa6d7f23 was stopped and auto-removed; no SQL ran.
+rtk docker image inspect postgres:16-alpine --format {{.Id}} -> exit 0; sha256:57c72fd2a128e416c7fcc499958864df5301e940bca0a56f58fddf30ffc07777
+rtk docker run -d --rm --name wacrm-hdb002-ea44ddbb --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=512m --mount type=bind,source=D:\Sistemas\TRAE IA\zapcrm\wacrm\.harness\tasks\20261015-223715475-obxw\postgresql-proof.sql,target=/tmp/proof.sql,readonly -e POSTGRES_HOST_AUTH_METHOD=trust postgres:16-alpine -> exit 0
+rtk docker exec wacrm-hdb002-ea44ddbb pg_isready -U postgres -> exit 0
+rtk docker exec -i wacrm-hdb002-ea44ddbb psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f /tmp/proof.sql -> exit 0; assertions covered migration replay, role flags, missing-account fail-closed RLS, account-scoped read, cross-account write denial, transaction-local context reset, runtime DDL denial, and transactional DDL rollback.
+Lock holder: rtk docker exec wacrm-hdb002-ea44ddbb psql -U postgres -d wacrm_validation -Atqc "SELECT pg_advisory_lock(916016); SELECT pg_sleep(3)" -> completed before cleanup.
+Lock contender: rtk docker exec wacrm-hdb002-ea44ddbb psql -U postgres -d wacrm_validation -Atqc "SELECT pg_try_advisory_lock(916016)" -> exit 0, result f while holder session was active.
+rtk docker exec wacrm-hdb002-ea44ddbb pg_dump -U postgres -Fc -f /tmp/wacrm-hdb002.dump wacrm_validation -> exit 0.
+rtk docker exec wacrm-hdb002-ea44ddbb createdb -U postgres wacrm_restored -> exit 0.
+rtk docker exec wacrm-hdb002-ea44ddbb pg_restore -U postgres -d wacrm_restored /tmp/wacrm-hdb002.dump -> exit 0.
+rtk docker exec wacrm-hdb002-ea44ddbb psql -U postgres -d wacrm_restored -Atqc "SELECT count(*) FROM account_records" -> exit 0, result 2.
+rtk docker stop wacrm-hdb002-ea44ddbb -> exit 0; --rm auto-removed the task-owned container. No named volume or host port was used.
+Limit: synthetic PostgreSQL proof only. No WACRM app schema, migration chain, runtime pool, Auth, Storage, or Realtime integration was exercised.

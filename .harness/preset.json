@@ -1,0 +1,7 @@
+{
+  "preset": "full",
+  "mode": "lean",
+  "stacks": [
+    "web", "n8n", "android"
+  ]
+}

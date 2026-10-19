@@ -33,6 +33,7 @@ import { ConversationsChart } from '@/components/dashboard/conversations-chart'
 import { PipelineDonut } from '@/components/dashboard/pipeline-donut'
 import { ResponseTimeChart } from '@/components/dashboard/response-time-chart'
 import { ActivityFeed } from '@/components/dashboard/activity-feed'
+import { ZapLeadIndicatorsPanel } from '@/components/dashboard/zap-lead-indicators'
 
 type RangeDays = 7 | 30 | 90
 
@@ -181,6 +182,8 @@ export default function DashboardPage() {
 
       {/* Quick actions */}
       <QuickActions />
+
+      <ZapLeadIndicatorsPanel />
 
       {/* Charts row */}
       {/* items-stretch (the grid default) stretches the two columns to

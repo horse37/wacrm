@@ -1,0 +1,31 @@
+﻿Disposable PostgreSQL postgres:15, --network none, tmpfs data directory, synthetic per-run passwords.
+Bootstrap: scripts/testing/postgres-migration-bootstrap.sql (test-only roles).
+== pool-runtime: node exit code 0
+v22.23.3
+pool runtime integration SUCCESS: user=wacrm_runtime application_name=wacrm-web select=ok create_table=denied(42501)
+== runner-fixture: node exit code 1
+v22.23.3
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+System.Management.Automation.RemoteException
+AssertionError [ERR_ASSERTION]: failing migration aborts the run
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///work/scripts/testing/runner-fixture-integration.mjs:50:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: Error: Migration ledger has a gap before version 1000
+      at runMigrations (file:///work/scripts/migrate-postgres.mjs:235:15)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async waitForActual (node:assert:644:5)
+      at async Function.rejects (node:assert:767:25)
+      at async file:///work/scripts/testing/runner-fixture-integration.mjs:50:3,
+  expected: /division by zero/,
+  operator: 'rejects',
+  diff: 'simple'
+}
+System.Management.Automation.RemoteException
+Node.js v22.23.3
+Validation failure: runner-fixture failed with exit 1
+Cleanup: no residual task resources
+Overall result: FAILURE

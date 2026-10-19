@@ -1,0 +1,1 @@
+Command: gitleaks git . --no-banner --redact

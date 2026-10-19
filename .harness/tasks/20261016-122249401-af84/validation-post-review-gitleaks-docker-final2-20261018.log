@@ -1,0 +1,5 @@
+Command: docker run --rm --network none --volume "D:\Sistemas\TRAE IA\zapcrm\wacrm:/repo:ro" zricethezav/gitleaks:v8.21.2 git /repo --no-banner --redact
+8:05PM INF 232 commits scanned.
+8:05PM INF scan completed in 5.05s
+8:05PM INF no leaks found
+Exit code: 0
