@@ -1,0 +1,23 @@
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/account/members/route.test.ts > GET /api/account/members PostgreSQL route > keeps database failures generic
+[GET /api/account/members] PostgreSQL fetch error: Error: private database detail
+    at C:/Sistemas/wacrm/src/app/api/account/members/route.test.ts:122:7
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+·····
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  15:30:19
+   Duration  5.13s (transform 513ms, setup 0ms, import 1.07s, tests 62ms, environment 0ms)
+

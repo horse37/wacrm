@@ -1,0 +1,4 @@
+npm notice run wacrm@0.2.2 typecheck
+npm notice run tsc --noEmit
+
+Exit code: 0

@@ -1,0 +1,31 @@
+npm notice run wacrm@0.2.2 test
+npm notice run vitest run src/lib/zap-lead/credentials.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/zap-lead/credentials.test.ts (7 tests | 1 failed) 45ms
+     × loads the event stream target and cursor through the PostgreSQL repository 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/zap-lead/credentials.test.ts > Zap Lead credential storage > loads the event stream target and cursor through the PostgreSQL repository
+AssertionError: promise rejected "TypeError: Cannot read properties of unde…" instead of resolving
+ ❯ src/lib/zap-lead/credentials.test.ts:164:3
+    162|   await expect(
+    163|     getZapLeadEventStreamTargetForCurrentAccount()
+    164|   ).resolves.toMatchObject({
+       |   ^
+    165|     accountId,
+    166|     keyId: registration.keyId,
+
+Caused by: TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ Module.getZapLeadEventStreamTargetForCurrentAccount src/lib/zap-lead/credentials.ts:151:34
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  08:27:20
+   Duration  1.85s (transform 170ms, setup 0ms, import 238ms, tests 45ms, environment 0ms)
+

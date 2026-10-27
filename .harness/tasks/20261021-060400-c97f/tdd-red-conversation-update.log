@@ -1,0 +1,133 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run --reporter=dot src/lib/repositories/whatsapp-send-conversation.test.ts src/app/api/whatsapp/send/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps legacy token upgrade in PostgreSQL and best-effort
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > does not wait for the legacy token upgrade before completing the send
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > logs only a safe error when legacy token upgrade fails
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'pt_BR' (found: true)
+Meta API send failed for all variants: synthetic provider failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: true)
+Meta API send failed for all variants: synthetic provider failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: false)
+Meta API send failed for all variants: synthetic provider failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id
+[whatsapp/send] reply target has no Meta message_id; sending without context
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > forwards the parent Meta message id as reply context
+Meta API send failed for all variants: synthetic Meta send failure
+
+··xx···········stdout | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[whatsapp/send] Auto-corrected contact phone: +15550000001 → +15550000002
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[whatsapp/send] contact phone auto-correction failed: The database operation failed.
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[flows] pause-on-agent-send threw: Cannot read properties of undefined (reading 'from')
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns the existing persistence error response after accepted send when message insert fails
+Error inserting sent message: The database operation failed.
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > does not persist a message when the WhatsApp provider rejects the send
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > updates the conversation in PostgreSQL after the provider accepts send
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'update')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:370:28)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:809:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps accepted send successful when PostgreSQL conversation update fails
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'update')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:370:28)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:859:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+·········xx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-conversation.test.ts > PostgreSQL WhatsApp send conversation repository > updates the last-message snapshot in the verified account
+TypeError: repository.updateAfterSend is not a function
+ ❯ src/lib/repositories/whatsapp-send-conversation.test.ts:93:18
+     91|
+     92|     await expect(
+     93|       repository.updateAfterSend({
+       |                  ^
+     94|         conversationId,
+     95|         lastMessageText,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-conversation.test.ts > PostgreSQL WhatsApp send conversation repository > returns false when RLS or account scope hides the conversation
+TypeError: repository.updateAfterSend is not a function
+ ❯ src/lib/repositories/whatsapp-send-conversation.test.ts:120:18
+    118|
+    119|     await expect(
+    120|       repository.updateAfterSend({
+       |                  ^
+    121|         conversationId: '20000000-0000-4000-8000-000000000002',
+    122|         lastMessageText: 'synthetic outbound message',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > updates the conversation in PostgreSQL after the provider accepts send
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:817:29
+    815|     );
+    816|
+    817|     expect(response.status).toBe(200);
+       |                             ^
+    818|     expect(await response.json()).toMatchObject({ success: true });
+    819|     const updateIndex = mocks.transactionQuery.mock.calls.findIndex(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps accepted send successful when PostgreSQL conversation update fails
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:867:29
+    865|     );
+    866|
+    867|     expect(response.status).toBe(200);
+       |                             ^
+    868|     expect(await response.json()).toMatchObject({ success: true });
+    869|     expect(mocks.transactionQuery).toHaveBeenCalledWith(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  4 failed | 22 passed (26)
+   Start at  06:12:29
+   Duration  3.78s (transform 426ms, setup 0ms, import 767ms, tests 220ms, environment 1ms)
+

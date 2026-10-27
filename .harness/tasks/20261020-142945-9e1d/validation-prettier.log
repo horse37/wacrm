@@ -1,0 +1,11 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/app/api/invitations/[token]/redeem/route.ts src/app/api/invitations/[token]/redeem/route.test.ts .harness/tasks/20261020-142945-9e1d/task.md .harness/tasks/20261020-142945-9e1d/handoffs/implementer.md
+Checking formatting...
+All matched files use Prettier code style!
+
+Route/task/handoff exit code: 0
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check --range-start 0 --range-end 1450 .harness/current-task.md
+Checking formatting...
+All matched files use Prettier code style!
+Current-task changed range exit code: 0

@@ -1,0 +1,163 @@
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires a verified session before opening a transaction 9ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > allows a viewer and reads only the encrypted connection fields for its account 5ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > returns null when account has no WhatsApp configuration 1ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > fails safely if account uniqueness is violated 1ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > fails safely when database status is outside the existing contract 1ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > fails safely when the encrypted token is missing 1ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > propagates safe database errors without exposing driver details 1ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > deletes only the current account config for an admin 2ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > denies non-admin membership before attempting a delete 1ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires a verified session before any delete transaction 1ms
+ × src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > reads the current admin config registration state by account 12ms
+   → repository.getRegistrationState is not a function
+ × src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires admin membership before reading config registration state 2ms
+   → repository.getRegistrationState is not a function
+ × src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > upserts encrypted config only for the verified admin account 2ms
+   → repository.saveConnectionConfig is not a function
+ × src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > rejects config writes for non-admin membership before INSERT 1ms
+   → repository.saveConnectionConfig is not a function
+ × src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > maps the global phone unique constraint to a safe conflict 2ms
+   → repository.saveConnectionConfig is not a function
+ ✓ src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > requires the verified server session before repository or Meta work 14ms
+ × src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > reserves config in PostgreSQL before Meta mutation and preserves success response 18ms
+   → expected "vi.fn()" to be called once, but got 0 times
+ × src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > returns the existing conflict contract before registration or subscription 10ms
+   → expected 200 to be 409 // Object.is equality
+ × src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > rejects non-admin PostgreSQL membership before contacting Meta 11ms
+   → expected 200 to be 403 // Object.is equality
+ × src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > persists registration failure and preserves its successful-save response 8ms
+   → expected "vi.fn()" to be called 2 times, but got 0 times
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > reads the current admin config registration state by account
+TypeError: repository.getRegistrationState is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:234:29
+    232|     );
+    233|
+    234|     await expect(repository.getRegistrationState()).resolves.toEqual({
+       |                             ^
+    235|       phoneNumberId: 'synthetic-phone-id-a',
+    236|       registeredAt: '2026-10-20T12:00:00.000Z',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires admin membership before reading config registration state
+TypeError: repository.getRegistrationState is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:260:29
+    258|     );
+    259|
+    260|     await expect(repository.getRegistrationState()).rejects.toEqual(
+       |                             ^
+    261|       new AppError('forbidden')
+    262|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > upserts encrypted config only for the verified admin account
+TypeError: repository.saveConnectionConfig is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:288:29
+    286|     };
+    287|
+    288|     await expect(repository.saveConnectionConfig(config)).resolves.toB…
+       |                             ^
+    289|
+    290|     const upsertCall = query.mock.calls.find(([sql]) =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > rejects config writes for non-admin membership before INSERT
+TypeError: repository.saveConnectionConfig is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:323:18
+    321|
+    322|     await expect(
+    323|       repository.saveConnectionConfig({
+       |                  ^
+    324|         phoneNumberId: 'synthetic-phone-id-new',
+    325|         wabaId: null,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > maps the global phone unique constraint to a safe conflict
+TypeError: repository.saveConnectionConfig is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:350:18
+    348|
+    349|     await expect(
+    350|       repository.saveConnectionConfig({
+       |                  ^
+    351|         phoneNumberId: 'synthetic-phone-id-claimed',
+    352|         wabaId: null,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > reserves config in PostgreSQL before Meta mutation and preserves success response
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ src/app/api/whatsapp/config/route.post.test.ts:159:36
+    157|       phone_info: phoneInfo,
+    158|     });
+    159|     expect(mocks.createRepository).toHaveBeenCalledOnce();
+       |                                    ^
+    160|     const [getVerifiedSession] = mocks.createRepository.mock.calls[0] …
+    161|     await expect(getVerifiedSession()).resolves.toEqual({ userId });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > returns the existing conflict contract before registration or subscription
+AssertionError: expected 200 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 200
+
+ ❯ src/app/api/whatsapp/config/route.post.test.ts:199:29
+    197|     const response = await POST(makeRequest());
+    198|
+    199|     expect(response.status).toBe(409);
+       |                             ^
+    200|     expect(await response.json()).toEqual({
+    201|       error:
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > rejects non-admin PostgreSQL membership before contacting Meta
+AssertionError: expected 200 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 200
+
+ ❯ src/app/api/whatsapp/config/route.post.test.ts:217:29
+    215|     const response = await POST(makeRequest());
+    216|
+    217|     expect(response.status).toBe(403);
+       |                             ^
+    218|     expect(await response.json()).toEqual({
+    219|       error: 'Your profile is not linked to an account.',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > persists registration failure and preserves its successful-save response
+AssertionError: expected "vi.fn()" to be called 2 times, but got 0 times
+ ❯ src/app/api/whatsapp/config/route.post.test.ts:243:40
+    241|       phone_info: phoneInfo,
+    242|     });
+    243|     expect(mocks.saveConnectionConfig).toHaveBeenCalledTimes(2);
+       |                                        ^
+    244|     expect(mocks.saveConnectionConfig.mock.calls[1]?.[0]).toMatchObjec…
+    245|       status: 'disconnected',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  9 failed | 11 passed (20)
+   Start at  18:30:17
+   Duration  3.20s (transform 417ms, setup 0ms, import 671ms, tests 112ms, environment 1ms)
+

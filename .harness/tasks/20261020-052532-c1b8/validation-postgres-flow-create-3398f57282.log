@@ -1,0 +1,10 @@
+Docker context: desktop-linux
+Command: docker run --pull=never -d --rm --name wacrm-flow-create-db-3398f57282 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL 16 image; tmpfs database; no ports or named volumes.
+Synthetic accounts, profiles, flow drafts, and template nodes only. Generated credentials are not recorded.
+PowerShell AST, fixture forced-RLS, NOBYPASSRLS, and minimum-grant checks passed.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Validation failure: docker exec failed with exit 2
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "db_flow_node_bootstrap" does not exist
+Cleanup: no residual task resources
+Overall result: FAILURE

@@ -1,0 +1,253 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/account/transfer-ownership/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > requires the owner guard, rate-limits, then transfers through PostgreSQL
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.test.ts:83:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository unauthorized errors to safe HTTP responses
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.test.ts:139:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository forbidden errors to safe HTTP responses
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.test.ts:139:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository bad_request errors to safe HTTP responses
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.test.ts:139:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository not_found errors to safe HTTP responses
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.test.ts:139:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository conflict errors to safe HTTP responses
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.test.ts:139:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts (11 tests | 9 failed) 66ms
+stderr | src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > preserves the existing status for SQLSTATE 42501
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.test.ts:161:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+     × requires the owner guard, rate-limits, then transfers through PostgreSQL 28ms
+     × maps repository unauthorized errors to safe HTTP responses 4ms
+     × maps repository forbidden errors to safe HTTP responses 3ms
+     × maps repository bad_request errors to safe HTTP responses 3ms
+     × maps repository not_found errors to safe HTTP responses 3ms
+     × maps repository conflict errors to safe HTTP responses 3ms
+     × preserves the existing status for SQLSTATE 42501 2ms
+     × preserves the existing status for SQLSTATE 22023 3ms
+     × sanitizes unexpected database failures behind the existing 500 response 6ms
+
+stderr | src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > preserves the existing status for SQLSTATE 22023
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/transfer-ownership/route.test.ts:161:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > requires the owner guard, rate-limits, then transfers through PostgreSQL
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts:85:29
+     83|     const response = await POST(postRequest());
+     84|
+     85|     expect(response.status).toBe(200);
+       |                             ^
+     86|     expect(await response.json()).toEqual({ ok: true });
+     87|     expect(mocks.checkRateLimit).toHaveBeenCalledWith(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository unauthorized errors to safe HTTP responses
+AssertionError: expected 500 to be 401 // Object.is equality
+
+- Expected
++ Received
+
+- 401
++ 500
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts:142:31
+    140|       const body = await response.json();
+    141|
+    142|       expect(response.status).toBe(status);
+       |                               ^
+    143|       expect(body).toEqual({ error: expect.any(String) });
+    144|       expect(JSON.stringify(body)).not.toContain(userId);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository forbidden errors to safe HTTP responses
+AssertionError: expected 500 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 500
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts:142:31
+    140|       const body = await response.json();
+    141|
+    142|       expect(response.status).toBe(status);
+       |                               ^
+    143|       expect(body).toEqual({ error: expect.any(String) });
+    144|       expect(JSON.stringify(body)).not.toContain(userId);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository bad_request errors to safe HTTP responses
+AssertionError: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts:142:31
+    140|       const body = await response.json();
+    141|
+    142|       expect(response.status).toBe(status);
+       |                               ^
+    143|       expect(body).toEqual({ error: expect.any(String) });
+    144|       expect(JSON.stringify(body)).not.toContain(userId);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository not_found errors to safe HTTP responses
+AssertionError: expected 500 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 500
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts:142:31
+    140|       const body = await response.json();
+    141|
+    142|       expect(response.status).toBe(status);
+       |                               ^
+    143|       expect(body).toEqual({ error: expect.any(String) });
+    144|       expect(JSON.stringify(body)).not.toContain(userId);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > maps repository conflict errors to safe HTTP responses
+AssertionError: expected 500 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 500
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts:142:31
+    140|       const body = await response.json();
+    141|
+    142|       expect(response.status).toBe(status);
+       |                               ^
+    143|       expect(body).toEqual({ error: expect.any(String) });
+    144|       expect(JSON.stringify(body)).not.toContain(userId);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > preserves the existing status for SQLSTATE 42501
+AssertionError: expected 500 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 500
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts:163:31
+    161|       const response = await POST(postRequest());
+    162|
+    163|       expect(response.status).toBe(status);
+       |                               ^
+    164|     }
+    165|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+ FAIL  src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > preserves the existing status for SQLSTATE 22023
+AssertionError: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts:163:31
+    161|       const response = await POST(postRequest());
+    162|
+    163|       expect(response.status).toBe(status);
+       |                               ^
+    164|     }
+    165|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯
+
+ FAIL  src/app/api/account/transfer-ownership/route.test.ts > POST /api/account/transfer-ownership > sanitizes unexpected database failures behind the existing 500 response
+AssertionError: expected { error: 'Internal server error' } to deeply equal { Object (error) }
+
+- Expected
++ Received
+
+  {
+-   "error": "Failed to transfer ownership",
++   "error": "Internal server error",
+  }
+
+ ❯ src/app/api/account/transfer-ownership/route.test.ts:179:18
+    177|
+    178|     expect(response.status).toBe(500);
+    179|     expect(body).toEqual({ error: 'Failed to transfer ownership' });
+       |                  ^
+    180|     expect(JSON.stringify(body)).not.toContain('synthetic database det…
+    181|     expect(consoleError).toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  9 failed | 2 passed (11)
+   Start at  14:59:56
+   Duration  2.14s (transform 202ms, setup 0ms, import 539ms, tests 66ms, environment 0ms)
+

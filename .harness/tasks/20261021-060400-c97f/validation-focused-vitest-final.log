@@ -1,0 +1,61 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run --reporter=dot src/lib/repositories/whatsapp-send-conversation.test.ts src/app/api/whatsapp/send/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps legacy token upgrade in PostgreSQL and best-effort
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > does not wait for the legacy token upgrade before completing the send
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > logs only a safe error when legacy token upgrade fails
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'pt_BR' (found: true)
+Meta API send failed for all variants: synthetic provider failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: true)
+Meta API send failed for all variants: synthetic provider failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: false)
+Meta API send failed for all variants: synthetic provider failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id
+[whatsapp/send] reply target has no Meta message_id; sending without context
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > forwards the parent Meta message id as reply context
+Meta API send failed for all variants: synthetic Meta send failure
+
+····stdout | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[whatsapp/send] Auto-corrected contact phone: +15550000001 → +15550000002
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[whatsapp/send] contact phone auto-correction failed: The database operation failed.
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[flows] pause-on-agent-send threw: Cannot read properties of undefined (reading 'from')
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns the existing persistence error response after accepted send when message insert fails
+Error inserting sent message: The database operation failed.
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > does not persist a message when the WhatsApp provider rejects the send
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > updates the conversation in PostgreSQL after the provider accepts send
+[flows] pause-on-agent-send threw: Cannot read properties of undefined (reading 'from')
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps accepted send successful when PostgreSQL conversation update fails
+[whatsapp/send] conversation update failed: The database operation failed.
+[flows] pause-on-agent-send threw: Cannot read properties of undefined (reading 'from')
+
+······················
+
+ Test Files  2 passed (2)
+      Tests  26 passed (26)
+   Start at  06:16:46
+   Duration  4.61s (transform 520ms, setup 0ms, import 949ms, tests 151ms, environment 1ms)
+

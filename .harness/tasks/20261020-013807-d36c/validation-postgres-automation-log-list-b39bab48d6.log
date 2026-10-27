@@ -1,0 +1,51 @@
+Command: docker run -d --rm --name wacrm-automation-logs-db-b39bab48d6 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=db_automation_logs_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic accounts, profiles, automations, contacts, and automation logs only. Generated bootstrap/runtime passwords are not recorded.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --rm --name wacrm-automation-logs-node-b39bab48d6 --network container:wacrm-automation-logs-db-b39bab48d6 --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_automation_logs_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e TZ=Pacific/Kiritimati -e PG_POOL_MAX=1 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-log-list-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 1
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     contact: null,
++     created_at: '2026-10-18T10:00:00.000Z',
++     error_message: null,
++     id: '40000000-0000-4000-8000-000000000007',
++     status: 'success',
++     steps_executed: [],
++     trigger_event: 'empty_account_event'
++   }
++ ]
+- []
+
+    at file:///source/scripts/testing/postgres-automation-log-list-integration.mjs:169:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      id: '40000000-0000-4000-8000-000000000007',
+      trigger_event: 'empty_account_event',
+      steps_executed: [],
+      status: 'success',
+      error_message: null,
+      created_at: '2026-10-18T10:00:00.000Z',
+      contact: null
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3
+Validation failure: PostgreSQL automation-log-list integration failed with exit 1.
+Cleanup: no residual task resources
+Overall result: FAILURE

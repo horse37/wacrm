@@ -1,0 +1,23 @@
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/account/route.test.ts > PATCH /api/account PostgreSQL route > keeps unexpected PostgreSQL errors generic
+[PATCH /api/account] PostgreSQL update error: Error: private database detail
+    at C:/Sistemas/wacrm/src/app/api/account/route.test.ts:181:40
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+··········
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  15:36:38
+   Duration  4.44s (transform 325ms, setup 0ms, import 830ms, tests 88ms, environment 0ms)
+

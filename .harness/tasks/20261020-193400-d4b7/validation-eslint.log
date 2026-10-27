@@ -1,0 +1,3 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run eslint --max-warnings=0 src/app/api/account/invitations/[id]/route.ts src/app/api/account/invitations/[id]/route.test.ts
+EXIT_CODE=0

@@ -1,0 +1,5 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/app/api/whatsapp/send/route.ts
+Checking formatting...
+All matched files use Prettier code style!
+EXIT=0

@@ -1,0 +1,19 @@
+A3 round 4 remediation — 2026-10-22
+Repository: C:\Sistemas\wacrm
+Branch: main
+HEAD: 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+Changed behavior:
+- Test coverage exercises each explicit Scope label A1–A5.
+- For each label, an approval scoped to it leaves a different filename scope's prior unresolved finding unresolved.
+
+Validation:
+- node --test .harness/dashboard-review-progress.test.mjs — PASS, 33/33.
+- node --check .harness/dashboard-review-progress.mjs — PASS.
+- node --check .harness/dashboard-review-progress.test.mjs — PASS.
+- prettier --check .harness/dashboard-review-progress.mjs .harness/dashboard-review-progress.test.mjs — PASS.
+- git diff --check — PASS on tracked working-tree changes.
+- Whitespace/final-newline scan — PASS for parser, tests, task/handoff, review index, and A3 review/evidence records.
+
+Regression catches both an unrecognized A label and accidental union of explicit Scope IDs with filename IDs.
+No database, Docker, external service, schema, RLS, grants, or production resources used.

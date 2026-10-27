@@ -1,0 +1,26 @@
+# Opus r2 finding 1 follow-up — indirect Zap Lead event-stream dependency
+# Date: 2026-10-22 (America/Sao_Paulo)
+# Scope: fail-closed route gate coverage only; no grants, migrations, or DB changes.
+
+## TDD red — before gate change
+Command: npx vitest run src/lib/db/postgres-api-route-gate.test.ts
+Result: FAIL, 1 failed / 3 passed. New assertion for
+/api/zap-lead/events/stream received false; expected true. This confirmed the
+indirect PostgreSQL-backed event-stream route was not covered by the gate.
+
+## Implementation
+Added /api/zap-lead/events to postgresBackedRoutePrefixes and an explicit
+regression assertion for /api/zap-lead/events/stream. The route's credentials
+helper uses createPostgresZapLeadEventStreamReadRepository. Middleware applies
+the gate before Supabase auth/client setup. No migration, grant, or policy was
+changed.
+
+## Final focused validation
+- npx vitest run src/lib/db/postgres-api-route-gate.test.ts: PASS, 4/4.
+- npx prettier --check src/lib/db/postgres-api-route-gate.ts src/lib/db/postgres-api-route-gate.test.ts: PASS.
+- npx eslint src/lib/db/postgres-api-route-gate.ts src/lib/db/postgres-api-route-gate.test.ts --max-warnings=0: PASS, exit 0.
+- npx tsc --noEmit: PASS, exit 0.
+- git diff --check -- src/lib/db/postgres-api-route-gate.ts src/lib/db/postgres-api-route-gate.test.ts: PASS, exit 0.
+
+No database, Docker, Supabase, production, external service, real data, or
+credentials were accessed. No commit, push, or deploy.

@@ -18,27 +18,41 @@
 //   silently hand their account away.
 // ============================================================
 
-import { NextResponse } from "next/server";
-import type { PostgrestError } from "@supabase/supabase-js";
+import { NextResponse } from 'next/server';
 
-import { requireRole, toErrorResponse } from "@/lib/auth/account";
+import { requireRole, toErrorResponse } from '@/lib/auth/account';
+import { toAppError } from '@/lib/db/errors';
+import { createPostgresAccountOwnershipTransferRepository } from '@/lib/repositories/account-ownership-transfer';
 import {
   checkRateLimit,
   rateLimitResponse,
   RATE_LIMITS,
-} from "@/lib/rate-limit";
+} from '@/lib/rate-limit';
 
-function rpcErrorToResponse(err: PostgrestError): NextResponse {
-  if (err.code === "42501") {
-    return NextResponse.json({ error: err.message }, { status: 403 });
+function repositoryErrorToResponse(error: unknown): NextResponse {
+  const appError = toAppError(error);
+  if (appError.sqlState === '42501') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
-  if (err.code === "22023") {
-    return NextResponse.json({ error: err.message }, { status: 400 });
+  if (appError.code === 'db_error') {
+    console.error('[transfer-ownership] unexpected repository error:', error);
+    return NextResponse.json(
+      { error: 'Failed to transfer ownership' },
+      { status: 500 }
+    );
   }
-  console.error("[transfer-ownership] unexpected RPC error:", err);
+
+  const statusByCode = {
+    unauthorized: 401,
+    forbidden: 403,
+    bad_request: 400,
+    not_found: 404,
+    conflict: 409,
+  } as const;
+
   return NextResponse.json(
-    { error: "Failed to transfer ownership" },
-    { status: 500 },
+    { error: appError.message },
+    { status: statusByCode[appError.code] }
   );
 }
 
@@ -47,17 +61,16 @@ function rpcErrorToResponse(err: PostgrestError): NextResponse {
 // (numbers, objects) before we round-trip.
 function looksLikeUuid(v: unknown): v is string {
   return (
-    typeof v === "string" &&
+    typeof v === 'string' &&
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v)
   );
 }
 
 export async function POST(request: Request) {
   try {
-    // `requireRole('owner')` is belt-and-braces — the RPC checks
-    // this too, but failing fast here saves a Supabase round trip
-    // on the obvious "admin trying to transfer" case.
-    const ctx = await requireRole("owner");
+    // Keep the existing Auth guard. The PostgreSQL repository also
+    // verifies the owner role before it starts the transfer.
+    const ctx = await requireRole('owner');
 
     // Rate-limit owner-only transfers. Legitimate use is one click
     // every few months at most; a script run in a loop would
@@ -65,27 +78,30 @@ export async function POST(request: Request) {
     // pace and bounds the noise.
     const limit = checkRateLimit(
       `admin:transferOwnership:${ctx.userId}`,
-      RATE_LIMITS.adminAction,
+      RATE_LIMITS.adminAction
     );
     if (!limit.success) return rateLimitResponse(limit);
 
-    const body = (await request.json().catch(() => null)) as
-      | { newOwnerUserId?: unknown }
-      | null;
+    const body = (await request.json().catch(() => null)) as {
+      newOwnerUserId?: unknown;
+    } | null;
     const newOwnerUserId = body?.newOwnerUserId;
 
     if (!looksLikeUuid(newOwnerUserId)) {
       return NextResponse.json(
         { error: "'newOwnerUserId' must be a valid UUID" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
-    const { error } = await ctx.supabase.rpc("transfer_account_ownership", {
-      p_new_owner_user_id: newOwnerUserId,
-    });
-
-    if (error) return rpcErrorToResponse(error);
+    const repository = createPostgresAccountOwnershipTransferRepository(
+      async () => ({ userId: ctx.userId })
+    );
+    try {
+      await repository.transferTo(newOwnerUserId);
+    } catch (error) {
+      return repositoryErrorToResponse(error);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {

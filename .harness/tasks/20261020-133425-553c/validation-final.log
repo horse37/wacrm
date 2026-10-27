@@ -1,0 +1,19 @@
+Focused validation — PostgreSQL flow editor detail route
+Task: 20261020-133425-553c
+Date: 2026-10-20 (Brasília)
+Repository: C:\Sistemas\wacrm
+Branch/HEAD: main / 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+TDD RED: `npx vitest run 'src/app/api/flows/[id]/route.test.ts' --maxWorkers=1 --no-file-parallelism` failed as expected (4 failed, 1 passed). Existing GET performed Supabase flow ownership/data queries and did not delegate to the PostgreSQL repository.
+
+Final checks:
+- PASS — focused route and repository Vitest: `npx vitest run 'src/app/api/flows/[id]/route.test.ts' src/lib/repositories/flow-editor-load.test.ts --maxWorkers=1 --no-file-parallelism` (17/17).
+- PASS — `npx tsc --noEmit`.
+- PASS — targeted ESLint on route and test with `--max-warnings=0`.
+- PASS — targeted Prettier check on route, test, task, and handoff.
+- PASS — `git diff --check` (exit 0; existing worktree reports line-ending normalization warnings).
+- PASS — disposable Docker Desktop PostgreSQL 16 forced-RLS flow-editor-load proof; evidence: `../20261020-020502-d4a8/validation-postgres-flow-editor-load-b1c6c0d25b.log`. It reports `NOBYPASSRLS`, exact column grants, tenant/member isolation, creator consistency, stable node ordering, allowlisted DTO, hidden not-found, identity cleanup, and no residual task resources.
+
+The route tests mock the existing verified server-session call. Docker used synthetic accounts/flows, `--network none`, tmpfs, read-only source mounts, and `--rm`; no Supabase service, credentials, real data, application traffic, or production was used. No commit, push, or deploy occurred.
+
+The route file was Prettier-normalized as a whole. `PUT` and `DELETE` logic was not intentionally changed; independent review must confirm semantic equivalence. H-DB-003/H-DATA-003 remain unapproved overall.

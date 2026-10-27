@@ -1,0 +1,10 @@
+Command: docker run -d --rm --name wacrm-contact-deal-list-db-6112eaba56 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=db_contact_deals_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic accounts/profiles/contacts/pipelines/pipeline_stages/deals only. Bootstrap and runtime passwords are generated for this run and are not recorded.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --rm --name wacrm-contact-deal-list-node-6112eaba56 --network container:wacrm-contact-deal-list-db-6112eaba56 --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_contact_deals_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=1 -e TZ=Pacific/Kiritimati node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-contact-deal-list-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 0
+PostgreSQL contact-deal integration SUCCESS: NOBYPASSRLS role, Deal projection, NUMERIC conversion, newest-first/ID order, account/contact/pipeline/stage isolation, viewer access, empty result, invalid/no-session rejection, and transaction-local identity cleanup.
+Cleanup: no residual task resources
+Overall result: SUCCESS

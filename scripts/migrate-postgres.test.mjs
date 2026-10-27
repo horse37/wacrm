@@ -126,6 +126,21 @@ function createMockPool({
   };
 }
 
+test('rejects unsupported custom migration owner before connecting', async () => {
+  const pool = createMockPool();
+  let connected = false;
+  pool.connect = async () => {
+    connected = true;
+    return pool.client;
+  };
+
+  await assert.rejects(
+    runMigrations({ pool, ownerRole: 'wacrm_custom_owner' }),
+    /migration chain requires owner role "postgres"/i
+  );
+  assert.equal(connected, false);
+});
+
 test('discovers SQL migrations in numeric order and hashes their exact contents', async () => {
   const directory = await createTempDirectory();
 
@@ -192,6 +207,32 @@ test('accepts current three-digit and future four-digit migration prefixes in nu
   }
 });
 
+test('accepts a nine-digit migration prefix and orders it numerically', async () => {
+  const directory = await createTempDirectory();
+
+  try {
+    await writeFile(
+      path.join(directory, '999999999_future.sql'),
+      'SELECT 999999999;'
+    );
+    await writeFile(
+      path.join(directory, '1000_four_digit.sql'),
+      'SELECT 1000;'
+    );
+    await writeFile(path.join(directory, '999_last_three.sql'), 'SELECT 999;');
+
+    const migrations = await discoverMigrations(directory);
+
+    assert.deepEqual(
+      migrations.map(({ version }) => version),
+      [999, 1000, 999999999]
+    );
+    assert.equal(migrations[2].name, '999999999_future.sql');
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
 test('rejects a four-digit prefix that duplicates a three-digit version', async () => {
   const directory = await createTempDirectory();
 
@@ -250,10 +291,11 @@ test('applies migrations in order under the advisory lock and records checksums'
       "SELECT 'migration-2';",
     ]);
     assert.deepEqual(pool.migrationRoles, ['postgres', 'postgres']);
-    assert.ok(
-      pool.calls.indexOf('SET ROLE "postgres"') <
-        pool.calls.indexOf("SELECT 'migration-1';")
-    );
+    const setRoleIndex = pool.calls.indexOf('SET ROLE "postgres"');
+    const firstMigrationIndex = pool.calls.indexOf("SELECT 'migration-1';");
+    assert.ok(setRoleIndex >= 0);
+    assert.ok(firstMigrationIndex >= 0);
+    assert.ok(setRoleIndex < firstMigrationIndex);
     assert.deepEqual(
       pool.ledger.map(({ version }) => version),
       [1, 2]
@@ -365,10 +407,10 @@ test('rejects a superuser migration login before acquiring the advisory lock', a
       runMigrations({ pool, directory, logger: { info() {} } }),
       /migration login must be a distinct LOGIN NOINHERIT NOSUPERUSER/
     );
-assert.equal(
-pool.calls.some((sql) => sql.includes('pg_try_advisory_lock')),
-false
-);
+    assert.equal(
+      pool.calls.some((sql) => sql.includes('pg_try_advisory_lock')),
+      false
+    );
     assert.equal(pool.migrationSql.length, 0);
     assert.ok(pool.releasedWith instanceof Error);
   } finally {

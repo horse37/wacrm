@@ -1,0 +1,12 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/whatsapp-config.test.ts src/app/api/whatsapp/config/route.delete.test.ts src/app/api/whatsapp/config/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  3 passed (3)
+      Tests  21 passed (21)
+   Start at  18:08:53
+   Duration  4.02s (transform 730ms, setup 0ms, import 1.28s, tests 101ms, environment 1ms)
+
+Exit code: 0

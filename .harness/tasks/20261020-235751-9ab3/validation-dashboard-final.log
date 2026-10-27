@@ -1,0 +1,12 @@
+Data/hora: 2026-10-20 21:28 BRT (America/Sao_Paulo)
+
+`node --check .harness/dashboard-server.mjs`: PASS
+`npx prettier --check .harness/dashboard-server.mjs`: PASS (`All matched files use Prettier code style!`)
+Após atualizar os registros: Prettier check no painel, task e handoff: PASS.
+`git diff --check` nos arquivos da fatia e registros: PASS; Git informou somente conversão de `LF` para `CRLF` em `route.ts`.
+
+Servidor local: reiniciado após confirmar que o PID anterior executava `.harness/dashboard-server.mjs` e possuía a porta 49213.
+`GET http://127.0.0.1:49213/api/status`: HTTP 200; task `20261020-235751-9ab3` em `in_progress`; fuso `America/Sao_Paulo`.
+`GET http://127.0.0.1:49213/dashboard.html`: HTTP 200; título `WACRM — andamento PostgreSQL`; rótulos visíveis de tarefa, validações, limites e ação em português.
+
+Esta checagem valida somente o painel local. Não comprova aprovação global de H-DATA-003/H-DB-003 nem qualquer integração externa.

@@ -1,0 +1,5 @@
+Started: 2026-10-20T08:49:28-03:00
+Command: docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,nodev,size=64m -e HOME=/tmp --mount <read-only-repository> --workdir /repo zricethezav/gitleaks:v8.21.2 dir /repo --no-banner --redact
+Exit code: 0
+SUCCESS: no leaks found
+no residual scanner container

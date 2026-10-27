@@ -1,0 +1,7 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --write src/lib/repositories/zap-lead-event-stream-read.ts src/lib/repositories/zap-lead-event-stream-read.test.ts src/lib/zap-lead/credentials.ts src/lib/zap-lead/credentials.test.ts .harness/tasks/20261021-081500-6525/postgres-zap-lead-event-stream-read-integration.mjs
+src/lib/repositories/zap-lead-event-stream-read.ts 298ms
+src/lib/repositories/zap-lead-event-stream-read.test.ts 52ms
+src/lib/zap-lead/credentials.ts 84ms
+src/lib/zap-lead/credentials.test.ts 95ms
+.harness/tasks/20261021-081500-6525/postgres-zap-lead-event-stream-read-integration.mjs 47ms

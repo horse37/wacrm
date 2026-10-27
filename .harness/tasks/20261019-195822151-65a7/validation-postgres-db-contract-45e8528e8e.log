@@ -1,0 +1,31 @@
+Command: docker run -d --rm --name wacrm-db-contract-45e8528e8e --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=db_contract_test -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database data is tmpfs; no named volumes or published ports.
+The repository is mounted read-only. The database login/password and SQL rows are generated for this run only.
+Disposable PostgreSQL Docker image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker exec <task-container> pg_isready -U db_contract_test -d postgres; exit 0.
+Command: docker run --rm --name wacrm-db-contract-node-45e8528e8e --network container:wacrm-db-contract-45e8528e8e --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://db_contract_test:<synthetic>@127.0.0.1:5432/postgres node:22-bookworm node --conditions=react-server --experimental-loader scripts/testing/typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-db-contract-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Disposable Node Docker image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 1
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'scripts' imported from /source/
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:314:9)
+    at packageResolve (node:internal/modules/esm/resolve:772:81)
+    at moduleResolve (node:internal/modules/esm/resolve:859:18)
+    at defaultResolve (node:internal/modules/esm/resolve:989:11)
+    at nextResolve (node:internal/modules/esm/hooks:748:28)
+    at Hooks.resolve (node:internal/modules/esm/hooks:240:30)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:722:35)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:680:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:350:14) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v22.23.3
+Validation failure: Node PostgreSQL DB contract integration failed with exit 1.
+Cleanup: no residual task resources
+Overall result: FAILURE

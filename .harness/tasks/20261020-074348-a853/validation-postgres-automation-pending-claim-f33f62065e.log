@@ -1,0 +1,47 @@
+Command: docker run -d --rm --name wacrm-automation-claim-db-f33f62065e --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=automation_claim_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Only synthetic automation rows are used. Bootstrap/runtime passwords are random for this run and are not recorded.
+PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Command: docker run --rm --name wacrm-automation-claim-node-f33f62065e --network container:wacrm-automation-claim-db-f33f62065e --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_automation_claim_job:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=4 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-pending-claim-integration.mjs
+Node container shares only the disposable database network namespace; repository mount is read-only.
+Node integration exit code: 1
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    '40000000-0000-4000-8000-000000000001',
+    '40000000-0000-4000-8000-000000000002',
+    '40000000-0000-4000-8000-000000000003',
++   '40000000-0000-4000-8000-000000000007'
+-   '40000000-0000-4000-8000-000000000004'
+  ]
+
+    at file:///source/scripts/testing/postgres-automation-pending-claim-integration.mjs:69:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    '40000000-0000-4000-8000-000000000001',
+    '40000000-0000-4000-8000-000000000002',
+    '40000000-0000-4000-8000-000000000003',
+    '40000000-0000-4000-8000-000000000007'
+  ],
+  expected: [
+    '40000000-0000-4000-8000-000000000001',
+    '40000000-0000-4000-8000-000000000002',
+    '40000000-0000-4000-8000-000000000003',
+    '40000000-0000-4000-8000-000000000004'
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3
+Validation failure: PostgreSQL automation pending-claim integration failed with exit 1.
+Cleanup: no residual task resources
+Overall result: FAILURE

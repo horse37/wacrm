@@ -1,0 +1,4 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/app/api/account/transfer-ownership/route.ts src/app/api/account/transfer-ownership/route.test.ts .harness/tasks/20261020-145507-8c48/task.md .harness/tasks/20261020-145507-8c48/handoffs/implementer.md .harness/tasks/20261020-142945-9e1d/task.md .harness/tasks/20261020-142945-9e1d/handoffs/implementer.md .harness/tasks/20261020-142945-9e1d/review-gpt6-luna-final-20261020.md .harness/current-task.md
+Checking formatting...
+All matched files use Prettier code style!

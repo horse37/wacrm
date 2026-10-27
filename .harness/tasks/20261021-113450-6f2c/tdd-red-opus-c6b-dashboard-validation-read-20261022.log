@@ -1,0 +1,33 @@
+TDD RED — dashboard validation collection error
+Disposable copied test tree used the pre-fix catch { return [] } implementation.
+node --test exit code: 1
+✖ dashboard handles page refresh, hostile Host, and refresh failure (7346.4705ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15065.8301
+
+✖ failing tests:
+
+test at ..\..\Users\Dell\AppData\Local\Temp\wacrm-caveat-6b-red-3aa619f6bc3b4e97a0fc7e36bcfd35e2\.harness\dashboard-server-http.test.mjs:135:1
+✖ dashboard handles page refresh, hostile Host, and refresh failure (7346.4705ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 500
+  
+      at TestContext.<anonymous> (file:///C:/Users/Dell/AppData/Local/Temp/wacrm-caveat-6b-red-3aa619f6bc3b4e97a0fc7e36bcfd35e2/.harness/dashboard-server-http.test.mjs:185:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 500,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+

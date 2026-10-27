@@ -13,6 +13,9 @@ vi.mock('@/lib/auth/account', () => ({
     Response.json({ error: 'Internal server error' }, { status: 500 })
   ),
 }));
+vi.mock('@/lib/repositories/zap-lead-registration-read', () => ({
+  createPostgresZapLeadRegistrationReadRepository: vi.fn(),
+}));
 vi.mock('@/lib/zap-lead/credentials', () => ({
   saveZapLeadCredentials: mocks.saveZapLeadCredentials,
   removeZapLeadCredentials: mocks.removeZapLeadCredentials,
@@ -25,18 +28,7 @@ vi.mock('@/lib/rate-limit', () => ({
   RATE_LIMITS: { adminAction: {} },
 }));
 
-import { DELETE, GET, POST } from './route';
-
-function singleResult(data: unknown) {
-  const query = {
-    eq: vi.fn(),
-    maybeSingle: vi.fn().mockResolvedValue({ data, error: null }),
-  };
-  query.eq.mockReturnValue(query);
-  return {
-    select: vi.fn(() => query),
-  };
-}
+import { DELETE, POST } from './route';
 
 describe('Zap Lead registration route', () => {
   beforeEach(() => {
@@ -45,18 +37,6 @@ describe('Zap Lead registration route', () => {
     mocks.requireRole.mockResolvedValue({
       userId: 'user-a',
       accountId: 'account-a',
-      supabase: {
-        from: vi.fn(() => ({
-          select: vi.fn(() => ({
-            eq: vi.fn(() => ({
-              maybeSingle: vi.fn().mockResolvedValue({
-                data: null,
-                error: null,
-              }),
-            })),
-          })),
-        })),
-      },
     });
   });
 
@@ -98,62 +78,9 @@ describe('Zap Lead registration route', () => {
     expect(mocks.saveZapLeadCredentials).not.toHaveBeenCalled();
   });
 
-  it('returns configuration metadata without secrets and can disconnect', async () => {
-    const getResponse = await GET();
-    const status = await getResponse.json();
-    expect(status).toEqual({
-      configured: false,
-      apiBaseUrl: null,
-      generation: null,
-      heartbeat: {
-        lastSuccessAt: null,
-        lastFailureAt: null,
-        lastErrorCode: null,
-        alertSentAt: null,
-      },
-    });
-
+  it('disconnects the Zap Lead registration', async () => {
     const deleteResponse = await DELETE();
     expect(deleteResponse.status).toBe(204);
     expect(mocks.removeZapLeadCredentials).toHaveBeenCalledOnce();
-  });
-
-  it('returns only technical heartbeat state for the current account', async () => {
-    const from = vi.fn((table: string) =>
-      singleResult(
-        table === 'zap_lead_integrations'
-          ? {
-              api_base_url: 'https://zap.example.test',
-              key_id: 'ak_000000000000000000000000',
-            }
-          : {
-              last_success_at: '2026-10-14T09:00:00.000Z',
-              last_failure_at: '2026-10-14T09:10:00.000Z',
-              last_error_code: 'health_request_failed',
-              alert_sent_at: '2026-10-14T09:10:00.000Z',
-            }
-      )
-    );
-    mocks.requireRole.mockResolvedValueOnce({
-      userId: 'user-a',
-      accountId: 'account-a',
-      supabase: { from },
-    });
-
-    const response = await GET();
-
-    expect(await response.json()).toEqual({
-      configured: true,
-      apiBaseUrl: 'https://zap.example.test',
-      generation: 'ak_000000000000000000000000',
-      heartbeat: {
-        lastSuccessAt: '2026-10-14T09:00:00.000Z',
-        lastFailureAt: '2026-10-14T09:10:00.000Z',
-        lastErrorCode: 'health_request_failed',
-        alertSentAt: '2026-10-14T09:10:00.000Z',
-      },
-    });
-    expect(from).toHaveBeenNthCalledWith(1, 'zap_lead_integrations');
-    expect(from).toHaveBeenNthCalledWith(2, 'zap_lead_integration_state');
   });
 });

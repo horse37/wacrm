@@ -1,0 +1,4 @@
+Command: git diff --check
+git diff --check exit code: 0
+Whitespace scan of nine task source/evidence files: PASS
+No trailing whitespace found.

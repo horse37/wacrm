@@ -1,0 +1,24 @@
+Task: 20261021-011547-2ff4 — POST /api/whatsapp/broadcast.
+Date: 2026-10-21, America/Sao_Paulo.
+Base: branch main, HEAD 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c.
+
+Post-implementation focused validation:
+Command: npm exec -- vitest run src/app/api/whatsapp/broadcast/route.test.ts --reporter=dot
+Exit code: 0; 1 test file passed, 6 tests passed.
+Coverage: successful account-scoped config/template reads and provider payload; shared verified-session callback; unauthenticated session; forbidden repository guard; missing WhatsApp config; rate limit before repository access; safe template-repository error response. Supabase SSR, repositories, and sendTemplateMessage are mocked.
+
+Command: npm run typecheck
+Exit code: 0.
+Command: npm exec -- eslint --max-warnings=0 src/app/api/whatsapp/broadcast/route.ts src/app/api/whatsapp/broadcast/route.test.ts
+Exit code: 0; zero warnings.
+Command: npm exec -- prettier --check src/app/api/whatsapp/broadcast/route.ts src/app/api/whatsapp/broadcast/route.test.ts
+Exit code: 0; both files formatted.
+Command: git diff --check
+Exit code: 0.
+
+PostgreSQL evidence reused because repository code, migrations, SQL, RLS and grants were not changed in this slice:
+- .harness/tasks/20261019-230941-5159/validation-postgres-whatsapp-config-8b9cf61413.log — disposable PostgreSQL 16, forced RLS, NOBYPASSRLS, verified account scope, cross-account denial, absent config, transaction identity cleanup.
+- .harness/tasks/20261020-031751-9e7d/validation-postgres-template-send-81e8e8dad8.log — disposable PostgreSQL 16, forced RLS, NOBYPASSRLS, minimum grants, account/name/language predicates, creator consistency, default language, null/missing/ambiguous handling, identity cleanup.
+Both prior runs used synthetic records, Docker Desktop disposable resources and confirmed cleanup. No database, external provider, Supabase, VPS or production access occurred in this route test run.
+
+Review status: internal read-only APPROVE, zero findings/caveats; independent GPT-6 Luna read-only review pending. The pre-implementation RED result is recorded in task.md. Task remains in_progress; this evidence does not approve H-DATA-003 or H-DB-003 globally.

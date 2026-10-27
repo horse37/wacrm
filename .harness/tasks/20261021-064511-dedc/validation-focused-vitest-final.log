@@ -1,0 +1,10 @@
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  2 passed (2)
+      Tests  29 passed (29)
+   Start at  07:03:00
+   Duration  4.02s (transform 369ms, setup 0ms, import 619ms, tests 128ms, environment 0ms)
+
+RESULT: PASS

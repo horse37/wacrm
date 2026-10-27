@@ -1,0 +1,182 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/whatsapp-send-flow-run.test.ts src/app/api/whatsapp/send/route.test.ts -t pauses the active run|no active run|filters an active run|more than one active run|before sending to the provider|blocks provider send --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts (6 tests | 4 failed | 2 skipped) 87ms
+     × pauses the active run for the verified account and contact 53ms
+     × returns false when no active run exists 10ms
+     × fails closed when RLS filters an active run from the UPDATE 9ms
+     × fails closed when PostgreSQL returns more than one active run 8ms
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > blocks provider send when PostgreSQL cannot confirm the Flow pause
+[flows] pause-on-agent-send failed: The database operation failed.
+
+ ❯ src/app/api/whatsapp/send/route.test.ts (24 tests | 2 failed | 22 skipped) 64ms
+     × pauses the active Flow run before sending to the provider 44ms
+     × blocks provider send when PostgreSQL cannot confirm the Flow pause 15ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-flow-run.test.ts > PostgreSQL WhatsApp send flow-run repository > pauses the active run for the verified account and contact
+AssertionError: expected 2nd "vi.fn()" call to have been called with [ StringContaining{…}, [ …(2) ] ]
+
+- Expected
++ Received
+
+  [
+-   StringContaining "SELECT id::text AS id FROM public.flow_runs",
++   "UPDATE public.flow_runs
++          SET status = 'paused_by_agent',
++              ended_at = $3::timestamptz,
++              end_reason = 'agent_replied'
++          WHERE account_id = $1::uuid
++            AND contact_id = $2::uuid
++            AND status = 'active'
++          RETURNING id::text AS id",
+    [
+      "10000000-0000-4000-8000-000000000001",
+      "40000000-0000-4000-8000-000000000001",
++     "2026-10-21T10:00:00.000Z",
+    ],
+  ]
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts:61:36
+     59|       [userId]
+     60|     );
+     61|     expect(mocks.transactionQuery).toHaveBeenNthCalledWith(
+       |                                    ^
+     62|       2,
+     63|       expect.stringContaining('SELECT id::text AS id FROM public.flow_…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-flow-run.test.ts > PostgreSQL WhatsApp send flow-run repository > returns false when no active run exists
+AssertionError: expected "vi.fn()" to not be called with arguments: [ StringContaining{…}, Any<Array> ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   StringContaining "UPDATE public.flow_runs",
+-   Any<Array>,
++   "SELECT set_config('request.jwt.claim.sub', $1, true)",
++   [
++     "00000000-0000-4000-8000-000000000001",
++   ],
+  ]
+
+  2nd vi.fn() call:
+
+  [
+-   StringContaining "UPDATE public.flow_runs",
+-   Any<Array>,
++   "UPDATE public.flow_runs
++          SET status = 'paused_by_agent',
++              ended_at = $3::timestamptz,
++              end_reason = 'agent_replied'
++          WHERE account_id = $1::uuid
++            AND contact_id = $2::uuid
++            AND status = 'active'
++          RETURNING id::text AS id",
++   [
++     "10000000-0000-4000-8000-000000000001",
++     "40000000-0000-4000-8000-000000000001",
++     "2026-10-21T10:00:00.000Z",
++   ],
+  ]
+
+
+Number of calls: 2
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts:83:40
+     81|     ).resolves.toBe(false);
+     82|     expect(mocks.transactionQuery).toHaveBeenCalledTimes(2);
+     83|     expect(mocks.transactionQuery).not.toHaveBeenCalledWith(
+       |                                        ^
+     84|       expect.stringContaining('UPDATE public.flow_runs'),
+     85|       expect.any(Array)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-flow-run.test.ts > PostgreSQL WhatsApp send flow-run repository > fails closed when RLS filters an active run from the UPDATE
+AssertionError: promise resolved "false" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+false
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts:106:5
+    104|     await expect(
+    105|       repository.pauseActiveForAgentReply(contactId, endedAt)
+    106|     ).rejects.toMatchObject({ code: 'db_error' });
+       |     ^
+    107|   });
+    108|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-flow-run.test.ts > PostgreSQL WhatsApp send flow-run repository > fails closed when PostgreSQL returns more than one active run
+AssertionError: promise resolved "false" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+false
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts:143:5
+    141|     await expect(
+    142|       repository.pauseActiveForAgentReply(contactId, endedAt)
+    143|     ).rejects.toMatchObject({ code: 'db_error' });
+       |     ^
+    144|   });
+    145|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > pauses the active Flow run before sending to the provider
+AssertionError: expected 23 to be less than 18
+ ❯ src/app/api/whatsapp/send/route.test.ts:909:72
+    907|       expect.any(String)
+    908|     );
+    909|     expect(mocks.pauseActiveForAgentReply.mock.invocationCallOrder[0])…
+       |                                                                        ^
+    910|       mocks.sendTextMessage.mock.invocationCallOrder[0]
+    911|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > blocks provider send when PostgreSQL cannot confirm the Flow pause
+AssertionError: expected 200 to be 503 // Object.is equality
+
+- Expected
++ Received
+
+- 503
++ 200
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:930:29
+    928|     );
+    929|
+    930|     expect(response.status).toBe(503);
+       |                             ^
+    931|     expect(mocks.sendTextMessage).not.toHaveBeenCalled();
+    932|     expect(mocks.insertSentMessage).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  6 failed | 24 skipped (30)
+   Start at  16:00:53
+   Duration  7.39s (transform 504ms, setup 0ms, import 848ms, tests 151ms, environment 1ms)
+
+
+exit_code=1

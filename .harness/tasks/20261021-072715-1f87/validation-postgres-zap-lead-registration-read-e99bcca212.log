@@ -1,0 +1,6 @@
+Command: Docker Desktop disposable PostgreSQL validation; images postgres:16-alpine and node:22-bookworm, --network none, PostgreSQL data in task-owned tmpfs, repository mounted read-only.
+The fixture uses only synthetic accounts, keys, URLs, and state. No Supabase or external service is contacted.
+Node integration exit code: 0
+PASS: account-scoped configuration/heartbeat reads, key isolation, admin RLS, forced RLS, secret projection, and transaction-local identity cleanup
+Cleanup: no residual task containers
+Overall result: SUCCESS

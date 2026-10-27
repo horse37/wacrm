@@ -1,0 +1,17 @@
+Docker context: desktop-linux
+Command: docker run --pull=never -d --rm --name wacrm-flow-delete-db-14d009222b --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; tmpfs database; no ports or named volumes.
+Synthetic accounts, profiles, flows, nodes, runs, and events only. Generated credentials are not recorded.
+PowerShell AST, fixture forced-RLS, NOBYPASSRLS, and minimum-grant checks passed.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --pull=never --rm --name wacrm-flow-delete-node-14d009222b --network container:wacrm-flow-delete-db-14d009222b --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_flow_delete_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=4 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-flow-delete-persistence-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 0
+PostgreSQL flow-delete persistence integration SUCCESS: forced RLS, NOBYPASSRLS, minimum grants, agent/owner/account isolation, concurrency, cascade assertions delegated to bootstrap post-probe, and identity cleanup.
+Bootstrap post-probe passed: owned flow deletion cascaded to its node, run, and event; unrelated flows remained.
+Only synthetic fixtures were queried; no provider/network calls occurred.
+Cleanup: no residual task resources
+Overall result: SUCCESS
+Focused validation: Vitest 7/7, TypeScript, targeted ESLint --max-warnings=0, Prettier --check, and git diff --check — all passed.
+Independent GPT-6 Luna read-only review: exact APPROVE, zero findings, and zero caveats; limited to this flow-delete persistence slice.
+Review does not approve route wiring, H-DATA-003/H-DB-003 overall, Auth/session migration, Supabase replacement, Storage, Realtime, application traffic, or production. Task remains in_progress.

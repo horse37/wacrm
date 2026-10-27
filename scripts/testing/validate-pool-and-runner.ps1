@@ -13,11 +13,26 @@ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $suffix = [guid]::NewGuid().ToString('N').Substring(0, 10)
 $databaseContainer = "wacrm-pool-db-$suffix"
 $nodeContainer = "wacrm-pool-node-$suffix"
-$dependencyDir = Join-Path $env:TEMP "wacrm-pg-validation-$suffix"
+$temporaryRoot = [System.IO.Path]::GetFullPath($env:TEMP).TrimEnd(
+  [System.IO.Path]::DirectorySeparatorChar,
+  [System.IO.Path]::AltDirectorySeparatorChar
+)
+$dependencyDir = [System.IO.Path]::GetFullPath(
+  (Join-Path $temporaryRoot "wacrm-pg-validation-$suffix")
+)
+if (
+  -not $dependencyDir.StartsWith(
+    $temporaryRoot + [System.IO.Path]::DirectorySeparatorChar,
+    [System.StringComparison]::OrdinalIgnoreCase
+  ) -or
+  [System.IO.Path]::GetFileName($dependencyDir) -notmatch '^wacrm-pg-validation-[a-f0-9]{10}$'
+) {
+  throw 'Temporary dependency cleanup path is outside its expected directory.'
+}
 $bootstrapPassword = [guid]::NewGuid().ToString('N')
 $runtimePassword = [guid]::NewGuid().ToString('N')
 $migratorPassword = [guid]::NewGuid().ToString('N')
-$taskLog = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "../../.harness/tasks/20261016-122249401-af84/validation-pool-and-runner-$suffix.log"))
+$taskLog = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "../../.harness/tasks/20261021-113450-6f2c/validation-postgres-runtime-role-guard-$suffix.log"))
 if (Test-Path -LiteralPath $taskLog) { throw "Refusing to overwrite existing validation log: $taskLog" }
 $validationSucceeded = $false
 $primaryFailure = $null
@@ -65,10 +80,32 @@ function Invoke-NodeStep {
 $copyCommand = 'set -e; mkdir /work; cd /source; tar --exclude=./node_modules --exclude=./.next --exclude=./.git -cf - . | (cd /work && tar -xf -); cp -r /deps/node_modules /work/node_modules; cd /work; node --version'
 
 try {
-  New-Item -ItemType Directory -Path $dependencyDir | Out-Null
-  & npm install --offline --ignore-scripts --no-audit --no-fund `
-    --prefix $dependencyDir --no-save --package-lock=false pg@8.16.3
-  if ($LASTEXITCODE -ne 0) { throw 'Offline install of cached pg@8.16.3 failed.' }
+  $dependencyNodeModules = Join-Path $dependencyDir 'node_modules'
+  New-Item -ItemType Directory -Path $dependencyNodeModules | Out-Null
+  $pendingPackages = [System.Collections.Generic.Queue[string]]::new()
+  $pendingPackages.Enqueue('pg')
+  $pendingPackages.Enqueue('server-only')
+  $copiedPackages = [System.Collections.Generic.HashSet[string]]::new(
+    [System.StringComparer]::OrdinalIgnoreCase
+  )
+  while ($pendingPackages.Count -gt 0) {
+    $packageName = $pendingPackages.Dequeue()
+    if (-not $copiedPackages.Add($packageName)) { continue }
+
+    $sourceDirectory = Join-Path $repoRoot "node_modules\$packageName"
+    if (-not (Test-Path -LiteralPath $sourceDirectory -PathType Container)) {
+      throw "Installed PostgreSQL dependency is missing: $packageName"
+    }
+    $packageManifest = Get-Content -Raw -LiteralPath (Join-Path $sourceDirectory 'package.json') | ConvertFrom-Json
+    if ($packageName -eq 'pg' -and $packageManifest.version -ne '8.16.3') {
+      throw "Expected pg@8.16.3, found pg@$($packageManifest.version)."
+    }
+
+    Copy-Item -LiteralPath $sourceDirectory -Destination $dependencyNodeModules -Recurse
+    foreach ($dependencyName in $packageManifest.dependencies.PSObject.Properties.Name) {
+      $pendingPackages.Enqueue($dependencyName)
+    }
+  }
 
   Invoke-DockerChecked @(
     'run', '-d', '--rm', '--name', $databaseContainer, '--network', 'none',
@@ -108,10 +145,39 @@ try {
   $migratorUrl = "postgres://wacrm_migrator:$migratorPassword@127.0.0.1:5432/postgres"
 
   Invoke-NodeStep -Label 'pool-runtime' `
-    -Command "$copyCommand && node --experimental-strip-types --experimental-default-type=module scripts/testing/pool-runtime-integration.mjs" `
+    -Command "$copyCommand && node --conditions=react-server --experimental-strip-types --experimental-default-type=module scripts/testing/pool-runtime-integration.mjs" `
     -EnvArgs @('-e', "DATABASE_URL=$runtimeUrl")
 
+  Invoke-DockerChecked @(
+    'exec', $databaseContainer, 'psql', '-X', '-v', 'ON_ERROR_STOP=1',
+    '-U', 'bootstrap_admin', '-d', 'postgres',
+    '-c', 'GRANT CREATE ON SCHEMA public TO wacrm_runtime; SET ROLE wacrm_runtime; CREATE TABLE public.pool_runtime_owned_probe (id integer); ALTER TABLE public.pool_runtime_owned_probe ENABLE ROW LEVEL SECURITY; RESET ROLE; REVOKE CREATE ON SCHEMA public FROM wacrm_runtime'
+  ) | Out-Null
+  Invoke-NodeStep -Label 'pool-owned-rls-table-rejected' `
+    -Command "$copyCommand && node --conditions=react-server --experimental-strip-types --experimental-default-type=module scripts/testing/pool-privileged-role-integration.mjs" `
+    -EnvArgs @('-e', "DATABASE_URL=$runtimeUrl")
+
+  Invoke-DockerChecked @(
+    'exec', $databaseContainer, 'psql', '-X', '-v', 'ON_ERROR_STOP=1',
+    '-U', 'bootstrap_admin', '-d', 'postgres',
+    '-c', 'CREATE ROLE wacrm_pool_bypass_probe NOLOGIN BYPASSRLS',
+    '-c', 'GRANT wacrm_pool_bypass_probe TO wacrm_runtime'
+  ) | Out-Null
+  Invoke-NodeStep -Label 'pool-bypass-membership-rejected' `
+    -Command "$copyCommand && node --conditions=react-server --experimental-strip-types --experimental-default-type=module scripts/testing/pool-privileged-role-integration.mjs" `
+    -EnvArgs @('-e', "DATABASE_URL=$runtimeUrl")
+  Invoke-DockerChecked @(
+    'exec', $databaseContainer, 'psql', '-X', '-v', 'ON_ERROR_STOP=1',
+    '-U', 'bootstrap_admin', '-d', 'postgres',
+    '-c', 'REVOKE wacrm_pool_bypass_probe FROM wacrm_runtime',
+    '-c', 'DROP ROLE wacrm_pool_bypass_probe'
+  ) | Out-Null
+
   $adminUrl = "postgres://bootstrap_admin:$bootstrapPassword@127.0.0.1:5432/postgres"
+  Invoke-NodeStep -Label 'pool-privileged-role-rejected' `
+    -Command "$copyCommand && node --conditions=react-server --experimental-strip-types --experimental-default-type=module scripts/testing/pool-privileged-role-integration.mjs" `
+    -EnvArgs @('-e', "DATABASE_URL=$adminUrl")
+
   Invoke-NodeStep -Label 'runner-fixture' `
     -Command "$copyCommand && node scripts/testing/runner-fixture-integration.mjs" `
     -EnvArgs @('-e', "DATABASE_URL_MIGRATIONS=$migratorUrl", '-e', "DATABASE_URL_ADMIN_VERIFY=$adminUrl")

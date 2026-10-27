@@ -1,0 +1,21 @@
+PostgreSQL WhatsApp config POST validation started: 2026-10-20T18:37:57.2855473-03:00
+Docker Desktop server: 29.8.1
+PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Runtime DSN uses task-generated credentials: postgres://wacrm_whatsapp_config_runtime:<redacted>@127.0.0.1:5432/postgres
+Node integration exit code: 1
+file:///source/src/lib/auth/postgres-account-guard.ts:122
+      throw new AppError('forbidden');
+            ^
+
+AppError: The operation is not allowed.
+    at Object.requireRole (file:///source/src/lib/auth/postgres-account-guard.ts:122:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async Object.getRegistrationState (file:///source/src/lib/repositories/whatsapp-config.ts:110:21)
+    at async file:///source/scripts/testing/postgres-whatsapp-config-post-integration.mjs:120:16 {
+  code: 'forbidden',
+  sqlState: undefined
+}
+
+Node.js v22.23.3
+Validation failure: Node PostgreSQL WhatsApp config POST integration failed with exit 1.
+Cleanup: no residual task resources

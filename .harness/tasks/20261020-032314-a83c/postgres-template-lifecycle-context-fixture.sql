@@ -1,0 +1,100 @@
+CREATE ROLE wacrm_template_lifecycle_runtime
+  LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
+
+CREATE SCHEMA auth;
+CREATE FUNCTION auth.uid()
+RETURNS uuid
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid
+$$;
+
+CREATE TYPE public.account_role_enum AS ENUM ('owner', 'admin', 'agent', 'viewer');
+
+CREATE TABLE public.accounts (
+  id uuid PRIMARY KEY,
+  name text NOT NULL
+);
+
+CREATE TABLE public.profiles (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL UNIQUE,
+  account_id uuid NOT NULL REFERENCES public.accounts(id),
+  account_role public.account_role_enum NOT NULL,
+  full_name text NOT NULL
+);
+
+CREATE TABLE public.message_templates (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL,
+  account_id uuid NOT NULL REFERENCES public.accounts(id),
+  name text NOT NULL,
+  status text NOT NULL,
+  meta_template_id text,
+  header_handle text,
+  sample_values jsonb,
+  submission_error text
+);
+
+CREATE FUNCTION public.is_account_member(target_account_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.profiles AS p
+    WHERE p.user_id = auth.uid()
+      AND p.account_id = target_account_id
+  )
+$$;
+
+ALTER TABLE public.accounts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.accounts FORCE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles FORCE ROW LEVEL SECURITY;
+ALTER TABLE public.message_templates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.message_templates FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY accounts_select_members
+  ON public.accounts FOR SELECT TO wacrm_template_lifecycle_runtime
+  USING (public.is_account_member(id));
+CREATE POLICY profiles_select_members
+  ON public.profiles FOR SELECT TO wacrm_template_lifecycle_runtime
+  USING (auth.uid() = user_id OR public.is_account_member(account_id));
+CREATE POLICY templates_select_members
+  ON public.message_templates FOR SELECT TO wacrm_template_lifecycle_runtime
+  USING (public.is_account_member(account_id));
+
+GRANT USAGE ON SCHEMA auth, public TO wacrm_template_lifecycle_runtime;
+GRANT EXECUTE ON FUNCTION auth.uid() TO wacrm_template_lifecycle_runtime;
+GRANT EXECUTE ON FUNCTION public.is_account_member(uuid)
+  TO wacrm_template_lifecycle_runtime;
+GRANT SELECT (id, name) ON TABLE public.accounts
+  TO wacrm_template_lifecycle_runtime;
+GRANT SELECT (user_id, account_id, account_role) ON TABLE public.profiles
+  TO wacrm_template_lifecycle_runtime;
+GRANT SELECT (id, user_id, account_id, name, status, meta_template_id)
+  ON TABLE public.message_templates TO wacrm_template_lifecycle_runtime;
+
+INSERT INTO public.accounts (id, name) VALUES
+  ('10000000-0000-4000-8000-000000000001', 'Synthetic Account A'),
+  ('10000000-0000-4000-8000-000000000002', 'Synthetic Account B');
+
+INSERT INTO public.profiles (id, user_id, account_id, account_role, full_name) VALUES
+  ('20000000-0000-4000-8000-000000000001', '00000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-000000000001', 'owner', 'Synthetic Owner A'),
+  ('20000000-0000-4000-8000-000000000003', '00000000-0000-4000-8000-000000000003', '10000000-0000-4000-8000-000000000001', 'viewer', 'Synthetic Viewer A'),
+  ('20000000-0000-4000-8000-000000000002', '00000000-0000-4000-8000-000000000002', '10000000-0000-4000-8000-000000000002', 'owner', 'Synthetic Owner B');
+
+INSERT INTO public.message_templates (
+  id, user_id, account_id, name, status, meta_template_id,
+  header_handle, sample_values, submission_error
+) VALUES
+  ('30000000-0000-4000-8000-000000000009', '00000000-0000-4000-8000-000000000003', '10000000-0000-4000-8000-000000000001', 'Lifecycle shared', 'PAUSED', 'SYNTHETIC_META_LIFECYCLE_009', 'SYNTHETIC_HEADER_HANDLE_MUST_NOT_LEAK', '{"header":["SYNTHETIC_SAMPLE_MUST_NOT_LEAK"]}', 'SYNTHETIC_ERROR_MUST_NOT_LEAK'),
+  ('30000000-0000-4000-8000-000000000008', '00000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-000000000001', 'Local draft', 'DRAFT', NULL, NULL, NULL, NULL),
+  ('30000000-0000-4000-8000-000000000007', '00000000-0000-4000-8000-000000000002', '10000000-0000-4000-8000-000000000002', 'Account B only', 'APPROVED', 'SYNTHETIC_META_ACCOUNT_B', NULL, NULL, NULL),
+  ('30000000-0000-4000-8000-000000000006', '00000000-0000-4000-8000-000000000004', '10000000-0000-4000-8000-000000000001', 'Orphan creator', 'APPROVED', NULL, NULL, NULL, NULL),
+  ('30000000-0000-4000-8000-000000000005', '00000000-0000-4000-8000-000000000002', '10000000-0000-4000-8000-000000000001', 'Mismatched creator', 'APPROVED', NULL, NULL, NULL, NULL);

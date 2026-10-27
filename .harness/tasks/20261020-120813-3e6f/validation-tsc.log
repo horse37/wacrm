@@ -1,0 +1,4 @@
+src/lib/repositories/automation-pending-schedule.test.ts(73,32): error TS2493: Tuple type '[sql: string]' of length '1' has no element at index '1'.
+src/lib/repositories/automation-pending-schedule.test.ts(102,12): error TS2532: Object is possibly 'undefined'.
+src/lib/repositories/automation-pending-schedule.test.ts(102,32): error TS2493: Tuple type '[sql: string]' of length '1' has no element at index '1'.
+src/lib/repositories/automation-pending-schedule.test.ts(116,32): error TS2493: Tuple type '[sql: string]' of length '1' has no element at index '1'.

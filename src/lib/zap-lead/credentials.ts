@@ -1,4 +1,6 @@
 import { requireRole } from '@/lib/auth/account';
+import { createPostgresZapLeadEventStreamReadRepository } from '@/lib/repositories/zap-lead-event-stream-read';
+import { lookupZapLeadWebhookCredential } from '@/lib/repositories/zap-lead-webhook-credential-read';
 import type { AccountRole } from '@/lib/auth/roles';
 import { decrypt, encrypt } from '@/lib/whatsapp/encryption';
 import { zapLeadAdminClient } from './admin-client';
@@ -10,20 +12,11 @@ interface StoredCredential {
   encrypted_registration: string;
 }
 
-interface StoredWebhookCredential {
-  account_id: string;
-  encrypted_registration: string;
-}
-
 interface StoredHealthTarget {
   account_id: string;
   key_id: string;
   api_base_url: string;
   encrypted_registration: string;
-}
-
-interface StoredEventStreamTarget extends StoredCredential {
-  account_id: string;
 }
 
 export interface ZapLeadHealthTarget {
@@ -147,19 +140,21 @@ async function loadZapLeadClientForCurrentAccount(minimumRole: AccountRole) {
 
 export async function getZapLeadEventStreamTargetForCurrentAccount(): Promise<ZapLeadEventStreamTarget | null> {
   const account = await requireRole('admin');
-  const { data, error } = await account.supabase
-    .from('zap_lead_integrations')
-    .select('account_id, api_base_url, encrypted_registration')
-    .eq('account_id', account.accountId)
-    .maybeSingle();
+  const repository = createPostgresZapLeadEventStreamReadRepository({
+    userId: account.userId,
+    accountId: account.accountId,
+  });
+  let stored;
+  try {
+    stored = await repository.getIntegration();
+  } catch {
+    throw new Error('Could not load Zap Lead event stream target');
+  }
+  if (!stored) return null;
 
-  if (error) throw new Error('Could not load Zap Lead event stream target');
-  if (!data) return null;
-
-  const stored = data as StoredEventStreamTarget;
   let registration;
   try {
-    const decrypted = decrypt(stored.encrypted_registration);
+    const decrypted = decrypt(stored.encryptedRegistration);
     registration = parseRegistrationCode(
       createRegistrationCode(JSON.parse(decrypted))
     );
@@ -167,21 +162,19 @@ export async function getZapLeadEventStreamTargetForCurrentAccount(): Promise<Za
     throw new Error('Stored Zap Lead credentials are invalid');
   }
 
-  const { data: state, error: stateError } = await account.supabase
-    .from('zap_lead_integration_state')
-    .select('last_sse_cursor_id')
-    .eq('account_id', account.accountId)
-    .eq('integration_key_id', registration.keyId)
-    .maybeSingle();
-  if (stateError)
+  let cursor: string | null;
+  try {
+    cursor = await repository.getCursor(registration.keyId);
+  } catch {
     throw new Error('Could not load Zap Lead event stream cursor');
+  }
 
   return {
-    accountId: stored.account_id,
+    accountId: stored.accountId,
     keyId: registration.keyId,
-    cursor: state?.last_sse_cursor_id ?? null,
+    cursor,
     client: createZapLeadClient({
-      baseUrl: normalizeApiBaseUrl(stored.api_base_url),
+      baseUrl: normalizeApiBaseUrl(stored.apiBaseUrl),
       keyId: registration.keyId,
       secret: registration.secret,
     }),
@@ -191,23 +184,15 @@ export async function getZapLeadEventStreamTargetForCurrentAccount(): Promise<Za
 export async function getZapLeadWebhookCredential(keyId: string) {
   if (!/^ak_[\da-f]{24}$/i.test(keyId)) return null;
 
-  const { data, error } = await zapLeadAdminClient()
-    .from('zap_lead_integrations')
-    .select('account_id, encrypted_registration')
-    .eq('key_id', keyId)
-    .maybeSingle();
-
-  if (error) throw new Error('Could not load Zap Lead webhook credential');
-  if (!data) return null;
-
-  const stored = data as StoredWebhookCredential;
+  const stored = await lookupZapLeadWebhookCredential(keyId);
+  if (!stored) return null;
   try {
-    const decrypted = decrypt(stored.encrypted_registration);
+    const decrypted = decrypt(stored.encryptedRegistration);
     const registration = parseRegistrationCode(
       createRegistrationCode(JSON.parse(decrypted))
     );
     if (registration.keyId !== keyId) return null;
-    return { accountId: stored.account_id, registration };
+    return { accountId: stored.accountId, registration };
   } catch {
     throw new Error('Stored Zap Lead webhook credentials are invalid');
   }

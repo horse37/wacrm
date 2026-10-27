@@ -1,0 +1,18 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/invitations/[token]/peek/route.test.ts src/lib/repositories/invitation-preview.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  2 passed (2)
+      Tests  18 passed (18)
+   Start at  14:20:49
+   Duration  4.53s (transform 243ms, setup 0ms, import 532ms, tests 103ms, environment 1ms)
+
+
+Static checks (2026-10-20):
+- `npm run typecheck` — exit 0.
+- `npx eslint 'src/app/api/invitations/[token]/peek/route.ts' 'src/app/api/invitations/[token]/peek/route.test.ts' --max-warnings=0` — exit 0.
+- `npx prettier --check` for route tests and new task/handoff files — exit 0.
+- Prettier `--check --range-start/--range-end` for the changed route and current-task sections — exit 0.
+- `git diff --check` — exit 0.

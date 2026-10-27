@@ -1,0 +1,5 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/app/api/account/invitations/route.ts
+Checking formatting...
+[warn] src/app/api/account/invitations/route.ts
+[warn] Code style issues found in the above file. Run Prettier with --write to fix.

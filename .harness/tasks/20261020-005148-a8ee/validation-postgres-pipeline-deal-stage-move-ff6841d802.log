@@ -1,0 +1,46 @@
+Command: docker run -d --rm --name wacrm-pipeline-deal-stage-move-db-ff6841d802 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=db_pipeline_deal_stage_move_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic accounts/profiles/pipelines/stages/contacts/deals only. Bootstrap and runtime passwords are generated for this run and are not recorded.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --rm --name wacrm-pipeline-deal-stage-move-node-ff6841d802 --network container:wacrm-pipeline-deal-stage-move-db-ff6841d802 --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_pipeline_deal_stage_move_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e TZ=Pacific/Kiritimati -e PG_POOL_MAX=1 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-pipeline-deal-stage-move-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 1
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    {
+      stage_id: '60000000-0000-4000-8000-000000000001',
++     updated_at: '2026-10-19 11:00:00+00'
+-     updated_at: '2026-10-19 10:00:00+00'
+    }
+  ]
+
+    at file:///source/scripts/testing/postgres-pipeline-deal-stage-move-integration.mjs:85:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      stage_id: '60000000-0000-4000-8000-000000000001',
+      updated_at: '2026-10-19 11:00:00+00'
+    }
+  ],
+  expected: [
+    {
+      stage_id: '60000000-0000-4000-8000-000000000001',
+      updated_at: '2026-10-19 10:00:00+00'
+    }
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3
+Validation failure: PostgreSQL pipeline-deal-stage-move integration failed with exit 1.
+Cleanup: no residual task resources
+Overall result: FAILURE

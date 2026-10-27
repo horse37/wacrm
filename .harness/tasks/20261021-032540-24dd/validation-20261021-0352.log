@@ -1,0 +1,18 @@
+Task: 20261021-032540-24dd — postgres-whatsapp-send-template-definition-lookup
+Data/hora: 2026-10-21 03:52 BRT (06:52 UTC)
+Branch/HEAD: main / 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+RED herdado da implementação: a primeira execução focada retornou 500 quando a expectativa era 502 porque o mock de phoneVariants estava incompleto. O mock foi completado e a rota passou 12/12 no handoff anterior. Essa primeira falha era de fixture; não é apresentada como prova isolada da regressão de PostgREST. O teste final agora verifica diretamente SQL de public.message_templates, parâmetros account/name/language e que supabase.from não recebe message_templates.
+
+Mudança final nesta retomada: caso parametrizado adicional sem template_language verifica o default en_US; Prettier aplicado somente a route.ts e route.test.ts.
+
+Comandos e resultados:
+- npx vitest run --maxWorkers=1 --no-file-parallelism src/app/api/whatsapp/send/route.test.ts src/lib/repositories/template-send-definition.test.ts — PASS, 2 arquivos, 36/36 testes (03:54 BRT).
+- npx tsc --noEmit — PASS.
+- npx eslint src/app/api/whatsapp/send/route.ts src/app/api/whatsapp/send/route.test.ts src/lib/repositories/template-send-definition.ts src/lib/repositories/template-send-definition.test.ts — PASS, sem avisos.
+- npx prettier --check src/app/api/whatsapp/send/route.ts src/app/api/whatsapp/send/route.test.ts — PASS.
+- git diff --check — PASS; mensagens LF/CRLF de autocrlf não representam erro de whitespace.
+
+Integração PostgreSQL 16 descartável do repositório reutilizada sem alterações no SQL/repositório: .harness/tasks/20261020-031751-9e7d/validation-postgres-template-send-81e8e8dad8.log. Nenhum DB foi iniciado nesta execução. Nenhuma chamada Meta/WhatsApp real.
+
+Revisões ainda pendentes; não declarar a task aprovada nem H-DATA-003/H-DB-003 concluídos.

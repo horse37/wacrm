@@ -1,0 +1,29 @@
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires a verified session before opening a transaction 15ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > allows a viewer and reads only the encrypted connection fields for its account 7ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > returns null when account has no WhatsApp configuration 2ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > fails safely if account uniqueness is violated 2ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > fails safely when database status is outside the existing contract 2ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > fails safely when the encrypted token is missing 1ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > propagates safe database errors without exposing driver details 2ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > deletes only the current account config for an admin 3ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > denies non-admin membership before attempting a delete 3ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires a verified session before any delete transaction 2ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > reads the current admin config registration state by account 7ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires admin membership before reading config registration state 1ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > upserts encrypted config only for the verified admin account 4ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > rejects config writes for non-admin membership before INSERT 2ms
+ ✓ src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > maps the global phone unique constraint to a safe conflict 1ms
+ ✓ src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > requires the verified server session before repository or Meta work 33ms
+ ✓ src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > reserves config in PostgreSQL before Meta mutation and preserves success response 19ms
+ ✓ src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > returns the existing conflict contract before registration or subscription 6ms
+ ✓ src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > rejects non-admin PostgreSQL membership before contacting Meta 4ms
+ ✓ src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > persists registration failure and preserves its successful-save response 6ms
+
+ Test Files  2 passed (2)
+      Tests  20 passed (20)
+   Start at  18:37:26
+   Duration  5.71s (transform 597ms, setup 0ms, import 1.37s, tests 138ms, environment 1ms)
+

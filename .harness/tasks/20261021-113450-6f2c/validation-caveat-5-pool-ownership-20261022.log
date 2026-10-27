@@ -1,0 +1,38 @@
+Opus r2 caveat 5 — reject runtime ownership of user tables
+TDD red: validation-postgres-runtime-role-guard-e38dc35fd3.log showed pool accepted wacrm_runtime as owner of a non-FORCE RLS table; expected rejection was missing. Cleanup succeeded.
+Final disposable PostgreSQL integration: validation-postgres-runtime-role-guard-373bf73c91.log; owner probe rejected, normal runtime passed, BYPASSRLS membership and superuser rejected, migration-runner fixture passed, no residual task resources.
+
+Command: npx vitest run src/lib/db/postgres-pool.test.ts
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/db/postgres-pool.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  1 passed (1)
+      Tests  23 passed (23)
+   Start at  19:32:00
+   Duration  3.38s (transform 239ms, setup 0ms, import 284ms, tests 141ms, environment 0ms)
+
+
+Command: npx tsc --noEmit
+TypeScript: PASS.
+npm notice run wacrm@0.2.2 npx
+npm notice run tsc --noEmit
+
+Command: npx eslint src/lib/db/postgres-pool.ts src/lib/db/postgres-pool.test.ts --max-warnings=0
+ESLint: PASS.
+npm notice run wacrm@0.2.2 npx
+npm notice run eslint src/lib/db/postgres-pool.ts src/lib/db/postgres-pool.test.ts --max-warnings=0
+
+Prettier check
+Prettier: PASS.
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/lib/db/postgres-pool.ts src/lib/db/postgres-pool.test.ts scripts/testing/pool-privileged-role-integration.mjs
+Checking formatting...
+All matched files use Prettier code style!
+
+PowerShell parser and git diff check: PASS.
+PowerShell parser: PASS
+warning: in the working copy of 'src/lib/db/postgres-pool.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/db/postgres-pool.ts', LF will be replaced by CRLF the next time Git touches it

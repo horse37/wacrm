@@ -1,0 +1,96 @@
+Caveat 3 — papel proprietário de migrations
+Validação do implementador. Sem acesso a banco, Docker, Supabase ou serviço externo.
+Command: npm run test:postgres-migrations
+npm notice run wacrm@0.2.2 test:postgres-migrations
+npm notice run node --test scripts/migrate-postgres.test.mjs
+✔ rejects unsupported custom migration owner before connecting (5.1845ms)
+✔ discovers SQL migrations in numeric order and hashes their exact contents (40.167ms)
+✔ rejects SQL files without a numeric migration prefix of three to nine digits (34.0918ms)
+✔ accepts current three-digit and future four-digit migration prefixes in numeric order (18.2374ms)
+✔ accepts a nine-digit migration prefix and orders it numerically (14.3536ms)
+✔ rejects a four-digit prefix that duplicates a three-digit version (11.0825ms)
+✔ rejects duplicate migration versions rather than applying ambiguous order (12.2903ms)
+✔ applies migrations in order under the advisory lock and records checksums (14.1607ms)
+✔ replay skips already applied migrations without executing their SQL again (10.658ms)
+✔ rejects a changed checksum before executing an applied migration (8.0764ms)
+✔ rolls back a failed migration and releases the role and advisory lock (9.6696ms)
+✔ rejects a superuser migration login before acquiring the advisory lock (10.7061ms)
+✔ rejects migration login membership in roles beyond the migration owner (11.7075ms)
+✔ rejects migration owner membership in additional roles (8.9002ms)
+✔ rejects a superuser migration owner before taking the advisory lock (13.9074ms)
+✔ rejects a login-capable migration owner before taking the advisory lock (11.0547ms)
+✔ rejects migration login or owner roles with elevated PostgreSQL attributes (72.1603ms)
+✔ normalizes CRLF checksums and accepts a legacy raw CRLF checksum (19.1075ms)
+✔ rejects an unknown migration version already present in the ledger (9.1861ms)
+✔ rejects a ledger gap instead of applying later migrations out of order (15.447ms)
+✔ rejects a migration name mismatch for a version already in the ledger (10.7767ms)
+[postgres-migrations] applied 001_first.sql
+✔ bounds advisory-lock waits and propagates unlock failures (35.0325ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1987.8102
+
+node --check scripts/migrate-postgres.mjs
+
+node --check scripts/migrate-postgres.test.mjs
+
+npx prettier --check scripts/migrate-postgres.mjs scripts/migrate-postgres.test.mjs
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check scripts/migrate-postgres.mjs scripts/migrate-postgres.test.mjs
+Checking formatting...
+[warn] scripts/migrate-postgres.mjs
+[warn] Code style issues found in the above file. Run Prettier with --write to fix.
+
+Superseding initial Prettier failure: scripts/migrate-postgres.mjs was formatted with Prettier.
+Final rerun: npm run test:postgres-migrations
+npm notice run wacrm@0.2.2 test:postgres-migrations
+npm notice run node --test scripts/migrate-postgres.test.mjs
+✔ rejects unsupported custom migration owner before connecting (7.1987ms)
+✔ discovers SQL migrations in numeric order and hashes their exact contents (41.0339ms)
+✔ rejects SQL files without a numeric migration prefix of three to nine digits (35.0666ms)
+✔ accepts current three-digit and future four-digit migration prefixes in numeric order (14.5664ms)
+✔ accepts a nine-digit migration prefix and orders it numerically (16.1632ms)
+✔ rejects a four-digit prefix that duplicates a three-digit version (13.6087ms)
+✔ rejects duplicate migration versions rather than applying ambiguous order (14.4571ms)
+✔ applies migrations in order under the advisory lock and records checksums (19.0336ms)
+✔ replay skips already applied migrations without executing their SQL again (11.4173ms)
+✔ rejects a changed checksum before executing an applied migration (8.901ms)
+✔ rolls back a failed migration and releases the role and advisory lock (10.7985ms)
+✔ rejects a superuser migration login before acquiring the advisory lock (9.0746ms)
+✔ rejects migration login membership in roles beyond the migration owner (8.947ms)
+✔ rejects migration owner membership in additional roles (7.771ms)
+✔ rejects a superuser migration owner before taking the advisory lock (12.3926ms)
+✔ rejects a login-capable migration owner before taking the advisory lock (10.0721ms)
+✔ rejects migration login or owner roles with elevated PostgreSQL attributes (64.2816ms)
+✔ normalizes CRLF checksums and accepts a legacy raw CRLF checksum (20.7214ms)
+✔ rejects an unknown migration version already present in the ledger (7.8598ms)
+✔ rejects a ledger gap instead of applying later migrations out of order (19.461ms)
+✔ rejects a migration name mismatch for a version already in the ledger (9.5957ms)
+[postgres-migrations] applied 001_first.sql
+✔ bounds advisory-lock waits and propagates unlock failures (28.2637ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1978.6176
+
+Final rerun: node --check source and test
+Final rerun: npx prettier --check scripts/migrate-postgres.mjs scripts/migrate-postgres.test.mjs
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check scripts/migrate-postgres.mjs scripts/migrate-postgres.test.mjs
+Checking formatting...
+All matched files use Prettier code style!
+
+Final rerun: git diff --check
+warning: in the working copy of 'scripts/migrate-postgres.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/migrate-postgres.test.mjs', LF will be replaced by CRLF the next time Git touches it
+
+RESULT: PASS. Migration tests 22/22; Node syntax, Prettier and git diff checks pass.

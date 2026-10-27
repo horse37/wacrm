@@ -1,0 +1,36 @@
+Command: docker run -d --rm --name wacrm-template-manager-db-388ba36e0c --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=db_template_manager_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic accounts, profiles, and message templates only. Bootstrap and runtime passwords are generated for this run and are not recorded.
+PowerShell AST and fixture minimum-grant/forced-RLS checks passed.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Validation failure: docker exec failed with exit 3
+CREATE ROLE
+CREATE SCHEMA
+CREATE FUNCTION
+CREATE TYPE
+CREATE TABLE
+CREATE TABLE
+CREATE FUNCTION
+CREATE TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+CREATE POLICY
+CREATE POLICY
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+INSERT 0 3
+INSERT 0 5
+psql:/repo/.harness/tasks/20261020-025018-6cda/postgres-template-manager-catalog-fixture.sql:173: ERROR:  VALUES lists must all be the same length
+LINE 24:     '30000000-0000-4000-8000-000000000002',
+             ^
+Cleanup: no residual task resources
+Overall result: FAILURE

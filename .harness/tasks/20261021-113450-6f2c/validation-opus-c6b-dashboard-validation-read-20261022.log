@@ -1,0 +1,19 @@
+# Validation — Opus r2 caveat 6b — dashboard evidence read errors — 2026-10-22
+
+## Regression and review response
+- Disposable copied-tree TDD RED for a missing evidence directory is preserved in `tdd-red-opus-c6b-dashboard-validation-read-20261022.log`: before the first fix, it returned HTTP 200 instead of the expected sanitized HTTP 500.
+- Independent GPT-6 Luna round 1 found that `readText` still swallowed an individual `readFile` error. Exact result: `review-opus-c6b-independent-20261022-r1.md`.
+- Remediation moved the collector to `.harness/dashboard-validation-files.mjs` and reads evidence through strict `readFile`; filesystem operations are injectable for a deterministic regression. The HTTP regression continues to prove the handler returns a sanitized 500 for collection failures.
+- The new regression injects `EACCES` from `readFile` and asserts the same error propagates instead of producing empty/unclassified evidence. A disposable pre-fix simulation wrapped that read in `catch { return '' }` and failed as expected; evidence: `tdd-red-opus-c6b-readfile-20261022.log`.
+
+## Focused validation
+- Five dashboard suites passed: 58/58, including the deterministic individual `readFile` failure regression and the HTTP missing-evidence-directory case.
+- `node --check` passed for `.harness/dashboard-server.mjs`, `.harness/dashboard-validation-files.mjs`, and both changed test files.
+- Prettier `--check` passed for all four changed source/test files.
+- `git diff --check` passed; Git emitted only pre-existing LF/CRLF informational warnings.
+- No database, Docker, Supabase, external service, production, real data, or credentials were accessed.
+
+## Status
+- Independent GPT-6 Luna round 2 returned `APPROVE`, zero findings, and zero caveats, limited to caveat 6b. Record: `review-opus-c6b-independent-20261022-r2.md`.
+- Caveat 6b is complete. This approval does not approve the full task, H-DATA-003, H-DB-003, or the working tree.
+- This approval scope is only Opus r2 caveat 6b. It does not approve the full task, H-DATA-003, H-DB-003, or the working tree.

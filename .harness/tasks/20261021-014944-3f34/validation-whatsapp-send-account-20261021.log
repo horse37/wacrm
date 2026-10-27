@@ -1,0 +1,21 @@
+# Validação — POST /api/whatsapp/send: resolução de conta
+
+Data: 2026-10-21 (BRT). Worktree preservada, branch `main`, HEAD `7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c`.
+
+## Resultado focado
+
+- `npm test -- src/app/api/whatsapp/send/route.test.ts` — PASS, 3/3.
+- `npm run typecheck` — PASS.
+- `npx eslint src/app/api/whatsapp/send/route.ts src/app/api/whatsapp/send/route.test.ts --max-warnings=0` — PASS, zero avisos/erros.
+- `npx prettier --check src/app/api/whatsapp/send/route.test.ts` — PASS.
+- `git diff --check` — PASS; apenas avisos de conversão LF/CRLF.
+
+## Formatação preexistente
+
+O arquivo original `src/app/api/whatsapp/send/route.ts` não passa no `prettier --check` do projeto no HEAD base. O mesmo check também falha na versão alterada. Formatar o arquivo inteiro muda mais de cem linhas não relacionadas; por isso o patch mantém o estilo local e restringe a checagem Prettier ao teste novo. Nenhuma linha funcional fora da resolução de conta foi reformatada.
+
+## Prova PostgreSQL reutilizada
+
+Nenhum container novo foi iniciado. O guard PostgreSQL usado pela rota já tem prova Docker descartável, PostgreSQL 16, `--network none`, role `NOBYPASSRLS`, dados sintéticos, isolamento entre contas, negação sem membership e limpeza do GUC transacional: `.harness/tasks/20261019-214717-04f2/validation-postgres-account-guard-2b84013215.log`.
+
+Os testes da rota simulam sessão, guard e integrações. Nenhum Supabase database, Meta/WhatsApp, mensagem, VPS, produção, dado ou credencial real foi acessado.

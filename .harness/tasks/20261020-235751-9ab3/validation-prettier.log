@@ -1,0 +1,14 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/app/api/whatsapp/config/verify-registration/route.ts src/app/api/whatsapp/config/verify-registration/route.test.ts src/lib/repositories/whatsapp-config.ts src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts scripts/testing/postgres-whatsapp-config-post-integration.mjs .harness/dashboard-server.mjs .harness/tasks/20261020-212612-34b1/task.md .harness/tasks/20261020-212612-34b1/handoffs/implementer.md .harness/tasks/20261020-235751-9ab3/task.md .harness/tasks/20261020-235751-9ab3/handoffs/implementer.md .harness/current-task.md
+Checking formatting...
+[warn] src/app/api/whatsapp/config/verify-registration/route.ts
+[warn] src/app/api/whatsapp/config/verify-registration/route.test.ts
+[warn] src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts
+[warn] scripts/testing/postgres-whatsapp-config-post-integration.mjs
+[warn] .harness/dashboard-server.mjs
+[warn] .harness/tasks/20261020-212612-34b1/task.md
+[warn] .harness/tasks/20261020-212612-34b1/handoffs/implementer.md
+[warn] .harness/tasks/20261020-235751-9ab3/task.md
+[warn] .harness/tasks/20261020-235751-9ab3/handoffs/implementer.md
+[warn] .harness/current-task.md
+[warn] Code style issues found in 10 files. Run Prettier with --write to fix.

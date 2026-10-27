@@ -1,0 +1,119 @@
+npm notice run wacrm@0.2.2 test
+npm notice run vitest run --maxWorkers=1 --no-file-parallelism --reporter=dot src/app/api/account/members/[userId]/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/account/members/[userId]/route.test.ts > /api/account/members/[userId] PostgreSQL routes > PATCH requires admin, rate-limits, then changes role through PostgreSQL
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.PATCH (C:/Sistemas/wacrm/src/app/api/account/members/[userId]/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/members/[userId]/route.test.ts:105:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/account/members/[userId]/route.test.ts > /api/account/members/[userId] PostgreSQL routes > PATCH maps repository authorization errors to 403
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'error' of '(intermediate value)' as it is undefined.
+    at Module.PATCH (C:/Sistemas/wacrm/src/app/api/account/members/[userId]/route.ts:84:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/members/[userId]/route.test.ts:166:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/account/members/[userId]/route.test.ts > /api/account/members/[userId] PostgreSQL routes > DELETE rate-limits, removes through PostgreSQL, and returns the new personal account ID
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'data' of '(intermediate value)' as it is undefined.
+    at Module.DELETE (C:/Sistemas/wacrm/src/app/api/account/members/[userId]/route.ts:112:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/members/[userId]/route.test.ts:173:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/account/members/[userId]/route.test.ts > /api/account/members/[userId] PostgreSQL routes > DELETE maps invalid database requests to 400 without exposing database text
+[toErrorResponse] uncategorized error: TypeError: Cannot destructure property 'data' of '(intermediate value)' as it is undefined.
+    at Module.DELETE (C:/Sistemas/wacrm/src/app/api/account/members/[userId]/route.ts:112:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/account/members/[userId]/route.test.ts:205:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+x····xx·x
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/account/members/[userId]/route.test.ts > /api/account/members/[userId] PostgreSQL routes > PATCH requires admin, rate-limits, then changes role through PostgreSQL
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/account/members/[userId]/route.test.ts:107:29
+    105|     const response = await PATCH(patchRequest(), routeContext());
+    106|
+    107|     expect(response.status).toBe(200);
+       |                             ^
+    108|     await expect(response.json()).resolves.toEqual({ ok: true });
+    109|     expect(mocks.checkRateLimit).toHaveBeenCalledWith(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/app/api/account/members/[userId]/route.test.ts > /api/account/members/[userId] PostgreSQL routes > PATCH maps repository authorization errors to 403
+AssertionError: expected 500 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 500
+
+ ❯ src/app/api/account/members/[userId]/route.test.ts:168:29
+    166|     const response = await PATCH(patchRequest(), routeContext());
+    167|
+    168|     expect(response.status).toBe(403);
+       |                             ^
+    169|     expect(await response.text()).not.toContain('private database deta…
+    170|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/app/api/account/members/[userId]/route.test.ts > /api/account/members/[userId] PostgreSQL routes > DELETE rate-limits, removes through PostgreSQL, and returns the new personal account ID
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/account/members/[userId]/route.test.ts:175:29
+    173|     const response = await DELETE(deleteRequest(), routeContext());
+    174|
+    175|     expect(response.status).toBe(200);
+       |                             ^
+    176|     await expect(response.json()).resolves.toEqual({
+    177|       ok: true,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/app/api/account/members/[userId]/route.test.ts > /api/account/members/[userId] PostgreSQL routes > DELETE maps invalid database requests to 400 without exposing database text
+AssertionError: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ src/app/api/account/members/[userId]/route.test.ts:207:29
+    205|     const response = await DELETE(deleteRequest(), routeContext());
+    206|
+    207|     expect(response.status).toBe(400);
+       |                             ^
+    208|     expect(await response.text()).not.toContain('private database deta…
+    209|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 5 passed (9)
+   Start at  15:15:53
+   Duration  2.04s (transform 220ms, setup 0ms, import 521ms, tests 59ms, environment 0ms)
+

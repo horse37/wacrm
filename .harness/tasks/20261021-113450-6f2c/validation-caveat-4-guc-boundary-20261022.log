@@ -1,0 +1,5 @@
+Opus r2 caveat 4 — GUC key_id is caller-settable by wacrm_runtime.
+Disposition: document the actual security boundary; do not treat the GUC as authentication or tenant isolation against a compromised runtime role.
+Code change is documentation-only in zap-lead-webhook-credential-read.ts. No SQL, migration behavior, grant, policy, or data changed.
+Existing disposable PostgreSQL evidence `validation-postgres-zap-lead-webhook-credential-read-e5cd5eb3d7.log` covers forced-RLS lookup, transaction-local GUC cleanup, and column scope. Source review confirms the runtime sets the custom GUC inside the transaction; PostgreSQL custom GUC is not a trusted identity claim.
+Validation: Prettier check and git diff --check passed. No DB/service/test rerun; behavior unchanged.Final git diff --check after documentation updates: PASS.

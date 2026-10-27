@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { requireRole, toErrorResponse } from '@/lib/auth/account';
+import { createPostgresZapLeadRegistrationReadRepository } from '@/lib/repositories/zap-lead-registration-read';
 import {
   checkRateLimit,
   rateLimitResponse,
@@ -43,20 +44,22 @@ function getWebhookUrl(): string | null {
 export async function GET() {
   try {
     const account = await requireRole('admin');
-    const { data, error } = await account.supabase
-      .from('zap_lead_integrations')
-      .select('api_base_url, key_id')
-      .eq('account_id', account.accountId)
-      .maybeSingle();
+    const repository = createPostgresZapLeadRegistrationReadRepository({
+      userId: account.userId,
+      accountId: account.accountId,
+    });
 
-    if (error) {
+    let integration;
+    try {
+      integration = await repository.getIntegration();
+    } catch {
       return NextResponse.json(
         { error: 'Could not load Zap Lead integration status' },
         { status: 500 }
       );
     }
 
-    if (!data) {
+    if (!integration) {
       return NextResponse.json({
         configured: false,
         apiBaseUrl: null,
@@ -70,15 +73,10 @@ export async function GET() {
       });
     }
 
-    const { data: state, error: stateError } = await account.supabase
-      .from('zap_lead_integration_state')
-      .select(
-        'last_success_at, last_failure_at, last_error_code, alert_sent_at'
-      )
-      .eq('account_id', account.accountId)
-      .eq('integration_key_id', data.key_id)
-      .maybeSingle();
-    if (stateError) {
+    let state;
+    try {
+      state = await repository.getHeartbeatState(integration.keyId);
+    } catch {
       return NextResponse.json(
         { error: 'Could not load Zap Lead heartbeat status' },
         { status: 500 }
@@ -87,13 +85,13 @@ export async function GET() {
 
     return NextResponse.json({
       configured: true,
-      apiBaseUrl: data.api_base_url,
-      generation: data.key_id,
+      apiBaseUrl: integration.apiBaseUrl,
+      generation: integration.keyId,
       heartbeat: {
-        lastSuccessAt: state?.last_success_at ?? null,
-        lastFailureAt: state?.last_failure_at ?? null,
-        lastErrorCode: state?.last_error_code ?? null,
-        alertSentAt: state?.alert_sent_at ?? null,
+        lastSuccessAt: state?.lastSuccessAt ?? null,
+        lastFailureAt: state?.lastFailureAt ?? null,
+        lastErrorCode: state?.lastErrorCode ?? null,
+        alertSentAt: state?.alertSentAt ?? null,
       },
     });
   } catch (error) {

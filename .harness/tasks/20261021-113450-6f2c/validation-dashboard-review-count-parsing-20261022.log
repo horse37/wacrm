@@ -1,0 +1,15 @@
+# Validation — scoped Portuguese review counts — 2026-10-22
+
+## TDD
+- Added a regression using the actual approval wording from the F4 Luna record: `APPROVE — delta 4`; `Achados neste escopo: 0`; `Ressalvas: nenhuma`.
+- Before correction, the focused review-progress suite failed this case: 37 passed, 1 failed. Dashboard would label the real limited-scope approval `REMEDIATION_REQUIRED`.
+- The count-label matcher now accepts `findings/achados in (the) scope` and `Achados neste escopo` before the count, while retaining explicit-zero checks. The existing F4 record is preserved verbatim. The supplemental dashboard round-2 record now has separate explicit `Verdict`, `Findings`, and `Caveats` fields matching the reviewer response; round 1 remains in its own file.
+
+## Final checks
+- Four dashboard suites: 52/52 passed; review-progress focused suite: 38/38.
+- Parser classified all six limited-scope Luna approval records and the supplemental dashboard round-2 approval as `APPROVE`.
+- Node syntax checks and Prettier checks for changed dashboard modules/tests passed; `git diff --check` passed with informational LF/CRLF warnings only.
+- No database, Docker, Supabase, external service, or real data/credentials used.
+
+Independent review of this parser delta is pending. It does not change the full-tree Opus verdict, which remains `REMEDIATION_REQUIRED`.
+- Independent GPT-6 Luna read-only review: `APPROVE`, zero findings and zero caveats, limited to the scoped-count parser and regression. Record: `review-dashboard-review-count-parser-independent-20261022-r1.md`.

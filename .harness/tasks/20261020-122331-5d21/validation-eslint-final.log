@@ -1,0 +1,3 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run eslint src/lib/repositories/automation-pending-finalize.ts src/lib/repositories/automation-pending-finalize.test.ts scripts/testing/postgres-automation-pending-finalize-tenant-integration.mjs --max-warnings=0
+exit=0

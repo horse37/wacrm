@@ -1,0 +1,113 @@
+TDD RED: trusted context and transaction identity tests before implementation
+Command: npx vitest run src/lib/repositories/automation-log-create.test.ts --maxWorkers=1 --no-file-parallelism
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/automation-log-create.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/repositories/automation-log-create.test.ts (13 tests | 6 failed) 42ms
+     × inserts an initial successful log and returns only its generated UUID 11ms
+     × supports an execution without a contact 4ms
+     × maps a 'missing row' generated-ID result to a safe database error 9ms
+     × maps a 'null ID' generated-ID result to a safe database error 2ms
+     × maps a 'malformed UUID' generated-ID result to a safe database error 2ms
+     × propagates database failures without driver details 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/automation-log-create.test.ts > PostgreSQL automation-log creation repository > inserts an initial successful log and returns only its generated UUID
+AssertionError: promise rejected "AppError: The request is invalid. { code: '…' }" instead of resolving
+ ❯ src/lib/repositories/automation-log-create.test.ts:55:56
+     53|     const repository = createPostgresAutomationLogCreateRepository();
+     54|
+     55|     await expect(repository.create(writerA, validInput)).resolves.toBe(
+       |                                                        ^
+     56|       generatedId
+     57|     );
+
+Caused by: AppError: The request is invalid.
+ ❯ validateInput src/lib/repositories/automation-log-create.ts:59:11
+ ❯ Object.create src/lib/repositories/automation-log-create.ts:75:28
+ ❯ src/lib/repositories/automation-log-create.test.ts:55:29
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/lib/repositories/automation-log-create.test.ts > PostgreSQL automation-log creation repository > supports an execution without a contact
+AssertionError: promise rejected "AppError: The request is invalid. { code: '…' }" instead of resolving
+ ❯ src/lib/repositories/automation-log-create.test.ts:87:5
+     85|     await expect(
+     86|       repository.create(writerA, { ...validInput, contactId: null })
+     87|     ).resolves.toBe(generatedId);
+       |     ^
+     88|     expect(query.mock.calls[0][1]).toEqual([
+     89|       validInput.automationId,
+
+Caused by: AppError: The request is invalid.
+ ❯ validateInput src/lib/repositories/automation-log-create.ts:59:11
+ ❯ Object.create src/lib/repositories/automation-log-create.ts:75:28
+ ❯ src/lib/repositories/automation-log-create.test.ts:86:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/lib/repositories/automation-log-create.test.ts > PostgreSQL automation-log creation repository > maps a 'missing row' generated-ID result to a safe database error
+ FAIL  src/lib/repositories/automation-log-create.test.ts > PostgreSQL automation-log creation repository > maps a 'null ID' generated-ID result to a safe database error
+ FAIL  src/lib/repositories/automation-log-create.test.ts > PostgreSQL automation-log creation repository > maps a 'malformed UUID' generated-ID result to a safe database error
+AssertionError: expected AppError: The request is invalid. { code: '…' } to deeply equal AppError: The database operation failed. { code: '…' }
+
+- Expected
++ Received
+
+  AppError {
+-   "message": "The database operation failed.",
++   "message": "The request is invalid.",
+    "name": "AppError",
+-   "code": "db_error",
++   "code": "bad_request",
+  }
+
+ ❯ src/lib/repositories/automation-log-create.test.ts:127:58
+    125|       const repository = createPostgresAutomationLogCreateRepository();
+    126|
+    127|       await expect(repository.create(writerA, validInput)).rejects.toE…
+       |                                                          ^
+    128|         new AppError('db_error')
+    129|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/lib/repositories/automation-log-create.test.ts > PostgreSQL automation-log creation repository > propagates database failures without driver details
+AssertionError: expected AppError: The request is invalid. { code: '…' } to be AppError: The database operation failed. { code: '…' } // Object.is equality
+
+- Expected
++ Received
+
+  AppError {
+-   "message": "The database operation failed.",
++   "message": "The request is invalid.",
+    "name": "AppError",
+-   "code": "db_error",
++   "code": "bad_request",
+  }
+
+ ❯ src/lib/repositories/automation-log-create.test.ts:138:56
+    136|     const repository = createPostgresAutomationLogCreateRepository();
+    137|
+    138|     await expect(repository.create(writerA, validInput)).rejects.toBe(…
+       |                                                        ^
+    139|   });
+    140|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 7 passed (13)
+   Start at  11:41:52
+   Duration  1.72s (transform 121ms, setup 0ms, import 162ms, tests 42ms, environment 0ms)
+
+Exit code: 1
+Expected TDD RED confirmed: old repository signature rejects trusted-context invocation.

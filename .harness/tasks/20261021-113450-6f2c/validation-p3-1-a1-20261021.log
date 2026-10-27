@@ -1,0 +1,11 @@
+Finding A1 — dashboard review parser
+
+TDD red: adding inline-code verdict/count cases failed before the parser fix; the failure was the expected `pendente` instead of `APPROVE` for `Verdict: `APPROVE``.
+
+Post-fix checks:
+- `node --test .harness/dashboard-review-progress.test.mjs` — exit 0; 25 passed, 0 failed.
+- `node --check .harness/dashboard-review-progress.mjs` — exit 0.
+- `npx prettier --check .harness/dashboard-review-progress.mjs .harness/dashboard-review-progress.test.mjs` — exit 0.
+- `git diff --check` — exit 0. Git emitted existing LF/CRLF normalization notices for other dirty files.
+
+No database, Docker, Supabase, network service, production resource, or external traffic was used.

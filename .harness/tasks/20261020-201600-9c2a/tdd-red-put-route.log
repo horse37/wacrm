@@ -1,0 +1,87 @@
+npm notice run wacrm@0.2.2 test
+npm notice run vitest run --reporter=verbose src/app/api/flows/[id]/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > requires the existing verified server session 16ms
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > loads editor DTO from PostgreSQL using verified session identity 15ms
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > maps repository not_found errors to safe HTTP status and message 2ms
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > maps repository db_error errors to safe HTTP status and message 2ms
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > does not expose raw repository errors 2ms
+ × src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > updates headers in PostgreSQL and returns the editor DTO 15ms
+   → admin.from(...).select(...).eq(...).maybeSingle is not a function
+ × src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > replaces graph in PostgreSQL when nodes are supplied 3ms
+   → admin.from(...).select(...).eq(...).maybeSingle is not a function
+ × src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > rejects invalid JSON before calling data repositories 6ms
+   → expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array [
+      "flows",
+    ]
+
+
+Number of calls: 1
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > updates headers in PostgreSQL and returns the editor DTO
+TypeError: admin.from(...).select(...).eq(...).maybeSingle is not a function
+ ❯ Module.PUT src/app/api/flows/[id]/route.ts:184:50
+    182|   // to reconcile its local form state.
+    183|   const [{ data: flow }, { data: nodes }] = await Promise.all([
+    184|     admin.from('flows').select('*').eq('id', id).maybeSingle(),
+       |                                                  ^
+    185|     admin
+    186|       .from('flow_nodes')
+ ❯ src/app/api/flows/[id]/route.test.ts:208:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > replaces graph in PostgreSQL when nodes are supplied
+TypeError: admin.from(...).select(...).eq(...).maybeSingle is not a function
+ ❯ Module.PUT src/app/api/flows/[id]/route.ts:184:50
+    182|   // to reconcile its local form state.
+    183|   const [{ data: flow }, { data: nodes }] = await Promise.all([
+    184|     admin.from('flows').select('*').eq('id', id).maybeSingle(),
+       |                                                  ^
+    185|     admin
+    186|       .from('flow_nodes')
+ ❯ src/app/api/flows/[id]/route.test.ts:233:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > rejects invalid JSON before calling data repositories
+AssertionError: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array [
+      "flows",
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/app/api/flows/[id]/route.test.ts:253:41
+    251|     expect(mocks.createFlowHeaderUpdateRepository).not.toHaveBeenCalle…
+    252|     expect(mocks.createFlowNodeGraphReplaceRepository).not.toHaveBeenC…
+    253|     expect(mocks.authenticatedFrom).not.toHaveBeenCalled();
+       |                                         ^
+    254|     expect(mocks.supabaseAdmin).not.toHaveBeenCalled();
+    255|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 5 passed (8)
+   Start at  17:20:46
+   Duration  2.21s (transform 170ms, setup 0ms, import 361ms, tests 64ms, environment 0ms)
+

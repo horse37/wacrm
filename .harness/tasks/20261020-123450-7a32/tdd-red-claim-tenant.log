@@ -1,0 +1,116 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/automation-pending-claim.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/repositories/automation-pending-claim.test.ts (17 tests | 9 failed) 56ms
+     × claims and projects rows needed by the resume engine 18ms
+     × supports a smaller requested batch size 2ms
+     × rejects malformed database branch as a safe database error 12ms
+     × rejects malformed database UUID as a safe database error 2ms
+     × rejects malformed database context as a safe database error 2ms
+     × rejects malformed database context message_text as a safe database error 2ms
+     × rejects malformed database context vars as a safe database error 2ms
+     × rejects malformed database step position as a safe database error 2ms
+     × propagates database failures without driver details 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/automation-pending-claim.test.ts > PostgreSQL automation pending-execution claim repository > claims and projects rows needed by the resume engine
+AssertionError: promise rejected "AppError: The request is invalid. { code: '…' }" instead of resolving
+ ❯ src/lib/repositories/automation-pending-claim.test.ts:63:49
+     61|     const repository = createPostgresAutomationPendingClaimRepository(…
+     62|
+     63|  await expect(repository.claimDue(writerA, asOf)).resolves.toEqual(cla…
+       |                                                 ^
+     64|
+     65|     expect(mocks.withTransaction).toHaveBeenCalledTimes(1);
+
+Caused by: AppError: The request is invalid.
+ ❯ validateClaimInput src/lib/repositories/automation-pending-claim.ts:123:11
+ ❯ Object.claimDue src/lib/repositories/automation-pending-claim.ts:141:5
+ ❯ src/lib/repositories/automation-pending-claim.test.ts:63:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  src/lib/repositories/automation-pending-claim.test.ts > PostgreSQL automation pending-execution claim repository > supports a smaller requested batch size
+AssertionError: promise rejected "AppError: The request is invalid. { code: '…' }" instead of resolving
+ ❯ src/lib/repositories/automation-pending-claim.test.ts:88:52
+     86|     const repository = createPostgresAutomationPendingClaimRepository(…
+     87|
+     88|  await expect(repository.claimDue(writerA, asOf, 3)).resolves.toEqual(…
+       |                                                    ^
+     89|  expect(query.mock.calls[1][1]).toEqual([writerA.accountId, asOf, 3]);
+     90|   });
+
+Caused by: AppError: The request is invalid.
+ ❯ validateClaimInput src/lib/repositories/automation-pending-claim.ts:123:11
+ ❯ Object.claimDue src/lib/repositories/automation-pending-claim.ts:141:5
+ ❯ src/lib/repositories/automation-pending-claim.test.ts:88:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  src/lib/repositories/automation-pending-claim.test.ts > PostgreSQL automation pending-execution claim repository > rejects malformed database branch as a safe database error
+ FAIL  src/lib/repositories/automation-pending-claim.test.ts > PostgreSQL automation pending-execution claim repository > rejects malformed database UUID as a safe database error
+ FAIL  src/lib/repositories/automation-pending-claim.test.ts > PostgreSQL automation pending-execution claim repository > rejects malformed database context as a safe database error
+ FAIL  src/lib/repositories/automation-pending-claim.test.ts > PostgreSQL automation pending-execution claim repository > rejects malformed database context message_text as a safe database error
+ FAIL  src/lib/repositories/automation-pending-claim.test.ts > PostgreSQL automation pending-execution claim repository > rejects malformed database context vars as a safe database error
+ FAIL  src/lib/repositories/automation-pending-claim.test.ts > PostgreSQL automation pending-execution claim repository > rejects malformed database step position as a safe database error
+AssertionError: expected AppError: The request is invalid. { code: '…' } to deeply equal AppError: The database operation failed. { code: '…' }
+
+- Expected
++ Received
+
+  AppError {
+-   "message": "The database operation failed.",
++   "message": "The request is invalid.",
+    "name": "AppError",
+-   "code": "db_error",
++   "code": "bad_request",
+  }
+
+ ❯ src/lib/repositories/automation-pending-claim.test.ts:139:49
+    137|       const repository = createPostgresAutomationPendingClaimRepositor…
+    138|
+    139|  await expect(repository.claimDue(writerA, asOf)).rejects.toEqual(
+       |                                                 ^
+    140|         new AppError('db_error')
+    141|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  src/lib/repositories/automation-pending-claim.test.ts > PostgreSQL automation pending-execution claim repository > propagates database failures without driver details
+AssertionError: expected AppError: The request is invalid. { code: '…' } to be AppError: The database operation failed. { code: '…' } // Object.is equality
+
+- Expected
++ Received
+
+  AppError {
+-   "message": "The database operation failed.",
++   "message": "The request is invalid.",
+    "name": "AppError",
+-   "code": "db_error",
++   "code": "bad_request",
+  }
+
+ ❯ src/lib/repositories/automation-pending-claim.test.ts:150:49
+    148|     const repository = createPostgresAutomationPendingClaimRepository(…
+    149|
+    150|  await expect(repository.claimDue(writerA, asOf)).rejects.toBe(failure…
+       |                                                 ^
+    151|   });
+    152| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  9 failed | 8 passed (17)
+   Start at  12:36:28
+   Duration  1.76s (transform 121ms, setup 0ms, import 170ms, tests 56ms, environment 0ms)
+
+TDD RED exit code: 1

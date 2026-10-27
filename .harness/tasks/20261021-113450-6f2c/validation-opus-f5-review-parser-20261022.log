@@ -1,0 +1,20 @@
+Opus 5.5 full-tree r2 — finding 5: review timestamp precision and Portuguese broad scope
+Date: 2026-10-22 (America/Sao_Paulo)
+
+TDD reproduction
+- Added same-day review pair with same scope/reviewer round and six-digit timestamps `201521` and `201559`. Before the fix, timestamps tied because the parser matched the four-digit alternative first; aggregate remained REMEDIATION_REQUIRED.
+- Added prior broad rejection plus later `Scope: árvore de trabalho, A1–A5` approval. Before the fix, ASCII `\b` did not recognize the accented initial letter and the broad rejection stayed open.
+- Before fix, focused suite had 38 passed and the two new regressions failed.
+
+Implementation
+- `.harness/dashboard-review-progress.mjs` now tries six timestamp digits before four.
+- Task-wide scope matching uses a Unicode letter boundary before scope phrases (`[^\p{L}]`, `u` flag), allowing `árvore de trabalho` to match without changing the existing ASCII end boundary.
+
+Final validation
+- `node --test .harness/dashboard-review-progress.test.mjs`: PASS, 40/40.
+- All four dashboard suites (`dashboard-http`, `dashboard-review-progress`, `dashboard-server-http`, `dashboard-validation-result`): PASS, 56/56.
+- `node --check` for parser and test: PASS.
+- `npx prettier --check .harness/dashboard-review-progress.mjs .harness/dashboard-review-progress.test.mjs`: PASS.
+- `git diff --check -- .harness/dashboard-review-progress.mjs .harness/dashboard-review-progress.test.mjs`: PASS, exit 0.
+
+No DB, Docker, Supabase, external service, real data, or credentials were accessed. No commit, push, or deploy. Independent GPT-6 Luna read-only review is pending.

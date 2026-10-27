@@ -1,0 +1,100 @@
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+x·xxx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/account/members/route.test.ts > GET /api/account/members PostgreSQL route > lists PostgreSQL members and preserves the response shape
+AssertionError: expected { members: [] } to deeply equal { members: [ { …(6) } ] }
+
+- Expected
++ Received
+
+  {
+-   "members": [
+-     {
+-       "avatar_url": null,
+-       "email": "member@example.test",
+-       "full_name": "Synthetic Member",
+-       "joined_at": "2026-10-19T12:00:00.000Z",
+-       "role": "admin",
+-       "user_id": "7d9d36e6-e4a8-4c1f-8f92-c8107c4a3d12",
+-     },
+-   ],
++   "members": [],
+  }
+
+ ❯ src/app/api/account/members/route.test.ts:77:33
+     75|
+     76|     expect(response.status).toBe(200);
+     77|     await expect(response.json()).resolves.toEqual({ members });
+       |                                 ^
+     78|     expect(mocks.createRepository).toHaveBeenCalledTimes(1);
+     79|     const [getVerifiedSession] = mocks.createRepository.mock.calls[0];
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/app/api/account/members/route.test.ts > GET /api/account/members PostgreSQL route > maps PostgreSQL account authorization failures to 403
+AssertionError: expected 200 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 200
+
+ ❯ src/app/api/account/members/route.test.ts:104:29
+    102|     const response = await GET();
+    103|
+    104|     expect(response.status).toBe(403);
+       |                             ^
+    105|     expect(await response.text()).not.toContain("private database deta…
+    106|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/app/api/account/members/route.test.ts > GET /api/account/members PostgreSQL route > maps PostgreSQL permission errors to 403 without exposing database text
+AssertionError: expected 200 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 200
+
+ ❯ src/app/api/account/members/route.test.ts:116:29
+    114|     const response = await GET();
+    115|
+    116|     expect(response.status).toBe(403);
+       |                             ^
+    117|     expect(await response.text()).not.toContain("private database deta…
+    118|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/app/api/account/members/route.test.ts > GET /api/account/members PostgreSQL route > keeps database failures generic
+AssertionError: expected 200 to be 500 // Object.is equality
+
+- Expected
++ Received
+
+- 500
++ 200
+
+ ❯ src/app/api/account/members/route.test.ts:125:29
+    123|     const response = await GET();
+    124|
+    125|     expect(response.status).toBe(500);
+       |                             ^
+    126|     const body = await response.json();
+    127|     expect(body).toEqual({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 1 passed (5)
+   Start at  15:28:47
+   Duration  2.16s (transform 205ms, setup 0ms, import 505ms, tests 43ms, environment 0ms)
+

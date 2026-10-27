@@ -1,0 +1,28 @@
+Task: 20261020-194700-5e8f — PostgreSQL WhatsApp reaction route wiring
+Date: 2026-10-20 (America/Sao_Paulo)
+
+TDD RED before implementation:
+  npx vitest run src/app/api/whatsapp/react/route.test.ts src/lib/repositories/message-reaction-target.test.ts
+  Expected: 11 failing assertions exposed legacy Supabase route wiring and the target repository's old bad_request behavior for missing provider ID/contact phone.
+  Raw output: validation-red-20261020.log
+
+Final focused unit tests:
+  npx vitest run src/app/api/whatsapp/react/route.test.ts src/lib/repositories/message-reaction-target.test.ts
+  PASS — 2 files, 22/22 tests.
+
+Final static checks:
+  npx tsc --noEmit
+  PASS — exit 0.
+  npx eslint src/app/api/whatsapp/react/route.ts src/app/api/whatsapp/react/route.test.ts src/lib/repositories/message-reaction-target.ts src/lib/repositories/message-reaction-target.test.ts scripts/testing/postgres-message-reaction-target-integration.mjs --max-warnings=0
+  PASS — exit 0, zero warnings.
+  npx prettier --check [same five files]
+  PASS — all matched files use Prettier code style.
+  git diff --check
+  PASS — exit 0; Git emitted existing LF-to-CRLF working-copy notices.
+
+Disposable PostgreSQL proof:
+  pwsh -NoProfile -File scripts/testing/validate-postgres-message-reaction-target.ps1
+  PASS — Docker Desktop context desktop-linux; PostgreSQL 16 forced-RLS/NOBYPASSRLS integration; synthetic fixture; no external network; read-only source mount; cleanup verified by validation script.
+  Final integration log: ../20261020-045346-9a2d/validation-postgres-message-reaction-target-4b2a1d9042.log
+
+No Supabase database access or live Meta/WhatsApp request. Existing authenticated-session call remains mocked in route tests. No commit, push, or deploy.

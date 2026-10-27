@@ -1,0 +1,15 @@
+﻿Command: docker run -d --rm --name wacrm-automation-log-append-tenant-db-41ae5b040e --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=automation_log_append_tenant_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic tenants/logs only. Bootstrap/runtime passwords are randomly generated and are not recorded.
+PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Validation failure: docker exec failed with exit 3
+CREATE ROLE
+CREATE TYPE
+CREATE TABLE
+CREATE TABLE
+CREATE FUNCTION
+CREATE FUNCTION
+psql:/repo/.harness/tasks/20261020-083929-c2a6/postgres-automation-log-append-tenant-fixture.sql:54: ERROR:  role "postgres" does not exist
+Cleanup: no residual task resources
+Overall result: FAILURE

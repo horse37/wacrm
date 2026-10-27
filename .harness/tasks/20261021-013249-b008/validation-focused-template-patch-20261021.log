@@ -1,0 +1,4 @@
+PASS — Vitest focado
+Comando: npx vitest run src/app/api/whatsapp/templates/[id]/route.patch.test.ts src/app/api/whatsapp/templates/[id]/route.test.ts src/lib/repositories/template-edit-persistence.test.ts src/lib/repositories/template-lifecycle-context.test.ts src/lib/repositories/template-lifecycle-config.test.ts
+Resultado: 5 arquivos, 49/49 testes aprovados.
+Casos PATCH cobrem Auth, gate admin antes de Meta, contexto/configuração, sucesso, falha do provedor, dry-run, erro de persistência, template ausente e ausência de consultas de dados via Supabase.

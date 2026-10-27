@@ -1,0 +1,10 @@
+﻿Command: docker run -d --rm --name wacrm-automation-editor-db-59513bf5f0 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=db_automation_editor_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic accounts, profiles, automations, and automation steps only. Generated bootstrap/runtime passwords are not recorded.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --rm --name wacrm-automation-editor-node-59513bf5f0 --network container:wacrm-automation-editor-db-59513bf5f0 --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_automation_editor_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e TZ=Pacific/Kiritimati -e PG_POOL_MAX=1 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-editor-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 0
+PostgreSQL automation-editor integration SUCCESS: forced RLS, NOBYPASSRLS, exact column grants, creator-only editor access with non-creator viewer/agent denial, account and creator isolation, deterministic nested step branches, legacy null branch compatibility, malformed cross-automation parent rejection, minimal editor DTO, empty automation, and pooled identity cleanup.
+Cleanup: no residual task resources
+Overall result: SUCCESS

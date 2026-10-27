@@ -190,6 +190,12 @@ export async function runMigrations({
   lockPollIntervalMs = DEFAULT_LOCK_POLL_INTERVAL_MS,
   logger = console,
 }) {
+  if (ownerRole !== DEFAULT_OWNER_ROLE) {
+    throw new Error(
+      `The migration chain requires owner role "${DEFAULT_OWNER_ROLE}"`
+    );
+  }
+
   const migrations = await discoverMigrations(directory);
   const client = await pool.connect();
   let lockAcquired = false;

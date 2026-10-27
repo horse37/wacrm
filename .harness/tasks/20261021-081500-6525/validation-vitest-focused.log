@@ -1,0 +1,11 @@
+npm notice run wacrm@0.2.2 test
+npm notice run vitest run src/lib/repositories/zap-lead-event-stream-read.test.ts src/lib/zap-lead/credentials.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  2 passed (2)
+      Tests  11 passed (11)
+   Start at  08:28:10
+   Duration  3.31s (transform 265ms, setup 0ms, import 420ms, tests 64ms, environment 1ms)
+

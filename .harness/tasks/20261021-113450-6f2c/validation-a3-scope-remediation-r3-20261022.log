@@ -1,0 +1,20 @@
+A3 round 3 remediation — 2026-10-22
+Repository: C:\Sistemas\wacrm
+Branch: main
+HEAD: 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+Changed behavior:
+- Explicit finding IDs in Scope are authoritative; conflicting IDs in filenames are ignored.
+- Explicit Scope recognizes P0–P3 finding IDs and A1–A5 review labels.
+
+Validation:
+- node --test .harness/dashboard-review-progress.test.mjs — PASS, 33/33.
+- Node syntax checks for parser and focused test — PASS.
+- Prettier check for parser and focused test — PASS.
+- git diff --check — PASS on tracked changes. Parser/test files were untracked; syntax and formatting checks covered them.
+
+Coverage:
+- Regression reproduces filename P2-3 with explicit Scope P2-2 only — Does not approve P2-3; old P2-3 finding remains unresolved.
+- A2 explicit Scope overrides an A3 filename.
+
+No database, Docker, external service, schema, RLS, grants, or production resources used.

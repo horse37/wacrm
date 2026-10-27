@@ -1,0 +1,9 @@
+A2 live dashboard verification — 2026-10-22
+Confirmed before restart: server.json mapped PID 26768 to http://127.0.0.1:49213/dashboard.html; PID 26768 command was .harness/dashboard-server.mjs and owned 49213.
+Restarted PID: 26768; current PID: 19400; process start: 22/10/2026 09:34:08
+URL: http://127.0.0.1:49213/dashboard.html
+API checkedAt: 22/10/2026 12:34:55; task: 20261021-113450-6f2c; state: in_progress; currentReview: REMEDIATION_REQUIRED
+API nextAction: Complete A2 correction: label aggregate task review state accurately, refresh only confirmed dashboard PID 26768 on port 49213, verify live API and HTML, then request independent GPT-6 Luna read-only A2 review. Keep full-tree Opus result separate from slice approvals.
+HTML HTTP status: 200; aggregate-state label present: True; obsolete latest-slice label absent: True
+Duplicate panel on port 49214 remains listening under PID: 24904
+No PostgreSQL or Docker was used.

@@ -1,0 +1,13 @@
+Command: docker run -d --rm --name wacrm-automation-log-create-tenant-db-4fd4c9837d --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=automation_log_create_tenant_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic tenants/logs only. Bootstrap/runtime passwords are randomly generated and are not recorded.
+PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Command: docker run --rm --name wacrm-automation-log-create-tenant-node-4fd4c9837d --network container:wacrm-automation-log-create-tenant-db-4fd4c9837d --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_automation_log_create_tenant_job:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=1 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-log-create-tenant-integration.mjs
+Node container shares only the disposable database network namespace; repository mount is read-only.
+Node integration exit code: 0
+PostgreSQL automation-log creation tenant integration SUCCESS: PostgreSQL 16, test-only membership and owner policy, forced RLS, NOBYPASSRLS, minimum column grants, trusted owner insert, ignored payload identity fields, same-account other-owner/cross-account/viewer RLS denial, private-column protection, safe constraint rollback, and transaction-local identity cleanup.
+Bootstrap-only stored-row audit: PASS (exactly three accepted trusted-context logs; no denied or constraint-rejected row persisted; contactful/contactless inputs, initial success, empty steps, and private payload preserved).
+DO
+Cleanup: no residual task resources
+Overall result: SUCCESS

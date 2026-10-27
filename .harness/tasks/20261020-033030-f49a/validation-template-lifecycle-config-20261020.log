@@ -1,0 +1,21 @@
+Task: 20261020-033030-f49a — PostgreSQL template lifecycle configuration read
+Repository: C:\Sistemas\wacrm
+Branch: main
+HEAD: 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+TDD RED: focused Vitest initially failed at module import because template-lifecycle-config.ts did not exist.
+
+Validation:
+- npm run test -- src/lib/repositories/template-lifecycle-config.test.ts — SUCCESS, 9/9.
+- npm run typecheck — SUCCESS.
+- npx eslint src/lib/repositories/template-lifecycle-config.ts src/lib/repositories/template-lifecycle-config.test.ts --max-warnings=0 — SUCCESS, zero warnings.
+- npx prettier --check src/lib/repositories/template-lifecycle-config.ts src/lib/repositories/template-lifecycle-config.test.ts scripts/testing/postgres-template-lifecycle-config-integration.mjs .harness/tasks/20261020-033030-f49a/task.md .harness/tasks/20261020-033030-f49a/handoffs/implementer.md — SUCCESS.
+- PowerShell AST parse — SUCCESS. Fixture grant and forced-RLS checks passed in the runner.
+- git diff --check — SUCCESS; only preexisting LF-to-CRLF worktree warnings.
+- Disposable Docker Desktop PostgreSQL 16 forced-RLS integration — SUCCESS. Runtime NOBYPASSRLS, exact column grants, explicit account scope, synthetic opaque credentials, --network none, tmpfs, read-only mounts, no ports/named volumes, and cleanup verified. Final detailed evidence: validation-postgres-template-lifecycle-config-43b496b6f9.log. The runner was repeated after the final type-signature adjustment; both executions passed and left no resources.
+
+The repository adds separate unwired edit/delete config reads. Edit returns only opaque encrypted access_token. Delete returns opaque encrypted access_token and nullable waba_id. Neither decrypts, logs, or sends credentials.
+
+No route/UI wiring, Meta calls, writes, Supabase, real credentials/data, application traffic, production, commit, push, or deploy. Task remains in_progress; H-DATA-003/H-DB-003 remain unapproved overall.
+
+Independent GPT-6 Luna read-only review returned exact APPROVE, zero findings, and zero caveats, limited to this repository slice. Route wiring, decryption, Meta calls, and H-DATA-003/H-DB-003 overall remain unapproved.

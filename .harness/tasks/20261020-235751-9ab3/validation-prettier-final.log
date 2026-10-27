@@ -1,0 +1,4 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/app/api/whatsapp/config/verify-registration/route.ts src/app/api/whatsapp/config/verify-registration/route.test.ts src/lib/repositories/whatsapp-config.ts src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts scripts/testing/postgres-whatsapp-config-post-integration.mjs .harness/dashboard-server.mjs .harness/tasks/20261020-235751-9ab3/task.md .harness/tasks/20261020-235751-9ab3/handoffs/implementer.md
+Checking formatting...
+All matched files use Prettier code style!

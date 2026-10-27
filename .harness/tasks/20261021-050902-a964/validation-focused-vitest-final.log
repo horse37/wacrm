@@ -1,0 +1,68 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/whatsapp-send-conversation.test.ts src/app/api/whatsapp/send/route.test.ts --reporter=verbose
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ✓ src/lib/repositories/whatsapp-send-conversation.test.ts > PostgreSQL WhatsApp send conversation repository > updates only the selected contact in the verified account 10ms
+ ✓ src/lib/repositories/whatsapp-send-conversation.test.ts > PostgreSQL WhatsApp send conversation repository > returns false when RLS hides the contact from this account 5ms
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps legacy token upgrade in PostgreSQL and best-effort
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > does not wait for the legacy token upgrade before completing the send
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > logs only a safe error when legacy token upgrade fails
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'pt_BR' (found: true)
+Meta API send failed for all variants: synthetic provider failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: true)
+Meta API send failed for all variants: synthetic provider failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: false)
+Meta API send failed for all variants: synthetic provider failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id
+[whatsapp/send] reply target has no Meta message_id; sending without context
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id
+Meta API send failed for all variants: synthetic Meta send failure
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > forwards the parent Meta message id as reply context
+Meta API send failed for all variants: synthetic Meta send failure
+
+stdout | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[whatsapp/send] Auto-corrected contact phone: +15550000001 → +15550000002
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[whatsapp/send] contact phone auto-correction failed: The database operation failed.
+
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > rejects missing session before resolving account 16ms
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[flows] pause-on-agent-send threw: Cannot read properties of undefined (reading 'from')
+
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > preserves the 403 response when verified user has no account 6ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses verified session identity for PostgreSQL guard before body validation 5ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns 404 for a missing conversation without reading it through Supabase 6ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses the PostgreSQL contact phone before reading the WhatsApp configuration 6ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps legacy token upgrade in PostgreSQL and best-effort 5ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > does not wait for the legacy token upgrade before completing the send 4ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > logs only a safe error when legacy token upgrade fails 6ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'pt_BR' (found: true) 6ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: true) 3ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: false) 2ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > looks up reply targets in PostgreSQL scoped to the verified account 3ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id 2ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > forwards the parent Meta message id as reply context 3ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns 400 for a conversation without a contact and skips WhatsApp config 2ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns 400 for a contact without a phone before reading WhatsApp config 2ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns 400 for an invalid contact phone before reading WhatsApp config 2ms
+ ✓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone 10ms
+
+ Test Files  2 passed (2)
+      Tests  20 passed (20)
+   Start at  05:27:19
+   Duration  3.31s (transform 362ms, setup 0ms, import 696ms, tests 111ms, environment 1ms)
+
+EXIT=0

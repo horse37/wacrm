@@ -1,0 +1,58 @@
+Achado P3-1 — contagem de revisões no dashboard
+
+Correção:
+- Total agora conta todas as tarefas H-DATA-003; cobertura de revisão aparece em campo separado.
+- Pareceres em `handoffs/reviewer.md` entram no cálculo junto aos `review*.md` da raiz.
+- Tarefas com múltiplos achados agregam resultado por escopo. Rodadas explícitas, datas e marcadores de fase definem precedência; empate conflitante fica não aprovado.
+- Mtime não participa da precedência, então tocar arquivo antigo não o promove a revisão mais recente.
+- `Code caveats: zero` não satisfaz exigência de zero ressalvas gerais; handoff português com `Status: APPROVE`, `Achados: nenhum` e `Ressalvas: nenhuma` é reconhecido.
+
+Validação final:
+- `node --test .harness/dashboard-review-progress.test.mjs .harness/dashboard-http.test.mjs .harness/dashboard-server-http.test.mjs`: SUCCESS, 14/14.
+- `node --check .harness/dashboard-review-progress.mjs` e `node --check .harness/dashboard-server.mjs`: SUCCESS.
+- `npx prettier --check .harness/dashboard-review-progress.mjs .harness/dashboard-review-progress.test.mjs .harness/dashboard-server.mjs`: SUCCESS.
+- `git diff --check`: SUCCESS; apenas avisos existentes de conversão LF/CRLF em arquivos locais.
+- A primeira rodada de testes encontrou o falso positivo `Code caveats: zero`; a regex foi corrigida e rodada final passou. A primeira checagem Prettier também pediu formatação; arquivos foram formatados e checagem final passou.
+- Sem banco/Docker: a fatia muda apenas agregação e classificação de registros locais de review.
+
+Nenhuma aprovação presumida; aguardando revisão independente GPT-6 Luna somente para P3-1.
+
+Revisão independente P3-1, rodada 2:
+- GPT-6 Luna read-only retornou REMEDIATION_REQUIRED.
+- Achado P2: um `Scope:` com múltiplos IDs era associado só ao primeiro; um achado posterior podia ficar oculto por aprovação de outro.
+- Registro exato: `review-p3-1-independent-20261021-r2.md`.
+
+Correção da rodada 2:
+- Linha de escopo explícita agora associa o resultado a todos os IDs declarados; escopo sem IDs mantém a chave textual normalizada.
+- Adicionado caso de regressão `Scope: P2-2 and P3-1`, seguido de aprovação somente para P2-2.
+- Validação após correção: testes de dashboard SUCCESS 15/15; `node --check` dos módulos SUCCESS; Prettier `--write` informou ambos arquivos inalterados; `git diff --check` SUCCESS, com avisos LF/CRLF preexistentes.
+- Próximo passo: revisão independente GPT-6 Luna da rodada 3. Nenhuma aprovação presumida.
+
+Revisão independente P3-1, rodada 3:
+- GPT-6 Luna read-only retornou REMEDIATION_REQUIRED.
+- Achado P2: uma frase histórica `Findings: zero` podia satisfazer a regex mesmo com `Findings: 1`; `Findings: zero critical findings` também passava.
+- Registro exato: `review-p3-1-independent-20261021-r3.md`.
+
+Correção da rodada 3:
+- Classificador agora exige campos explícitos `Findings`/`Achados` e `Caveats`/`Ressalvas`; todos os campos encontrados precisam ter valor inteiro `zero`, `0`, `none` ou `nenhum(a)`.
+- Valor qualificado, campo contraditório, citação histórica e `Code caveats` não qualificam aprovação.
+- Testes regressivos cobrem contagem positiva com zero histórico e `zero critical findings`.
+- Uma primeira tentativa estrita não reconheceu `Achados: nenhum. Ressalvas: nenhuma.` na mesma linha e depois não aceitou campo separado por newline; o parser foi ajustado para separar ambos por pontuação ou quebra de linha.
+- Validação final após correção: dashboard tests SUCCESS 17/17; `node --check` dos módulos SUCCESS; Prettier `--check` SUCCESS; `git diff --check` SUCCESS com avisos LF/CRLF preexistentes.
+- Próximo passo: revisão independente GPT-6 Luna da rodada 4. Nenhuma aprovação presumida.
+
+Revisão independente P3-1, rodada 4:
+- GPT-6 Luna read-only retornou REMEDIATION_REQUIRED.
+- Achado P2: `explicitVerdict` escolhia o primeiro campo `Final verdict:` e ignorava veredito final conflitante posterior.
+- Registro exato: `review-p3-1-independent-20261021-r4.md`.
+
+Correção da rodada 4:
+- Campos finais explícitos agora são coletados; resultados finais divergentes retornam conflito e nunca aprovação. Sem campos `Final`, campos explícitos divergentes também são tratados conservadoramente.
+- Teste cobre APPROVE com contagens zero seguido de REMEDIATION_REQUIRED.
+- Validação final após correção: dashboard tests SUCCESS 18/18; `node --check` dos módulos SUCCESS; Prettier `--check` SUCCESS; `git diff --check` SUCCESS, com avisos LF/CRLF preexistentes.
+- Próximo passo: revisão independente GPT-6 Luna da rodada 5. Nenhuma aprovação presumida.
+
+Revisão independente P3-1, rodada 5:
+- GPT-6 Luna read-only retornou APPROVE, zero achados e zero ressalvas, limitado ao dashboard review/task-state progress.
+- Registro exato: `review-p3-1-independent-20261021-r5.md`.
+- P3-1 encerrado nesta fatia. A aprovação não cobre outras correções, a task inteira, H-DATA-003 ou H-DB-003.

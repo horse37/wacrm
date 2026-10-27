@@ -1,0 +1,19 @@
+Docker Desktop context: desktop-linux
+PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Database: wacrm_template_edit_task; synthetic fixtures only; no published ports; no external network.
+Runner: Node 22 in a container sharing only the isolated PostgreSQL loopback namespace.
+Repository mount is read-only; database data uses disposable tmpfs.
+DATABASE_URL password redacted; WACRM_TEMPLATE_EDIT_POSTGRES_TEST=1.
+file:///source/scripts/testing/postgres-template-edit-persistence-integration.mjs:115
+  assert.equal(template.category, 'Utility');
+                        ^
+
+TypeError: Cannot read properties of undefined (reading 'category')
+    at main (file:///source/scripts/testing/postgres-template-edit-persistence-integration.mjs:115:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///source/scripts/testing/postgres-template-edit-persistence-integration.mjs:170:3
+
+Node.js v22.23.3
+Validation failure: PostgreSQL integration failed with exit 1.
+Cleanup: disposable database and runner containers removed; residual count 0.

@@ -1,0 +1,10 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run eslint --max-warnings=0 src/app/api/whatsapp/config/verify-registration/route.ts src/app/api/whatsapp/config/verify-registration/route.test.ts src/lib/repositories/whatsapp-config.ts src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts scripts/testing/postgres-whatsapp-config-post-integration.mjs
+ESLint found too many warnings (maximum: 0).
+
+C:\Sistemas\wacrm\src\lib\repositories\whatsapp-config-registration-diagnostics.test.ts
+  41:30  warning  '_sql' is defined but never used     @typescript-eslint/no-unused-vars
+  41:44  warning  '_values' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 2 problems (0 errors, 2 warnings)
+

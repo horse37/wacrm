@@ -1,0 +1,21 @@
+Task: PostgreSQL flow update route (`PUT /api/flows/[id]`)
+Date: 2026-10-20 (America/Sao_Paulo)
+
+TDD RED
+- `npm test -- --reporter=verbose 'src/app/api/flows/[id]/route.test.ts'`
+- Before route implementation: 3 failed, 5 passed. Failures showed header and graph repositories were not delegated to, and malformed JSON still triggered Supabase data lookup.
+- Full output: `tdd-red-put-route.log`.
+
+Focused GREEN
+- `npm test -- 'src/app/api/flows/[id]/route.test.ts' 'src/lib/repositories/flow-header-update.test.ts' 'src/lib/repositories/flow-node-graph-replace.test.ts' 'src/lib/repositories/flow-editor-load.test.ts' 'src/lib/auth/postgres-account-guard.test.ts'` — PASS, 5 files / 52 tests.
+- `npm run typecheck` — PASS.
+- `npx eslint --max-warnings=0 'src/app/api/flows/[id]/route.ts' 'src/app/api/flows/[id]/route.test.ts'` — PASS, zero warnings.
+- `npx prettier --check 'src/app/api/flows/[id]/route.ts' 'src/app/api/flows/[id]/route.test.ts'` — PASS.
+- `git diff --check --` — PASS; Git printed existing LF-to-CRLF working-tree warnings, no whitespace errors.
+
+PostgreSQL evidence
+- No repository, SQL, schema, RLS, or grants changed. Reused existing disposable PostgreSQL 16 forced-RLS evidence: header update `.harness/tasks/20261020-050802-a6c1/validation-postgres-flow-header-update-b089a62b10.log`; graph replacement `.harness/tasks/20261020-051507-1c3e/validation-postgres-flow-node-graph-replace-c93d62ad67.log`; editor load `.harness/tasks/20261020-020502-d4a8/validation-postgres-flow-editor-load-df54197bc5.log`.
+- No Supabase database/service used. Route tests mock the existing verified-session Auth lookup and PostgreSQL repositories.
+
+Limits
+- This proves only PUT route wiring and scoped repository delegation. H-DATA-003/H-DB-003 remain unapproved overall. Independent read-only review pending.

@@ -1,0 +1,25 @@
+# Validation — dashboard validation list — 2026-10-22
+
+## Defect and TDD
+- Live `/api/status` returned `validations: []` while the active task had 102 eligible validation/review artifacts.
+- Regression test initially failed at `status.validations.length > 0` before the fix.
+- Cause: `collectValidationFiles` called `classifyReview` without importing it; its catch returned an empty list. Import added in `.harness/dashboard-server.mjs`.
+- Initial test also pinned current task artifact names. Independent GPT-6 Luna round 1 returned `REMEDIATION_REQUIRED` with one P3 durability caveat. Test was changed to copy dashboard modules into a temporary repository and create synthetic task, validation, and review fixtures. It now asserts API exposes fixture `PASS` and `APPROVE` records without relying on the active task or its ten newest artifacts.
+
+## Final checks
+- Four focused dashboard suites: 51/51 passed, including HTTP endpoint and hermetic validation/review fixture.
+- `node --check` passed for `.harness/dashboard-server.mjs` and `.harness/dashboard-server-http.test.mjs`.
+- Prettier check passed for both changed files. An earlier check found formatting in the test; formatting was applied before the passing check.
+- `git diff --check` passed; Git printed only existing LF/CRLF informational warnings.
+- No database, Docker, Supabase, external service, or real data/credentials used.
+
+## Independent review
+- GPT-6 Luna round 1: `REMEDIATION_REQUIRED`, zero code findings, one P3 caveat: the test depended on real task names/current task. Record: `review-dashboard-validation-list-independent-20261022-r1.md`.
+- GPT-6 Luna round 2 reviewed the hermetic fixture read-only and returned `APPROVE`, zero findings and zero caveats. Record: `review-dashboard-validation-list-independent-20261022-r2.md`.
+- Approval is limited to the dashboard validation list fix and its HTTP regression test.
+
+## Live panel verification
+- Confirmed `%LOCALAPPDATA%\Wacrm\migration-dashboard\server.json` identified PID 19400 as the server for `http://127.0.0.1:49213/dashboard.html`; `Get-NetTCPConnection` confirmed PID 19400 owned port 49213. Restarted only that verified process, hidden, with the same repository and Node runtime.
+- New server PID 24872 owns port 49213. Separate PID 24904 still owns port 49214 and was preserved.
+- Live `/api/status`: 10 validation/review rows, including this validation log and round-2 approval record; fresh `checkedAt` `2026-10-22T16:34:35.711Z`.
+- Live `/dashboard.html`: HTTP 200, `Cache-Control: no-store`, page retains 20-minute polling.

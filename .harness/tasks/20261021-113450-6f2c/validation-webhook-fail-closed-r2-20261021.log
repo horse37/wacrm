@@ -1,0 +1,15 @@
+# Webhook fail-closed validation — remediation round 1 — 2026-10-21
+
+Scope: regression coverage for `POST /api/zap-lead/webhook` when the PostgreSQL opt-in flag is disabled.
+
+- Independent Luna round 1 found a test-coverage gap only: unset and non-`1` values were not covered, and body-read prevention was not asserted. Exact result is in `review-webhook-fail-closed-independent-20261021-r1.md`.
+- Replaced the single empty-value case with cases for the flag being unset, empty, and `true`. Each case replaces the request body with a reader spy that throws if accessed and asserts `getReader` is never called; credential lookup and event persistence mocks remain uncalled.
+- `npm exec -- vitest run src/app/api/zap-lead/webhook/route.test.ts` — PASS, 20/20.
+- `npx tsc --noEmit` — PASS (exit 0).
+- Targeted ESLint with `--max-warnings=0` — PASS (exit 0; no warnings).
+- Prettier check for route and test — PASS.
+- Targeted `git diff --check` — PASS (exit 0; Git printed only LF-to-CRLF advisory warnings).
+- Live dashboard API remains on `http://127.0.0.1:49214/api/status`; active task is `20261021-113450-6f2c`, `in_progress`, latest review `REMEDIATION_REQUIRED`, branch `main`, expected HEAD `7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c`.
+
+No database, Docker, Supabase, VPS, production, real data, or real credentials were used. No migration/schema/RLS/grant changes, commits, pushes, or deploys occurred. Independent GPT-6 Luna round 2 returned APPROVE, zero findings and zero caveats, limited to this guard/test scope; record: `review-webhook-fail-closed-independent-20261021-r2.md`.
+

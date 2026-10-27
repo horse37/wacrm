@@ -1,0 +1,2 @@
+node --check scripts/testing/postgres-whatsapp-contact-phone-integration.mjs: PASS
+PowerShell Parser.ParseFile scripts/testing/validate-postgres-whatsapp-contact-phone.ps1: PASS

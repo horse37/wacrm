@@ -1,4 +1,4 @@
-import type { AccountRole } from "@/lib/auth/roles";
+import type { AccountRole } from '@/lib/auth/roles';
 
 export interface Profile {
   id: string;
@@ -77,7 +77,7 @@ export interface AccountInvitation {
   id: string;
   account_id: string;
   /** Roles offered via invite — owner is never offered. */
-  role: Exclude<AccountRole, "owner">;
+  role: Exclude<AccountRole, 'owner'>;
   created_by_user_id: string | null;
   label: string | null;
   created_at: string;
@@ -169,7 +169,12 @@ export type ContentType =
   | 'template'
   /** Customer tapped a reply button or list row on a message we sent. */
   | 'interactive';
-export type MessageStatus = 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
+export type MessageStatus =
+  | 'sending'
+  | 'sent'
+  | 'delivered'
+  | 'read'
+  | 'failed';
 
 export interface Message {
   id: string;
@@ -278,7 +283,7 @@ export interface Pipeline {
   id: string;
   user_id: string;
   name: string;
-  created_at: string;
+  created_at: string | null;
 }
 
 export interface PipelineStage {
@@ -287,7 +292,7 @@ export interface PipelineStage {
   name: string;
   position: number;
   color: string;
-  created_at: string;
+  created_at: string | null;
 }
 
 export type DealStatus = 'open' | 'won' | 'lost';
@@ -317,8 +322,31 @@ export interface Deal {
   assignee?: Profile;
 }
 
-export type BroadcastStatus = 'draft' | 'scheduled' | 'sending' | 'sent' | 'failed';
-export type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'read' | 'replied' | 'failed';
+/** Narrow nested projection used by the pipeline board's deal cards. */
+export interface PipelineBoardDeal extends Omit<
+  Deal,
+  'contact' | 'assignee' | 'created_at' | 'updated_at'
+> {
+  created_at: string | null;
+  updated_at: string | null;
+  notes?: string;
+  contact?: Pick<Contact, 'id' | 'phone' | 'name'>;
+  assignee?: Pick<Profile, 'id' | 'full_name'>;
+}
+
+export type BroadcastStatus =
+  | 'draft'
+  | 'scheduled'
+  | 'sending'
+  | 'sent'
+  | 'failed';
+export type RecipientStatus =
+  | 'pending'
+  | 'sent'
+  | 'delivered'
+  | 'read'
+  | 'replied'
+  | 'failed';
 
 export interface Broadcast {
   id: string;

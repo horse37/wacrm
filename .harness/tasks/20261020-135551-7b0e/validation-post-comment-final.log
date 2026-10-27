@@ -1,0 +1,7 @@
+Final focused recheck after clarifying the existing POST/DELETE account-helper comment (2026-10-20, Brasília).
+PASS — npx vitest run 'src/app/api/whatsapp/config/route.test.ts' 'src/lib/repositories/whatsapp-config.test.ts' --maxWorkers=1 --no-file-parallelism; 14/14.
+PASS — npm run typecheck.
+PASS — npx eslint 'src/app/api/whatsapp/config/route.ts' 'src/app/api/whatsapp/config/route.test.ts' --max-warnings=0.
+PASS — npx prettier --check for route test, task, and implementer handoff.
+PASS — git diff --check (exit 0; only pre-existing line-ending normalization warnings).
+Docker PostgreSQL integration was unchanged by this comment-only correction; see validation-postgres-whatsapp-config-8c73a7cbb4.log.

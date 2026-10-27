@@ -1,0 +1,4 @@
+COMMAND: npx tsc --noEmit
+npm notice run wacrm@0.2.2 npx
+npm notice run tsc --noEmit
+EXIT_CODE=0

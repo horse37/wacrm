@@ -1,0 +1,3 @@
+Comando: `git diff --check -- 'src/app/api/whatsapp/templates/[id]/route.ts'`, mais verificação de whitespace dos arquivos novos.
+Resultado: PASS, sem whitespace inválido. Git emitiu somente aviso local de normalização LF/CRLF.
+Exit code: 0.

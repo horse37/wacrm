@@ -1,0 +1,25 @@
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-flow-run.test.ts [ src/lib/repositories/whatsapp-send-flow-run.test.ts ]
+Error: Cannot find module '/src/lib/repositories/whatsapp-send-flow-run' imported from C:/Sistemas/wacrm/src/lib/repositories/whatsapp-send-flow-run.test.ts
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts:13:1
+     11| vi.mock('server-only', () => ({}));
+     12|
+     13| import { createPostgresWhatsAppSendFlowRunRepository } from './whatsap…
+       | ^
+     14|
+     15| const userId = '00000000-0000-4000-8000-000000000001';
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  06:53:49
+   Duration  1.90s (transform 116ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)
+

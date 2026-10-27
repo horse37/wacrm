@@ -1,0 +1,35 @@
+Task: 20261021-004200-f8b0 — POST /api/whatsapp/templates/sync
+Branch/HEAD: main / 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+Vitest:
+Comando: `npx vitest run 'src/app/api/whatsapp/templates/sync/route.test.ts' 'src/lib/repositories/template-sync-persistence.test.ts' 'src/lib/repositories/template-lifecycle-config.test.ts' 'src/lib/auth/postgres-account-guard.test.ts' --maxWorkers=1 --no-file-parallelism`
+Resultado: PASS, 4 arquivos e 42 testes; código de saída 0. Testes da rota simulam Auth, fetch/Meta, configuração e repositório de persistência.
+
+TypeScript:
+Command: npm run typecheck
+Resultado: PASS; código de saída 0.
+
+ESLint:
+Command: npx eslint 'src/app/api/whatsapp/templates/sync/route.ts' 'src/app/api/whatsapp/templates/sync/route.test.ts' 'src/lib/repositories/template-sync-persistence.ts' 'src/lib/repositories/template-lifecycle-config.ts' 'src/lib/auth/postgres-account-guard.ts' --max-warnings=0
+Resultado: PASS, zero avisos/erros; código de saída 0.
+
+Prettier:
+Command: npx prettier --check 'src/app/api/whatsapp/templates/sync/route.ts' 'src/app/api/whatsapp/templates/sync/route.test.ts' '.harness/tasks/20261021-004200-f8b0/task.md' '.harness/tasks/20261021-004200-f8b0/handoffs/implementer.md' '.harness/tasks/20261021-024500-6a71/review-gpt6-luna-final-20261021.md'
+Resultado: PASS; todos os arquivos listados estão formatados; código de saída 0.
+
+Whitespace:
+Command: git diff --check
+Resultado: PASS; código de saída 0.
+
+PostgreSQL:
+Os repositórios, SQL, RLS, grants e fixtures não foram alterados nesta task de wiring da rota. Reutilizadas evidências bem-sucedidas de PostgreSQL 16 descartável para os repositórios de persistência/configuração: `.harness/tasks/20261020-034647-d1e1/validation-postgres-template-sync-persistence-264fd1579d.log` (integração Node, saída 0; `--network none`, tmpfs, montagem read-only, sem portas ou volumes publicados) e `.harness/tasks/20261020-033030-f49a/validation-postgres-template-lifecycle-config-4c74067f77.log` (integração Node, saída 0; RLS forçado e `NOBYPASSRLS`). Docker não foi iniciado nesta task da rota.
+
+Limites: sem banco/serviço Supabase, Meta/Auth real, VPS, produção, dados/credenciais reais, tráfego de aplicação, alterações de schema/RLS/grants, Storage ou Realtime. Sem commit, push ou deploy.
+
+Reexecução final pré-review em 2026-10-21 00:57 BRT: Vitest 42/42, `npm run typecheck`, ESLint direcionado com `--max-warnings=0`, Prettier check e `git diff --check` passaram.
+
+Remediação P2 da primeira revisão independente: `paging.next` agora é validado antes de cada fetch. Só HTTPS, origem exata `https://graph.facebook.com`, sem userinfo e caminho da versão `v21.0` são aceitos; URLs externas, HTTP, userinfo e versão divergente retornam 502 sem segundo fetch nem persistência. Evidência da revisão: `review-gpt6-luna-initial-20261021.md`.
+
+Validação final após remediação em 2026-10-21 01:04 BRT: Vitest focado PASS, 4 arquivos e 46 testes; `npm run typecheck` PASS; ESLint direcionado `--max-warnings=0` PASS; Prettier check PASS; `git diff --check` PASS. Nenhum arquivo de repositório, SQL, RLS ou grants mudou; evidências PostgreSQL sintéticas da sync e configuração continuam válidas, sem iniciar Docker nesta fatia.
+
+Segunda revisão independente GPT-6 Luna read-only: `APPROVE`, zero achados e zero ressalvas abertas, limitada à rota `POST /api/whatsapp/templates/sync`; revisão não executou testes/comandos. Relatório: `review-gpt6-luna-final-20261021.md`.

@@ -1,0 +1,127 @@
+A3 scope aggregation remediation — 2026-10-22
+Repository: C:\Sistemas\wacrm
+Branch: main
+HEAD: 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+Scope: dashboard review-scope parser and regression tests only. No database or Docker used.
+
+--- Node syntax: dashboard-review-progress.mjs
+
+exit_code=0
+--- Node syntax: dashboard-review-progress.test.mjs
+
+exit_code=0
+--- Focused parser tests
+✔ uses named review rounds instead of file modification time (15.223ms)
+✔ does not treat the referenced Opus round as a newer Luna review round (3.2484ms)
+✔ keeps every finding scope visible when one scope remains unresolved (0.8293ms)
+✔ associates a multi-scope review with every finding it declares (0.6849ms)
+✔ does not choose between conflicting reviews with the same recorded order (0.6155ms)
+✔ accepts explicit final approval that mentions an earlier remediation (0.3829ms)
+✔ rejects conflicting explicit final verdicts (0.3968ms)
+✔ accepts Portuguese reviewer handoff with explicit empty findings and caveats (2.4357ms)
+✔ accepts explicit zero counts stated beside the approval verdict (7.0591ms)
+✔ parses verdict and count values wrapped in inline code in review fields (1.3596ms)
+✔ ignores failure examples mentioned in review body after final approval (0.5038ms)
+✔ ignores result lines inside plain-text examples and fenced code (0.5976ms)
+✔ keeps a real Result failure conflicting with an approval (0.3254ms)
+✔ ignores finding and caveat counts inside examples and code (0.4139ms)
+✔ retains a positive finding count after an example boundary (0.3368ms)
+✔ does not infer zero counts from qualified or contradictory inline claims (0.7555ms)
+✔ groups review rounds by referenced Opus finding and reviewer round (0.8183ms)
+✔ does not treat code-only caveats as zero caveats (0.6414ms)
+✔ does not accept approval without explicit zero findings and caveats (0.266ms)
+✔ does not let historical zero findings override a positive current count (0.2293ms)
+✔ does not treat zero critical findings as zero findings overall (0.2305ms)
+✔ finds root reviews and handoff reviewer record, but not other handoff documents (40.6677ms)
+✔ uses all roadmap tasks as denominator and reports review coverage separately (3.056ms)
+✔ recognizes H-DATA-003 roadmap with Markdown backticks (0.6116ms)
+✔ reads bold task status and labels complete as concluded (0.7908ms)
+✔ ignores approval-boundary references in a review scope (0.7457ms)
+✔ falls back to the task group when Scope only denies broader approval (0.4516ms)
+✔ recognizes explicit zero counts in qualified caveat fields (0.4429ms)
+✔ groups free-text scopes by stable review name and ignores roadmap exclusions (0.5432ms)
+✔ groups A3 rounds under their finding label instead of changing prose scope (1.0459ms)
+✔ does not count the provenance index as a reviewer report (0.4318ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2182.2173
+
+exit_code=0
+--- Prettier
+Checking formatting...
+All matched files use Prettier code style!
+
+exit_code=0
+{
+  "reviewRecords": 42,
+  "aggregate": "REMEDIATION_REQUIRED",
+  "scopes": [
+    {
+      "scope": "A2",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "A3",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "A4",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "A5",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "OPUS-R2-F2",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "OPUS-R2-F1",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "opus-working-tree",
+      "result": "REMEDIATION_REQUIRED"
+    },
+    {
+      "scope": "P2-1",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "P2-2",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "P2-3",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "P2-4",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "P3-1",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "A1",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "P3-2",
+      "result": "APPROVE"
+    },
+    {
+      "scope": "webhook-fail-closed",
+      "result": "APPROVE"
+    }
+  ]
+}
+--- Target-file whitespace
+PASS

@@ -1,0 +1,69 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/flows/[id]/activate/route.test.ts --reporter=dot
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+··xxxxxx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/flows/[id]/activate/route.test.ts > POST /api/flows/[id]/activate PostgreSQL route > delegates draft status to PostgreSQL and preserves success response shape
+ FAIL  src/app/api/flows/[id]/activate/route.test.ts > POST /api/flows/[id]/activate PostgreSQL route > delegates active status to PostgreSQL and preserves success response shape
+ FAIL  src/app/api/flows/[id]/activate/route.test.ts > POST /api/flows/[id]/activate PostgreSQL route > delegates archived status to PostgreSQL and preserves success response shape
+TypeError: supabase.from is not a function
+ ❯ Module.POST src/app/api/flows/[id]/activate/route.ts:47:6
+     45|   // Ownership via RLS — caller's client.
+     46|   const { data: existing } = await supabase
+     47|     .from('flows')
+       |      ^
+     48|     .select('id')
+     49|     .eq('id', id)
+ ❯ src/app/api/flows/[id]/activate/route.test.ts:104:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/app/api/flows/[id]/activate/route.test.ts > POST /api/flows/[id]/activate PostgreSQL route > returns the full validator issue list when activation is blocked
+TypeError: supabase.from is not a function
+ ❯ Module.POST src/app/api/flows/[id]/activate/route.ts:47:6
+     45|   // Ownership via RLS — caller's client.
+     46|   const { data: existing } = await supabase
+     47|     .from('flows')
+       |      ^
+     48|     .select('id')
+     49|     .eq('id', id)
+ ❯ src/app/api/flows/[id]/activate/route.test.ts:128:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/app/api/flows/[id]/activate/route.test.ts > POST /api/flows/[id]/activate PostgreSQL route > maps missing or cross-account flow to the existing 404 response
+TypeError: supabase.from is not a function
+ ❯ Module.POST src/app/api/flows/[id]/activate/route.ts:47:6
+     45|   // Ownership via RLS — caller's client.
+     46|   const { data: existing } = await supabase
+     47|     .from('flows')
+       |      ^
+     48|     .select('id')
+     49|     .eq('id', id)
+ ❯ src/app/api/flows/[id]/activate/route.test.ts:140:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/app/api/flows/[id]/activate/route.test.ts > POST /api/flows/[id]/activate PostgreSQL route > uses safe responses for authorization and database errors
+TypeError: supabase.from is not a function
+ ❯ Module.POST src/app/api/flows/[id]/activate/route.ts:47:6
+     45|   // Ownership via RLS — caller's client.
+     46|   const { data: existing } = await supabase
+     47|     .from('flows')
+       |      ^
+     48|     .select('id')
+     49|     .eq('id', id)
+ ❯ src/app/api/flows/[id]/activate/route.test.ts:148:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 2 passed (8)
+   Start at  17:09:15
+   Duration  1.97s (transform 259ms, setup 0ms, import 435ms, tests 53ms, environment 2ms)
+

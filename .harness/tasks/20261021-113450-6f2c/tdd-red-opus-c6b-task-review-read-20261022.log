@@ -1,0 +1,10 @@
+# Opus r2 caveat 6b follow-up — task/review file read errors
+# Date: 2026-10-22 (America/Sao_Paulo)
+
+Command: node --test .harness/dashboard-server-http.test.mjs
+Result before removing the broad readText catch: FAIL, 1 passed / 1 failed.
+Regression injected EACCES while reading current-task.md after server startup;
+the old behavior returned HTTP 200 instead of expected HTTP 500. Exact assertion:
+Expected 500, received 200.
+
+This reproduced silent partial dashboard status caused by catch { return '' }.

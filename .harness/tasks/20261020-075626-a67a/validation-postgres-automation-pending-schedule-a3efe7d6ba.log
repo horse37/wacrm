@@ -1,0 +1,13 @@
+Command: docker run -d --rm --name wacrm-automation-schedule-db-a3efe7d6ba --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=automation_schedule_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic automation queue rows only. Bootstrap/runtime passwords are random for this run and are not recorded.
+PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Command: docker run --rm --name wacrm-automation-schedule-node-a3efe7d6ba --network container:wacrm-automation-schedule-db-a3efe7d6ba --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_automation_schedule_job:<synthetic-generated>@127.0.0.1:5432/postgres node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-pending-schedule-integration.mjs
+Node container shares only the disposable database network namespace; repository mount is read-only.
+Node integration exit code: 0
+PostgreSQL automation pending-schedule integration SUCCESS: PostgreSQL 16, forced RLS, NOBYPASSRLS, column-only INSERT plus SELECT(id), generated IDs, optional/null fields, context default, transaction error mapping, and safe failure behavior.
+Bootstrap-only stored-row audit: PASS (full fields, default context, pending status, no rejected row).
+DO
+Cleanup: no residual task resources
+Overall result: SUCCESS

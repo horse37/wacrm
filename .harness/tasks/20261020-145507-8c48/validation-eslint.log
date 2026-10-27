@@ -1,0 +1,2 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run eslint src/app/api/account/transfer-ownership/route.ts src/app/api/account/transfer-ownership/route.test.ts --max-warnings=0

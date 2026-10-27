@@ -1,0 +1,44 @@
+Command: docker run -d --rm --name wacrm-broadcast-detail-db-88418c181d --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=db_broadcast_detail_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic accounts/profiles/contacts/broadcasts/recipients only. Bootstrap and runtime passwords are generated for this run and are not recorded.
+PowerShell AST and fixture minimum-grant/forced-RLS checks passed.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Validation failure: docker exec failed with exit 3
+CREATE ROLE
+CREATE SCHEMA
+CREATE FUNCTION
+CREATE TYPE
+CREATE TABLE
+CREATE TABLE
+CREATE FUNCTION
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE POLICY
+CREATE POLICY
+CREATE POLICY
+CREATE POLICY
+CREATE POLICY
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+INSERT 0 3
+psql:/repo/.harness/tasks/20261020-023725-670d/postgres-broadcast-detail-fixture.sql:162: ERROR:  duplicate key value violates unique constraint "profiles_user_id_key"
+DETAIL:  Key (user_id)=(00000000-0000-4000-8000-000000000001) already exists.
+Cleanup: no residual task resources
+Overall result: FAILURE

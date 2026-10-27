@@ -1,0 +1,93 @@
+npm notice run wacrm@0.2.2 test
+npm notice run vitest run src/app/api/account/invitations/[id]/route.test.ts --maxWorkers=1 --no-file-parallelism --reporter=dot
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+xx·xx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/account/invitations/[id]/route.test.ts > DELETE /api/account/invitations/[id] PostgreSQL route > revokes through PostgreSQL and returns the existing success response
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/account/invitations/[id]/route.test.ts:76:29
+     74|     const response = await DELETE(request(), routeContext());
+     75|
+     76|     expect(response.status).toBe(200);
+       |                             ^
+     77|     await expect(response.json()).resolves.toEqual({ ok: true });
+     78|     expect(mocks.requireRole).toHaveBeenCalledWith('admin');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/app/api/account/invitations/[id]/route.test.ts > DELETE /api/account/invitations/[id] PostgreSQL route > returns 404 when the invitation is absent or outside the caller account
+AssertionError: expected 500 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 500
+
+ ❯ src/app/api/account/invitations/[id]/route.test.ts:95:29
+     93|     const response = await DELETE(request(), routeContext());
+     94|
+     95|     expect(response.status).toBe(404);
+       |                             ^
+     96|     await expect(response.json()).resolves.toEqual({ error: 'Invitatio…
+     97|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/app/api/account/invitations/[id]/route.test.ts > DELETE /api/account/invitations/[id] PostgreSQL route > maps PostgreSQL permission denial to a safe forbidden response
+AssertionError: expected 500 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 500
+
+ ❯ src/app/api/account/invitations/[id]/route.test.ts:115:29
+    113|     const response = await DELETE(request(), routeContext());
+    114|
+    115|     expect(response.status).toBe(403);
+       |                             ^
+    116|     await expect(response.json()).resolves.toEqual({ error: 'Forbidden…
+    117|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/app/api/account/invitations/[id]/route.test.ts > DELETE /api/account/invitations/[id] PostgreSQL route > hides unexpected PostgreSQL details behind a generic server error
+AssertionError: expected { error: 'Internal server error' } to deeply equal { Object (error) }
+
+- Expected
++ Received
+
+  {
+-   "error": "Failed to revoke invitation",
++   "error": "Internal server error",
+  }
+
+ ❯ src/app/api/account/invitations/[id]/route.test.ts:125:33
+    123|
+    124|     expect(response.status).toBe(500);
+    125|     await expect(response.json()).resolves.toEqual({
+       |                                 ^
+    126|       error: 'Failed to revoke invitation',
+    127|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 1 passed (5)
+   Start at  16:37:49
+   Duration  1.89s (transform 224ms, setup 0ms, import 513ms, tests 43ms, environment 0ms)
+

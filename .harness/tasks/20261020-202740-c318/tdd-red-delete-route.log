@@ -1,0 +1,78 @@
+npm notice run wacrm@0.2.2 test
+npm notice run vitest run --reporter=verbose src/app/api/flows/[id]/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > requires the existing verified server session 13ms
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > loads editor DTO from PostgreSQL using verified session identity 9ms
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > maps repository not_found errors to safe HTTP status and message 2ms
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > maps repository db_error errors to safe HTTP status and message 1ms
+ ✓ src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > does not expose raw repository errors 3ms
+ ✓ src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > updates headers in PostgreSQL and returns the editor DTO 3ms
+ ✓ src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > replaces graph in PostgreSQL when nodes are supplied 2ms
+ ✓ src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > requires a verified session before repositories or data access 2ms
+ ✓ src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > maps repository errors to safe HTTP status and message 2ms
+ ✓ src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > rejects an empty flow name before repository writes 2ms
+ ✓ src/app/api/flows/[id]/route.test.ts > PUT /api/flows/[id] > rejects invalid JSON before calling data repositories 1ms
+ × src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > deletes through PostgreSQL and preserves success response 6ms
+   → expected "vi.fn()" to be called 1 times, but got 0 times
+ ✓ src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > requires verified session before repository or data access 1ms
+ × src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > maps repository forbidden errors to safe HTTP status and message 3ms
+   → Cannot read properties of undefined (reading 'select')
+ × src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > maps repository not_found errors to safe HTTP status and message 2ms
+   → Cannot read properties of undefined (reading 'select')
+ × src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > maps repository db_error errors to safe HTTP status and message 2ms
+   → Cannot read properties of undefined (reading 'select')
+ × src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > does not expose raw repository errors 1ms
+   → Cannot read properties of undefined (reading 'select')
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > deletes through PostgreSQL and preserves success response
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ src/app/api/flows/[id]/route.test.ts:344:46
+    342|     expect(response.status).toBe(200);
+    343|     expect(await response.json()).toEqual({ ok: true });
+    344|     expect(mocks.createFlowDeleteRepository).toHaveBeenCalledTimes(1);
+       |                                              ^
+    345|     expect(mocks.deleteOwnedFlow).toHaveBeenCalledExactlyOnceWith(flow…
+    346|     const [getVerifiedSession] = mocks.createFlowDeleteRepository.mock…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > maps repository forbidden errors to safe HTTP status and message
+ FAIL  src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > maps repository not_found errors to safe HTTP status and message
+ FAIL  src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > maps repository db_error errors to safe HTTP status and message
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ requireOwnership src/app/api/flows/[id]/route.ts:38:18
+     36|   // returns null (404 below).
+     37|   const { data: flow } = await supabase
+     38|     .from('flows')
+       |                  ^
+     39|     .select('id')
+     40|     .eq('id', flowId)
+ ❯ Module.DELETE src/app/api/flows/[id]/route.ts:168:17
+ ❯ src/app/api/flows/[id]/route.test.ts:378:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > DELETE /api/flows/[id] > does not expose raw repository errors
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ requireOwnership src/app/api/flows/[id]/route.ts:38:18
+     36|   // returns null (404 below).
+     37|   const { data: flow } = await supabase
+     38|     .from('flows')
+       |                  ^
+     39|     .select('id')
+     40|     .eq('id', flowId)
+ ❯ Module.DELETE src/app/api/flows/[id]/route.ts:168:17
+ ❯ src/app/api/flows/[id]/route.test.ts:392:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 12 passed (17)
+   Start at  17:29:10
+   Duration  2.09s (transform 279ms, setup 0ms, import 505ms, tests 57ms, environment 2ms)
+

@@ -1,0 +1,22 @@
+Task: 20261020-033829-58ee — PostgreSQL template sync match lookup
+Repository: C:\Sistemas\wacrm
+Branch: main
+HEAD: 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+TDD RED:
+- `npm run test -- src/lib/repositories/template-sync-match.test.ts` — expected FAILURE before repository implementation: module not found, 0 tests. This confirmed the test was exercising a missing module.
+
+Validation:
+- `npm run test -- src/lib/repositories/template-sync-match.test.ts` — SUCCESS, 9/9.
+- `npm run typecheck` — SUCCESS.
+- `npx eslint src/lib/repositories/template-sync-match.ts src/lib/repositories/template-sync-match.test.ts --max-warnings=0` — SUCCESS, zero warnings.
+- `npx prettier --check` — SUCCESS for the changed TypeScript files, integration script, and task/handoff records.
+- PowerShell AST parse and fixture preflight — SUCCESS in the PostgreSQL validation runner.
+- `git diff --check` — SUCCESS; only existing LF-to-CRLF worktree warnings were emitted.
+- `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/testing/validate-postgres-template-sync-match.ps1` — SUCCESS. Disposable Docker Desktop context `desktop-linux`, PostgreSQL 16, `--network none`, tmpfs database, read-only repo mount, no published ports/named volumes, synthetic records, generated non-logged credentials, exact minimum column SELECT grants, forced RLS, runtime `NOBYPASSRLS`, account/name/language matching, creator profile consistency, null/missing/orphan and duplicate cases, and transaction-local identity cleanup. No residual task resources. Detailed evidence: `validation-postgres-template-sync-match-dcbdd8c769.log`.
+
+The repository returns only a validated local template UUID or null. It does not write, call Meta/provider APIs, decrypt secrets, or wire the sync route.
+
+No Supabase, real credentials/data, application traffic, production, commit, push, or deploy. Task remains `in_progress`; H-DATA-003/H-DB-003 remain unapproved overall.
+
+Independent GPT-6 Luna read-only review returned exact APPROVE, zero findings, zero caveats, and no additional validation needed, limited to this repository slice. It did not approve route wiring, writes, provider calls, or H-DATA-003/H-DB-003 overall.

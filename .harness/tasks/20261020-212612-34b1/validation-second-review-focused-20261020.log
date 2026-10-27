@@ -1,0 +1,113 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run --reporter=dot src/app/api/whatsapp/config/route.post.test.ts src/app/api/whatsapp/config/route.test.ts src/app/api/whatsapp/config/route.delete.test.ts src/lib/repositories/whatsapp-config.test.ts src/lib/auth/postgres-account-guard.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+················x··x·x··················x·············
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > denies non-admin membership before attempting a delete
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/whatsapp-config.test.ts:201:53
+    199|     );
+    200|
+    201|     await expect(repository.deleteConnectionConfig()).rejects.toEqual(
+       |                                                     ^
+    202|       new AppError('forbidden')
+    203|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires admin membership before reading config registration state
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/whatsapp-config.test.ts:260:51
+    258|     );
+    259|
+    260|     await expect(repository.getRegistrationState()).rejects.toEqual(
+       |                                                   ^
+    261|       new AppError('forbidden')
+    262|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > rejects config writes for non-admin membership before INSERT
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/whatsapp-config.test.ts:337:5
+    335|         updatedAt: '2026-10-20T12:00:00.000Z',
+    336|       })
+    337|     ).rejects.toEqual(new AppError('forbidden'));
+       |     ^
+    338|     expect(
+    339|       query.mock.calls.some(([sql]) =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.post.test.ts > POST /api/whatsapp/config > saves a new Meta test number as connected but not registered without a PIN
+AssertionError: expected { …(10) } to match object { status: 'connected', …(1) }
+(8 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "registeredAt": null,
+-   "status": "connected",
++   "status": "disconnected",
+  }
+
+ ❯ src/app/api/whatsapp/config/route.post.test.ts:364:59
+    362|       phone_info: phoneInfo,
+    363|     });
+    364|     expect(mocks.saveConnectionConfig.mock.calls[0]?.[0]).toMatchObjec…
+       |                                                           ^
+    365|       status: 'connected',
+    366|       registeredAt: null,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  4 failed | 50 passed (54)
+   Start at  20:10:44
+   Duration  7.74s (transform 1.83s, setup 0ms, import 3.81s, tests 513ms, environment 2ms)
+

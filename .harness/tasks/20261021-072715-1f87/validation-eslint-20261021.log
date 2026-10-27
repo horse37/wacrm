@@ -1,0 +1,2 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run eslint src/app/api/zap-lead/registration/route.ts src/app/api/zap-lead/registration/route.test.ts src/app/api/zap-lead/registration/route.get.test.ts src/lib/repositories/zap-lead-registration-read.ts src/lib/repositories/zap-lead-registration-read.test.ts

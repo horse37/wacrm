@@ -1,0 +1,16 @@
+Docker context: desktop-linux
+Command: docker run --pull=never -d --rm --name wacrm-flow-node-db-c93d62ad67 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL 16 image; tmpfs database; no ports or named volumes.
+Synthetic accounts, profiles, flows, and nodes only. Generated credentials are not recorded.
+PowerShell AST, fixture forced-RLS, NOBYPASSRLS, and minimum-grant checks passed.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --pull=never --rm --name wacrm-flow-node-runtime-c93d62ad67 --network container:wacrm-flow-node-db-c93d62ad67 --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_flow_node_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=4 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-flow-node-graph-replace-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 0
+PostgreSQL flow-node graph replacement integration SUCCESS: forced RLS, NOBYPASSRLS, minimum grants, account/role isolation, atomic rollback/replacement, empty graph, and identity cleanup.
+Bootstrap post-probe passed: replacement graph and defaults persisted; account B graph remained cleared.
+Only synthetic fixtures were queried; no app/provider/network calls occurred.
+Cleanup: no residual task resources
+Overall result: SUCCESS
+
+Independent review: fresh GPT-6 Luna read-only review returned exact APPROVE, zero findings, and zero caveats for this repository slice only. The reviewer confirmed branch main, expected HEAD, send_media fixture/test correction, scoped implementation, and the Docker evidence above. H-DATA-003/H-DB-003 overall and all excluded integration/production surfaces remain unapproved.

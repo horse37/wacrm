@@ -1,0 +1,27 @@
+npm notice run wacrm@0.2.2 test
+npm notice run vitest run src/lib/repositories/zap-lead-event-stream-read.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/repositories/zap-lead-event-stream-read.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/zap-lead-event-stream-read.test.ts [ src/lib/repositories/zap-lead-event-stream-read.test.ts ]
+Error: Cannot find module '/src/lib/repositories/zap-lead-event-stream-read' imported from C:/Sistemas/wacrm/src/lib/repositories/zap-lead-event-stream-read.test.ts
+ ❯ src/lib/repositories/zap-lead-event-stream-read.test.ts:13:1
+     11| vi.mock('server-only', () => ({}));
+     12|
+     13| import { createPostgresZapLeadEventStreamReadRepository } from './zap-…
+       | ^
+     14|
+     15| const userId = '00000000-0000-4000-8000-000000000001';
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  08:25:12
+   Duration  1.91s (transform 119ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)
+

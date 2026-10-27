@@ -1,0 +1,121 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/zap-lead/events.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/zap-lead/events.test.ts (9 tests | 5 failed) 80ms
+     × persists only technical SSE receipt fields and its event cursor 16ms
+     × returns stale stream cursor results for overlap recovery 8ms
+     × preserves duplicate SSE function results 5ms
+     × preserves invalid SSE function results 7ms
+     × rejects unknown function status and generic transaction failure 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/zap-lead/events.test.ts > Zap Lead event receipt persistence > persists only technical SSE receipt fields and its event cursor
+AssertionError: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array [
+      "record_zap_lead_sse_event",
+      Object {
+        "p_account_id": "account-a",
+        "p_event_id": "18fae01a-a5b8-4a7e-95af-453810e49dc9",
+        "p_event_type": "conversation.message.created",
+        "p_expected_cursor": "b725b80f-3f64-4bcb-9020-92336bce6ebd",
+        "p_key_id": "ak_000000000000000000000000",
+        "p_occurred_at": "2026-10-13T12:30:00.000Z",
+      },
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/lib/zap-lead/events.test.ts:72:24
+     70|       recordZapLeadSseEvent(sseReceipt, expectedCursor)
+     71|     ).resolves.toBe('accepted');
+     72|  expect(mocks.rpc).not.toHaveBeenCalled();
+       |                        ^
+     73|  expect(mocks.withTransaction).toHaveBeenCalledOnce();
+     74|  expect(mocks.query).toHaveBeenCalledWith(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/lib/zap-lead/events.test.ts > Zap Lead event receipt persistence > returns stale stream cursor results for overlap recovery
+AssertionError: expected 'accepted' to be 'stale' // Object.is equality
+
+Expected: "stale"
+Received: "accepted"
+
+ ❯ src/lib/zap-lead/events.test.ts:95:57
+     93|     });
+     94|
+     95|     await expect(recordZapLeadSseEvent(sseReceipt, null)).resolves.toB…
+       |                                                         ^
+     96|       'stale'
+     97|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/lib/zap-lead/events.test.ts > Zap Lead event receipt persistence > preserves duplicate SSE function results
+AssertionError: expected 'accepted' to be 'duplicate' // Object.is equality
+
+Expected: "duplicate"
+Received: "accepted"
+
+ ❯ src/lib/zap-lead/events.test.ts:104:59
+    102|     async (status) => {
+    103|       mocks.query.mockResolvedValueOnce({ rows: [{ status }], rowCount…
+    104|       await expect(recordZapLeadSseEvent(sseReceipt, null)).resolves.t…
+       |                                                           ^
+    105|         status
+    106|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/lib/zap-lead/events.test.ts > Zap Lead event receipt persistence > preserves invalid SSE function results
+AssertionError: expected 'accepted' to be 'invalid' // Object.is equality
+
+Expected: "invalid"
+Received: "accepted"
+
+ ❯ src/lib/zap-lead/events.test.ts:104:59
+    102|     async (status) => {
+    103|       mocks.query.mockResolvedValueOnce({ rows: [{ status }], rowCount…
+    104|       await expect(recordZapLeadSseEvent(sseReceipt, null)).resolves.t…
+       |                                                           ^
+    105|         status
+    106|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/lib/zap-lead/events.test.ts > Zap Lead event receipt persistence > rejects unknown function status and generic transaction failure
+AssertionError: promise resolved "'accepted'" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+"accepted"
+
+ ❯ src/lib/zap-lead/events.test.ts:115:57
+    113|       rowCount: 1,
+    114|     });
+    115|     await expect(recordZapLeadSseEvent(sseReceipt, null)).rejects.toTh…
+       |                                                         ^
+    116|       'Zap Lead SSE receipt returned an invalid status'
+    117|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 4 passed (9)
+   Start at  00:18:11
+   Duration  1.99s (transform 150ms, setup 0ms, import 227ms, tests 80ms, environment 0ms)
+

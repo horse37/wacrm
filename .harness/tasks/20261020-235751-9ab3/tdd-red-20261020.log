@@ -1,0 +1,159 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/whatsapp/config/verify-registration/route.test.ts src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts --reporter=dot --no-color
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+xxxxx·xxxxxx
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts > PostgreSQL WhatsApp registration diagnostics repository > reads only diagnostic fields scoped to the verified account with transaction-local identity
+TypeError: repository.getRegistrationDiagnostics is not a function
+ ❯ src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts:66:29
+     64|     }));
+     65|
+     66|     await expect(repository.getRegistrationDiagnostics()).resolves.toE…
+       |                             ^
+     67|       registrationDiagnostics
+     68|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts > PostgreSQL WhatsApp registration diagnostics repository > returns null when the account has no WhatsApp configuration
+TypeError: repository.getRegistrationDiagnostics is not a function
+ ❯ src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts:97:29
+     95|     }));
+     96|
+     97|     await expect(repository.getRegistrationDiagnostics()).resolves.toB…
+       |                             ^
+     98|   });
+     99|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts > PostgreSQL WhatsApp registration diagnostics repository > rejects duplicate account rows as a data conflict
+TypeError: repository.getRegistrationDiagnostics is not a function
+ ❯ src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts:106:29
+    104|     }));
+    105|
+    106|     await expect(repository.getRegistrationDiagnostics()).rejects.toEq…
+       |                             ^
+    107|       new AppError('conflict')
+    108|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts > PostgreSQL WhatsApp registration diagnostics repository > does not query WhatsApp configuration when the verified user has no account membership
+TypeError: repository.getRegistrationDiagnostics is not a function
+ ❯ src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts:118:29
+    116|     }));
+    117|
+    118|     await expect(repository.getRegistrationDiagnostics()).rejects.toEq…
+       |                             ^
+    119|       new AppError('forbidden')
+    120|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts > PostgreSQL WhatsApp registration diagnostics repository > rejects malformed diagnostic fields without exposing row contents
+TypeError: repository.getRegistrationDiagnostics is not a function
+ ❯ src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts:131:29
+    129|     }));
+    130|
+    131|     await expect(repository.getRegistrationDiagnostics()).rejects.toEq…
+       |                             ^
+    132|       new AppError('db_error')
+    133|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  src/app/api/whatsapp/config/verify-registration/route.test.ts > GET /api/whatsapp/config/verify-registration PostgreSQL route > preserves the unlinked-account diagnostic without a Supabase data query
+Error: Unexpected Supabase data access
+ ❯ Object.<anonymous> src/app/api/whatsapp/config/verify-registration/route.test.ts:58:13
+     56|     });
+     57|     mocks.supabaseFrom.mockImplementation(() => {
+     58|       throw new Error('Unexpected Supabase data access');
+       |             ^
+     59|     });
+     60|     mocks.createRepository.mockReturnValue({
+ ❯ Module.GET src/app/api/whatsapp/config/verify-registration/route.ts:45:6
+ ❯ src/app/api/whatsapp/config/verify-registration/route.test.ts:89:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  src/app/api/whatsapp/config/verify-registration/route.test.ts > GET /api/whatsapp/config/verify-registration PostgreSQL route > returns the existing no-configuration diagnostic when PostgreSQL has no row
+Error: Unexpected Supabase data access
+ ❯ Object.<anonymous> src/app/api/whatsapp/config/verify-registration/route.test.ts:58:13
+     56|     });
+     57|     mocks.supabaseFrom.mockImplementation(() => {
+     58|       throw new Error('Unexpected Supabase data access');
+       |             ^
+     59|     });
+     60|     mocks.createRepository.mockReturnValue({
+ ❯ Module.GET src/app/api/whatsapp/config/verify-registration/route.ts:45:6
+ ❯ src/app/api/whatsapp/config/verify-registration/route.test.ts:103:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  src/app/api/whatsapp/config/verify-registration/route.test.ts > GET /api/whatsapp/config/verify-registration PostgreSQL route > uses account-scoped PostgreSQL state and preserves the successful diagnostic contract
+Error: Unexpected Supabase data access
+ ❯ Object.<anonymous> src/app/api/whatsapp/config/verify-registration/route.test.ts:58:13
+     56|     });
+     57|     mocks.supabaseFrom.mockImplementation(() => {
+     58|       throw new Error('Unexpected Supabase data access');
+       |             ^
+     59|     });
+     60|     mocks.createRepository.mockReturnValue({
+ ❯ Module.GET src/app/api/whatsapp/config/verify-registration/route.ts:45:6
+ ❯ src/app/api/whatsapp/config/verify-registration/route.test.ts:116:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+ FAIL  src/app/api/whatsapp/config/verify-registration/route.test.ts > GET /api/whatsapp/config/verify-registration PostgreSQL route > keeps an unreadable encrypted token as a diagnostic response
+Error: Unexpected Supabase data access
+ ❯ Object.<anonymous> src/app/api/whatsapp/config/verify-registration/route.test.ts:58:13
+     56|     });
+     57|     mocks.supabaseFrom.mockImplementation(() => {
+     58|       throw new Error('Unexpected Supabase data access');
+       |             ^
+     59|     });
+     60|     mocks.createRepository.mockReturnValue({
+ ❯ Module.GET src/app/api/whatsapp/config/verify-registration/route.ts:45:6
+ ❯ src/app/api/whatsapp/config/verify-registration/route.test.ts:154:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+
+ FAIL  src/app/api/whatsapp/config/verify-registration/route.test.ts > GET /api/whatsapp/config/verify-registration PostgreSQL route > returns Meta check failures in the diagnostic body without failing the request
+Error: Unexpected Supabase data access
+ ❯ Object.<anonymous> src/app/api/whatsapp/config/verify-registration/route.test.ts:58:13
+     56|     });
+     57|     mocks.supabaseFrom.mockImplementation(() => {
+     58|       throw new Error('Unexpected Supabase data access');
+       |             ^
+     59|     });
+     60|     mocks.createRepository.mockReturnValue({
+ ❯ Module.GET src/app/api/whatsapp/config/verify-registration/route.ts:45:6
+ ❯ src/app/api/whatsapp/config/verify-registration/route.test.ts:171:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/11]⎯
+
+ FAIL  src/app/api/whatsapp/config/verify-registration/route.test.ts > GET /api/whatsapp/config/verify-registration PostgreSQL route > maps PostgreSQL failures to a safe server response
+Error: Unexpected Supabase data access
+ ❯ Object.<anonymous> src/app/api/whatsapp/config/verify-registration/route.test.ts:58:13
+     56|     });
+     57|     mocks.supabaseFrom.mockImplementation(() => {
+     58|       throw new Error('Unexpected Supabase data access');
+       |             ^
+     59|     });
+     60|     mocks.createRepository.mockReturnValue({
+ ❯ Module.GET src/app/api/whatsapp/config/verify-registration/route.ts:45:6
+ ❯ src/app/api/whatsapp/config/verify-registration/route.test.ts:189:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/11]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  11 failed | 1 passed (12)
+   Start at  21:01:01
+   Duration  3.18s (transform 250ms, setup 0ms, import 534ms, tests 67ms, environment 1ms)
+

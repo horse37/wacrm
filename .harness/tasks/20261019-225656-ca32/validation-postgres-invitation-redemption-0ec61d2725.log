@@ -1,0 +1,32 @@
+Command: docker run -d --rm --name wacrm-invitation-redemption-db-0ec61d2725 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=512m -e POSTGRES_USER=db_invitation_redemption_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic users, accounts, invitations, and domain rows only. Generated passwords are not recorded.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --rm --name wacrm-invitation-redemption-node-0ec61d2725 --network container:wacrm-invitation-redemption-db-0ec61d2725 --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_invitation_redemption_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=1 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-invitation-redemption-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 1
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: unknown invitation: error code
++ actual - expected
+
++ 'conflict'
+- 'bad_request'
+
+    at expectAppError (file:///source/scripts/testing/postgres-invitation-redemption-integration.mjs:53:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///source/scripts/testing/postgres-invitation-redemption-integration.mjs:160:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'conflict',
+  expected: 'bad_request',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3
+Validation failure: docker Node PostgreSQL invitation-redemption integration failed with exit 1.
+Cleanup: no residual task resources
+Overall result: FAILURE

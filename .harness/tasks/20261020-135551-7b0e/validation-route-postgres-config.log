@@ -1,0 +1,13 @@
+Command: npx vitest run 'src/app/api/whatsapp/config/route.test.ts' 'src/lib/repositories/whatsapp-config.test.ts' --maxWorkers=1 --no-file-parallelism
+Exit code: 0
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/whatsapp/config/route.test.ts src/lib/repositories/whatsapp-config.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  13:58:47
+   Duration  3.57s (transform 295ms, setup 0ms, import 527ms, tests 60ms, environment 0ms)
+

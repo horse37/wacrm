@@ -1,0 +1,23 @@
+# Opus r2 caveat 6b follow-up — task/review file read errors
+# Date: 2026-10-22 (America/Sao_Paulo)
+# Scope: propagate dashboard filesystem read failures; no database behavior.
+
+Implementation:
+- readText now propagates readFile errors for current-task.md, task.md, and review files.
+- listTaskDirectories and collectRecentActivity no longer convert filesystem errors to empty data.
+- Missing optional handoffs directories remain an empty list only for ENOENT; other errors propagate.
+- HTTP handler returns sanitized 500 when status collection fails.
+- Integration test injects EACCES on current-task.md after startup and requires sanitized HTTP 500.
+
+TDD red: tdd-red-opus-c6b-task-review-read-20261022.log (old catch returned 200; expected 500).
+
+Final validation:
+- Five dashboard suites: 59/59 passed.
+- node --check dashboard-server.mjs, dashboard-text-file.mjs, dashboard-server-http.test.mjs: passed.
+- Prettier --check on the three changed dashboard JavaScript files: passed.
+- ESLint on dashboard-text-file.mjs and dashboard-server-http.test.mjs with --max-warnings=0: passed.
+- git diff --check: exit 0; Git emitted existing LF/CRLF notices for the dirty working tree.
+- Exploratory ESLint on dashboard-server.mjs with --max-warnings=0 exited 1 for five no-unused-vars warnings on functions referenced only inside the inline HTML/JavaScript template; zero errors. The repository lint command targets src, tests, and scripts, not .harness.
+
+No database, Docker, Supabase, production, external service, real data, or
+credentials were accessed. No commit, push, or deploy.

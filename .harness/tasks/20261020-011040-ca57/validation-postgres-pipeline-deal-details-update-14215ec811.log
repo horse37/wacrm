@@ -1,0 +1,8 @@
+Command: docker run -d --rm --name wacrm-pipeline-deal-details-update-db-14215ec811 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=db_pipeline_deal_create_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic accounts/profiles/pipelines/stages/contacts/deals only. Bootstrap and runtime passwords are generated for this run and are not recorded.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Validation failure: docker exec failed with exit 1
+ERROR:  role "wacrm_pipeline_deal_create_runtime" does not exist
+Cleanup: no residual task resources
+Overall result: FAILURE

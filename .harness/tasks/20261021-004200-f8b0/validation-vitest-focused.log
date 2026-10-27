@@ -1,0 +1,11 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/whatsapp/templates/sync/route.test.ts src/lib/repositories/template-sync-persistence.test.ts src/lib/repositories/template-lifecycle-config.test.ts src/lib/auth/postgres-account-guard.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  4 passed (4)
+      Tests  42 passed (42)
+   Start at  00:52:23
+   Duration  6.78s (transform 361ms, setup 0ms, import 697ms, tests 112ms, environment 1ms)
+

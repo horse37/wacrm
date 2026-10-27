@@ -1,0 +1,3 @@
+Comando: `npx eslint 'src/app/api/whatsapp/templates/[id]/route.ts' 'src/app/api/whatsapp/templates/[id]/route.test.ts' src/lib/repositories/template-delete-persistence.postgres.test.ts --max-warnings=0`.
+Resultado: PASS, sem erros ou avisos.
+Exit code: 0.

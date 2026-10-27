@@ -1,0 +1,139 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/whatsapp/send/route.test.ts -t keeps a successful send when PostgreSQL cannot auto-correct the contact phone --reporter=verbose
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stdout | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[whatsapp/send] Auto-corrected contact phone: +15550000001 → +15550000002
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+[flows] pause-on-agent-send threw: Cannot read properties of undefined (reading 'from')
+
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > rejects missing session before resolving account
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > preserves the 403 response when verified user has no account
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses verified session identity for PostgreSQL guard before body validation
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns 404 for a missing conversation without reading it through Supabase
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses the PostgreSQL contact phone before reading the WhatsApp configuration
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps legacy token upgrade in PostgreSQL and best-effort
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > does not wait for the legacy token upgrade before completing the send
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > logs only a safe error when legacy token upgrade fails
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'pt_BR' (found: true)
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: true)
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: false)
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > looks up reply targets in PostgreSQL scoped to the verified account
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > forwards the parent Meta message id as reply context
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns 400 for a conversation without a contact and skips WhatsApp config
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns 400 for a contact without a phone before reading WhatsApp config
+ ↓ src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > returns 400 for an invalid contact phone before reading WhatsApp config
+ × src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone 46ms
+   → expected "vi.fn()" to be called with arguments: [ StringContaining{…}, [ …(3) ] ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   StringContaining "UPDATE public.contacts",
++   "SELECT set_config('request.jwt.claim.sub', $1, true)",
+    [
+-     "40000000-0000-4000-8000-000000000001",
+-     "10000000-0000-4000-8000-000000000001",
+-     "+15550000002",
++     "00000000-0000-4000-8000-000000000001",
+    ],
+  ]
+
+  2nd vi.fn() call:
+
+  [
+-   StringContaining "UPDATE public.contacts",
++   "SELECT
++            c.id::text AS conversation_id,
++            c.account_id::text AS conversation_account_id,
++            ct.id::text AS contact_id,
++            ct.account_id::text AS contact_account_id,
++            ct.phone AS contact_phone
++          FROM public.conversations AS c
++          LEFT JOIN public.contacts AS ct
++            ON ct.id = c.contact_id
++           AND ct.account_id = c.account_id
++          WHERE c.id = $1::uuid
++            AND c.account_id = $2::uuid
++          LIMIT 1",
+    [
+-     "40000000-0000-4000-8000-000000000001",
++     "20000000-0000-4000-8000-000000000001",
+      "10000000-0000-4000-8000-000000000001",
+-     "+15550000002",
+    ],
+  ]
+
+
+Number of calls: 2
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps a successful send when PostgreSQL cannot auto-correct the contact phone
+AssertionError: expected "vi.fn()" to be called with arguments: [ StringContaining{…}, [ …(3) ] ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   StringContaining "UPDATE public.contacts",
++   "SELECT set_config('request.jwt.claim.sub', $1, true)",
+    [
+-     "40000000-0000-4000-8000-000000000001",
+-     "10000000-0000-4000-8000-000000000001",
+-     "+15550000002",
++     "00000000-0000-4000-8000-000000000001",
+    ],
+  ]
+
+  2nd vi.fn() call:
+
+  [
+-   StringContaining "UPDATE public.contacts",
++   "SELECT
++            c.id::text AS conversation_id,
++            c.account_id::text AS conversation_account_id,
++            ct.id::text AS contact_id,
++            ct.account_id::text AS contact_account_id,
++            ct.phone AS contact_phone
++          FROM public.conversations AS c
++          LEFT JOIN public.contacts AS ct
++            ON ct.id = c.contact_id
++           AND ct.account_id = c.account_id
++          WHERE c.id = $1::uuid
++            AND c.account_id = $2::uuid
++          LIMIT 1",
+    [
+-     "40000000-0000-4000-8000-000000000001",
++     "20000000-0000-4000-8000-000000000001",
+      "10000000-0000-4000-8000-000000000001",
+-     "+15550000002",
+    ],
+  ]
+
+
+Number of calls: 2
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:729:36
+
+    727|       whatsapp_message_id: 'wamid.synthetic-sent',
+    728|     });
+    729|     expect(mocks.transactionQuery).toHaveBeenCalledWith(
+       |                                    ^
+    730|       expect.stringContaining('UPDATE public.contacts'),
+    731|       [contactId, accountId, acceptedPhone]
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 17 skipped (18)
+   Start at  05:17:08
+   Duration  2.25s (transform 344ms, setup 0ms, import 593ms, tests 50ms, environment 0ms)
+

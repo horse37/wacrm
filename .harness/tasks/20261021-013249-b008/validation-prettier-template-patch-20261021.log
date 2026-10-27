@@ -1,0 +1,2 @@
+PASS — Prettier check no bloco PATCH de route.ts com --range-start/--range-end; route.patch.test.ts e integração MJS passaram em check completo.
+A rota inteira conserva formatação preexistente fora deste bloco; GET/DELETE não foram reformatados. A verificação integral anterior da rota falhava em HEAD e permanece fora do escopo.

@@ -1,0 +1,95 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/zap-lead/registration/route.get.test.ts --reporter=dot
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+xxxx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/zap-lead/registration/route.get.test.ts > Zap Lead registration GET PostgreSQL reads > reads only current-account technical configuration and heartbeat from PostgreSQL
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/zap-lead/registration/route.get.test.ts:62:29
+     60|     const response = await GET();
+     61|
+     62|     expect(response.status).toBe(200);
+       |                             ^
+     63|     expect(await response.json()).toEqual({
+     64|       configured: true,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/app/api/zap-lead/registration/route.get.test.ts > Zap Lead registration GET PostgreSQL reads > does not read heartbeat when integration is absent
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/zap-lead/registration/route.get.test.ts:84:29
+     82|     const response = await GET();
+     83|
+     84|     expect(response.status).toBe(200);
+       |                             ^
+     85|     expect(await response.json()).toMatchObject({
+     86|       configured: false,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/app/api/zap-lead/registration/route.get.test.ts > Zap Lead registration GET PostgreSQL reads > preserves the integration status error response when PostgreSQL read fails
+AssertionError: expected { error: 'Internal server error' } to deeply equal { Object (error) }
+
+- Expected
++ Received
+
+  {
+-   "error": "Could not load Zap Lead integration status",
++   "error": "Internal server error",
+  }
+
+ ❯ src/app/api/zap-lead/registration/route.get.test.ts:99:35
+     97|
+     98|     expect(response.status).toBe(500);
+     99|     expect(await response.json()).toEqual({
+       |                                   ^
+    100|       error: 'Could not load Zap Lead integration status',
+    101|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/app/api/zap-lead/registration/route.get.test.ts > Zap Lead registration GET PostgreSQL reads > preserves the heartbeat status error response when PostgreSQL state read fails
+AssertionError: expected { error: 'Internal server error' } to deeply equal { Object (error) }
+
+- Expected
++ Received
+
+  {
+-   "error": "Could not load Zap Lead heartbeat status",
++   "error": "Internal server error",
+  }
+
+ ❯ src/app/api/zap-lead/registration/route.get.test.ts:110:35
+    108|
+    109|     expect(response.status).toBe(500);
+    110|     expect(await response.json()).toEqual({
+       |                                   ^
+    111|       error: 'Could not load Zap Lead heartbeat status',
+    112|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  07:34:15
+   Duration  1.99s (transform 124ms, setup 0ms, import 313ms, tests 46ms, environment 0ms)
+

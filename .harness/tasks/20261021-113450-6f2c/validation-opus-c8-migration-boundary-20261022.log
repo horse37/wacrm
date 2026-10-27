@@ -1,0 +1,17 @@
+Opus r2 caveat 8 — migration 028 boundary documentation
+Date: 2026-10-22
+Scope: documentation-only correction in HANDOFF-CONTEXT.md.
+
+Evidence read:
+- supabase/migrations/028_zap_lead_runtime_read_policies.sql contains forced-RLS policies and column-scoped grants for zap_lead_integrations and zap_lead_integration_state, including zap_lead_webhook_credential_lookup.
+- The migration has a preflight requiring a pre-existing nonprivileged wacrm_runtime role; it does not create the role.
+- The migration covers Zap Lead tables only; it does not provide the full grants/policies needed by other PostgreSQL-backed routes and RPCs.
+- The migration's PostgreSQL validation is disposable-only evidence in validation-postgres-zap-lead-runtime-migration-e35b5694d4.log; no persistent database was accessed for this documentation change.
+
+Checks:
+- git diff --check -- HANDOFF-CONTEXT.md: PASS.
+- npx prettier --check HANDOFF-CONTEXT.md: FAIL; the baseline at HEAD also fails the same Prettier check. No whole-file formatting was applied to avoid unrelated churn.
+- No application tests, PostgreSQL, Docker, Supabase, external service, production, real data, or credentials were accessed.
+- No commit, push, or deploy.
+
+Disposition: the stale handoff statement was corrected to distinguish the migration's Zap Lead policies/column grants from role creation and the still-incomplete global runtime privilege matrix. Independent GPT-6 Luna read-only review of caveat 8 is pending; no approval is implied.

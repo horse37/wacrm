@@ -1,0 +1,168 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run --maxWorkers=1 --no-file-parallelism src/app/api/whatsapp/send/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses the PostgreSQL contact phone before reading the WhatsApp configuration
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'select')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:170:30)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:253:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'pt_BR' (found: true)
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'select')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:170:30)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:337:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: true)
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'select')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:170:30)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:337:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: false)
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'select')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:170:30)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:337:24
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > looks up reply targets in PostgreSQL scoped to the verified account
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'select')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:170:30)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:403:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'select')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:170:30)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:426:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > forwards the parent Meta message id as reply context
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'select')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:170:30)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:447:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+ ❯ src/app/api/whatsapp/send/route.test.ts (14 tests | 7 failed) 73ms
+     × uses the PostgreSQL contact phone before reading the WhatsApp configuration 18ms
+     × uses PostgreSQL template definition for the verified account in 'pt_BR' (found: true) 3ms
+     × uses PostgreSQL template definition for the verified account in 'en_US' (found: true) 3ms
+     × uses PostgreSQL template definition for the verified account in 'en_US' (found: false) 3ms
+     × looks up reply targets in PostgreSQL scoped to the verified account 4ms
+     × sends without reply context when the parent has no Meta message id 3ms
+     × forwards the parent Meta message id as reply context 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses the PostgreSQL contact phone before reading the WhatsApp configuration
+AssertionError: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:261:29
+    259|     );
+    260|
+    261|     expect(response.status).toBe(400);
+       |                             ^
+    262|     expect(await response.json()).toEqual({
+    263|       error:
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'pt_BR' (found: true)
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: true)
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > uses PostgreSQL template definition for the verified account in 'en_US' (found: false)
+AssertionError: expected 500 to be 502 // Object.is equality
+
+- Expected
++ Received
+
+- 502
++ 500
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:346:31
+    344|       );
+    345|
+    346|       expect(response.status).toBe(502);
+       |                               ^
+    347|     expect(mocks.getConnectionConfig).toHaveBeenCalledOnce();
+    348|     expect(mocks.from).not.toHaveBeenCalledWith('whatsapp_config');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > looks up reply targets in PostgreSQL scoped to the verified account
+AssertionError: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:412:29
+    410|     );
+    411|
+    412|     expect(response.status).toBe(400);
+       |                             ^
+    413|     expect(await response.json()).toEqual({
+    414|       error: 'reply_to_message_id not found in this conversation',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > sends without reply context when the parent has no Meta message id
+AssertionError: expected 500 to be 502 // Object.is equality
+
+- Expected
++ Received
+
+- 502
++ 500
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:435:29
+    433|     );
+    434|
+    435|     expect(response.status).toBe(502);
+       |                             ^
+    436|     expect(mocks.sendTextMessage).toHaveBeenCalledWith(
+    437|       expect.objectContaining({ contextMessageId: undefined })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > forwards the parent Meta message id as reply context
+AssertionError: expected 500 to be 502 // Object.is equality
+
+- Expected
++ Received
+
+- 502
++ 500
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:456:29
+    454|     );
+    455|
+    456|     expect(response.status).toBe(502);
+       |                             ^
+    457|     expect(mocks.sendTextMessage).toHaveBeenCalledWith(
+    458|       expect.objectContaining({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed | 7 passed (14)
+   Start at  04:08:47
+   Duration  1.97s (transform 244ms, setup 0ms, import 440ms, tests 73ms, environment 0ms)
+

@@ -1,0 +1,13 @@
+# A5 provenance validation — 2026-10-21 21:24 BRT
+
+Scope: documentation/indexing only. No application source, database, schema, Docker resource, Git ref, commit, push, or deployment was changed.
+
+- Review inventory: 36 persisted GPT-6 Luna review records and 36 index rows; no missing file, stale row, incomplete/duplicate metadata field, or table-to-record source-ID mismatch.
+- Parent-thread provenance cross-check: all 33 reviewer-thread IDs found in the task conversation are represented in the index or its explicit preliminary-review note. The preliminary A4 thread `01a160a8-1f63-7741-aab7-b9851a738dce` is reported separately: the contemporaneous message records `REMEDIATION_REQUIRED` and 3 findings, but the full response and caveat count were not retained. No caveat count was inferred.
+- Formal A4 source mapping corrected: round 1 → `01a160af-ddca-7171-859a-0c327008b1ce`; round 2 → `01a160b9-fad1-7ce1-9ac8-f24d9fa9cb12`; rounds 3–5 link to their respective reviewer threads. A4 round 5 response/clarification is preserved in its record.
+- P2-3 clarification: exact four-line reviewer clarification was recovered from thread `01a15ffe-89bf-78e1-b608-6402792be771` and added verbatim to `review-p2-3-independent-20261021-r2-clarification.md`.
+- Focused Node tests: `node --test .harness/dashboard-review-progress.test.mjs .harness/dashboard-http.test.mjs .harness/dashboard-server-http.test.mjs` — PASS, 30/30.
+- Prettier: `npx --no-install prettier --check` on the provenance index and six edited review records — PASS.
+- Whitespace: `git diff --check` — PASS; explicit trailing-whitespace scan across 11 edited documents — PASS.
+- Live dashboard: `GET /api/status` HTTP 200, `no-store`; active task `20261021-113450-6f2c`, `in_progress`, review `REMEDIATION_REQUIRED`, next action reflects A5; branch `main`, HEAD `7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c`. Served `/dashboard.html` HTTP 200, `no-store`, includes active task and polling.
+- No PostgreSQL test was needed for this documentation-only slice. Independent GPT-6 Luna review of A5 is the next action; A5 is not yet approved.

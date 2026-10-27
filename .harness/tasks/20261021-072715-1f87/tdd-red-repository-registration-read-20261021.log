@@ -1,0 +1,27 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/zap-lead-registration-read.test.ts --reporter=dot
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/zap-lead-registration-read.test.ts [ src/lib/repositories/zap-lead-registration-read.test.ts ]
+Error: Cannot find module '/src/lib/repositories/zap-lead-registration-read' imported from C:/Sistemas/wacrm/src/lib/repositories/zap-lead-registration-read.test.ts
+ ❯ src/lib/repositories/zap-lead-registration-read.test.ts:13:1
+     11| vi.mock('server-only', () => ({}));
+     12|
+     13| import { createPostgresZapLeadRegistrationReadRepository } from './zap…
+       | ^
+     14|
+     15| const userId = '00000000-0000-4000-8000-000000000001';
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  07:36:41
+   Duration  1.85s (transform 92ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)
+

@@ -1,0 +1,4 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/app/api/account/invitations/route.test.ts
+Checking formatting...
+All matched files use Prettier code style!

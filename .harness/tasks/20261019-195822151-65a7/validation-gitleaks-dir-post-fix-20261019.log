@@ -1,0 +1,5 @@
+# Gitleaks 8.21.2 directory scan after transaction-error correction — 2026-10-19
+Image: zricethezav/gitleaks:v8.21.2.
+Command: docker run --rm --network none --read-only --tmpfs /tmp:rw,nosuid,nodev,size=256m -e HOME=/tmp --mount 'type=bind,source=C:\Sistemas\wacrm,target=/repo,readonly' --workdir /repo zricethezav/gitleaks:v8.21.2 dir /repo --no-banner --redact
+Result: SUCCESS, exit 0; scan completed in 3m11s; no leaks found.
+The full checkout, including untracked files, was mounted read-only; network was disabled. No files were changed by the scanner.

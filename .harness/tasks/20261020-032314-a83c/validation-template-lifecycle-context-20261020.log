@@ -1,0 +1,21 @@
+Task: 20261020-032314-a83c — PostgreSQL template lifecycle context read
+Repository: C:\Sistemas\wacrm
+Branch: main
+HEAD: 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+TDD RED: focused Vitest initially failed at module import because template-lifecycle-context.ts did not exist.
+
+Validation:
+- npm run test -- src/lib/repositories/template-lifecycle-context.test.ts — SUCCESS, 7/7.
+- npm run typecheck — SUCCESS.
+- npx eslint src/lib/repositories/template-lifecycle-context.ts src/lib/repositories/template-lifecycle-context.test.ts --max-warnings=0 — SUCCESS, zero warnings.
+- npx prettier --check src/lib/repositories/template-lifecycle-context.ts src/lib/repositories/template-lifecycle-context.test.ts scripts/testing/postgres-template-lifecycle-context-integration.mjs .harness/tasks/20261020-032314-a83c/task.md .harness/tasks/20261020-032314-a83c/handoffs/implementer.md — SUCCESS.
+- Disposable Docker Desktop PostgreSQL 16 forced-RLS integration — SUCCESS; exact grants, NOBYPASSRLS, --network none, tmpfs, readonly mounts, synthetic records/generated credentials, and cleanup verified. Detailed evidence: validation-postgres-template-lifecycle-69d6dc66c9.log.
+- PowerShell AST and fixture checks passed in the Docker runner.
+- git diff --check — SUCCESS. Git emitted only existing line-ending conversion warnings for modified worktree files.
+
+The implementation adds two unwired read methods: edit context returns status/meta_template_id; delete context returns name/meta_template_id. Both require verified account membership, explicit template/account predicates, creator/profile/account join, transaction-local identity, bound values, safe null-on-missing, and validated minimal DTOs.
+
+No route/UI wiring, writes, Meta calls, Supabase, real credentials/data, application traffic, production, commit, push, or deploy. Task remains in_progress; H-DATA-003/H-DB-003 remain unapproved overall.
+
+Fresh independent GPT-6 Luna read-only review returned exactly APPROVE, zero findings, and zero caveats for this slice only. No route wiring, Meta calls, or writes were included. HARNESS task remains in_progress; H-DATA-003/H-DB-003 remain unapproved overall.

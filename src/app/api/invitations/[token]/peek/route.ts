@@ -29,7 +29,7 @@ import {
   rateLimitResponse,
   RATE_LIMITS,
 } from "@/lib/rate-limit";
-import { createClient } from "@/lib/supabase/server";
+import { createPostgresInvitationPreviewRepository } from '@/lib/repositories/invitation-preview';
 
 /**
  * Best-effort client IP. The `x-forwarded-for` header is what
@@ -43,16 +43,16 @@ import { createClient } from "@/lib/supabase/server";
  * is fine for dev.
  */
 function getClientIp(request: Request): string {
-  const xff = request.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
-  const xri = request.headers.get("x-real-ip");
+  const xff = request.headers.get('x-forwarded-for');
+  if (xff) return xff.split(',')[0].trim();
+  const xri = request.headers.get('x-real-ip');
   if (xri) return xri.trim();
-  return "unknown";
+  return 'unknown';
 }
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ token: string }> },
+  { params }: { params: Promise<{ token: string }> }
 ) {
   // Rate-limit by IP first. Returns 429 to a serial bruteforcer
   // before we ever touch the DB.
@@ -61,27 +61,22 @@ export async function GET(
   if (!limit.success) return rateLimitResponse(limit);
 
   const { token } = await params;
-  if (!token || typeof token !== "string") {
+  if (!token || typeof token !== 'string') {
     return NextResponse.json(
-      { ok: false, reason: "not_found" },
-      { status: 404 },
+      { ok: false, reason: 'not_found' },
+      { status: 404 }
     );
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase.rpc("peek_invitation", {
-    p_token_hash: hashInviteToken(token),
-  });
-
-  if (error) {
-    console.error("[peek] rpc error:", error);
+  try {
+    const repository = createPostgresInvitationPreviewRepository();
+    const data = await repository.peekByTokenHash(hashInviteToken(token));
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('[peek] repository error:', error);
     return NextResponse.json(
-      { ok: false, reason: "server_error" },
-      { status: 500 },
+      { ok: false, reason: 'server_error' },
+      { status: 500 }
     );
   }
-
-  // The RPC always returns a json object — either ok:true with
-  // metadata or ok:false with a reason. Forward verbatim.
-  return NextResponse.json(data);
 }

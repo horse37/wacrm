@@ -1,0 +1,88 @@
+P1 fail-closed API gate validation — 2026-10-22
+
+## Focused Vitest
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/db/postgres-api-route-gate.test.ts src/middleware.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  2 passed (2)
+      Tests  5 passed (5)
+   Start at  15:39:50
+   Duration  4.70s (transform 162ms, setup 0ms, import 482ms, tests 80ms, environment 1ms)
+
+
+exit_code=0
+
+## ESLint
+npm notice run wacrm@0.2.2 npx
+npm notice run eslint src/lib/db/postgres-api-route-gate.ts src/lib/db/postgres-api-route-gate.test.ts src/middleware.ts src/middleware.test.ts --max-warnings=0
+
+exit_code=0
+
+## Prettier check
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/lib/db/postgres-api-route-gate.ts src/lib/db/postgres-api-route-gate.test.ts src/middleware.ts src/middleware.test.ts
+Checking formatting...
+All matched files use Prettier code style!
+
+exit_code=0
+
+## TypeScript
+npm notice run wacrm@0.2.2 npx
+npm notice run tsc --noEmit
+
+exit_code=0
+
+## Git diff check
+warning: in the working copy of '.harness/current-task.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.harness/tasks/20261016-122249401-af84/handoffs/implementer.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'HANDOFF-CONTEXT.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/project-map.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/migrate-postgres.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/(dashboard)/automations/[id]/logs/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/(dashboard)/automations/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/invitations/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/invitations/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/members/[userId]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/members/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/transfer-ownership/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/automations/[id]/duplicate/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/automations/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/automations/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/flows/[id]/activate/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/flows/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/flows/[id]/runs/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/flows/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/invitations/[token]/peek/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/invitations/[token]/redeem/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/broadcast/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/config/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/config/verify-registration/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/react/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/send/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/templates/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/templates/submit/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/templates/sync/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/zap-lead/registration/route.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/zap-lead/registration/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/zap-lead/webhook/route.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/zap-lead/webhook/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/db/postgres-pool.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/db/postgres-pool.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/zap-lead/credentials.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/zap-lead/credentials.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/middleware.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/types/index.ts', LF will be replaced by CRLF the next time Git touches it
+
+exit_code=0
+
+## PostgreSQL route inventory
+repositoryRoutes=25; uncovered=0
+
+exit_code=0
+
+No database, Docker, external service, or real data accessed. Luna review pending; task remains in_progress.

@@ -1,0 +1,10 @@
+Command: docker run --pull=never --rm --name wacrm-whatsapp-conversation-db-97c47261d3 --network none --tmpfs /var/lib/postgresql/data --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL 16; tmpfs database; no published ports or named volumes.
+Synthetic accounts, conversations, messages and runtime role only. Passwords generated for this run and not recorded.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --rm --network container:<disposable-database> --mount <read-only-repository> node --conditions=react-server --import <typescript-loader> --experimental-strip-types scripts/testing/postgres-whatsapp-send-conversation-update-integration.mjs
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Node integration exit code: 0
+PASS: conversation update owner, viewer denial, account isolation, invalid UUID, persisted values, forced RLS, and transaction-local identity cleanup
+Cleanup: no residual task containers
+Overall result: SUCCESS

@@ -1,0 +1,8 @@
+Finding A2 — live dashboard process and status refresh
+
+- Verified the stale listener PID 9980 was `node.exe .harness/dashboard-server.mjs`, started 2026-10-21 14:43:12 BRT. Stopped only that verified dashboard process.
+- Restarted the local dashboard from `C:\Sistemas\wacrm` as PID 26768 at 2026-10-21 18:05:33 BRT on `http://127.0.0.1:49213/dashboard.html`.
+- Fresh `GET /api/status` at `2026-10-21T21:08:09.684Z`: branch `main`, expected HEAD `7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c`, task `20261021-113450-6f2c` / `in_progress`, current review `REMEDIATION_REQUIRED`.
+- API dirty count 1434 matched `git status --short --untracked-files=all` count 1434. The increase from Opus's 1428 reflects six task artifacts created after that read-only review.
+- Served dashboard returned HTTP 200 with `Cache-Control: no-store`; API response also had `no-store`. HTML contained the active task bootstrap, `/api/status` no-cache fetch, and 20-minute refresh contract.
+- This records the live result only. Review aggregation counts remain subject to A3; no global H-DATA-003/H-DB-003 approval is implied.

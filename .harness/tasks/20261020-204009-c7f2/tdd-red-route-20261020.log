@@ -1,0 +1,111 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/flows/route.post.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/app/api/flows/route.post.test.ts (13 tests | 12 failed) 48ms
+     × creates a plain draft through PostgreSQL using verified identity 10ms
+     × clones template metadata and nodes atomically through PostgreSQL 3ms
+     × rejects invalid JSON before persistence 2ms
+     × rejects missing name before persistence 2ms
+     × rejects unknown templates without database access 2ms
+     × maps repository unauthorized errors to safe HTTP status and message 2ms
+     × maps repository forbidden errors to safe HTTP status and message 2ms
+     × maps repository bad_request errors to safe HTTP status and message 1ms
+     × maps repository not_found errors to safe HTTP status and message 2ms
+     × maps repository conflict errors to safe HTTP status and message 1ms
+     × maps repository db_error errors to safe HTTP status and message 1ms
+     × does not expose raw database errors 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > creates a plain draft through PostgreSQL using verified identity
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ Module.POST src/app/api/flows/route.ts:72:21
+     70|   // even though the admin client below bypasses RLS.
+     71|   const { data: profile } = await supabase
+     72|     .from('profiles')
+       |                     ^
+     73|     .select('account_id')
+     74|     .eq('user_id', userId)
+ ❯ src/app/api/flows/route.post.test.ts:74:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
+
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > clones template metadata and nodes atomically through PostgreSQL
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ Module.POST src/app/api/flows/route.ts:72:21
+     70|   // even though the admin client below bypasses RLS.
+     71|   const { data: profile } = await supabase
+     72|     .from('profiles')
+       |                     ^
+     73|     .select('account_id')
+     74|     .eq('user_id', userId)
+ ❯ src/app/api/flows/route.post.test.ts:117:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
+
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > rejects invalid JSON before persistence
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > rejects missing name before persistence
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ Module.POST src/app/api/flows/route.ts:72:21
+     70|   // even though the admin client below bypasses RLS.
+     71|   const { data: profile } = await supabase
+     72|     .from('profiles')
+       |                     ^
+     73|     .select('account_id')
+     74|     .eq('user_id', userId)
+ ❯ src/app/api/flows/route.post.test.ts:141:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
+
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > rejects unknown templates without database access
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ Module.POST src/app/api/flows/route.ts:72:21
+     70|   // even though the admin client below bypasses RLS.
+     71|   const { data: profile } = await supabase
+     72|     .from('profiles')
+       |                     ^
+     73|     .select('account_id')
+     74|     .eq('user_id', userId)
+ ❯ src/app/api/flows/route.post.test.ts:152:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
+
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > maps repository unauthorized errors to safe HTTP status and message
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > maps repository forbidden errors to safe HTTP status and message
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > maps repository bad_request errors to safe HTTP status and message
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > maps repository not_found errors to safe HTTP status and message
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > maps repository conflict errors to safe HTTP status and message
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > maps repository db_error errors to safe HTTP status and message
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ Module.POST src/app/api/flows/route.ts:72:21
+     70|   // even though the admin client below bypasses RLS.
+     71|   const { data: profile } = await supabase
+     72|     .from('profiles')
+       |                     ^
+     73|     .select('account_id')
+     74|     .eq('user_id', userId)
+ ❯ src/app/api/flows/route.post.test.ts:174:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+ FAIL  src/app/api/flows/route.post.test.ts > POST /api/flows PostgreSQL route > does not expose raw database errors
+TypeError: Cannot read properties of undefined (reading 'select')
+ ❯ Module.POST src/app/api/flows/route.ts:72:21
+     70|   // even though the admin client below bypasses RLS.
+     71|   const { data: profile } = await supabase
+     72|     .from('profiles')
+       |                     ^
+     73|     .select('account_id')
+     74|     .eq('user_id', userId)
+ ❯ src/app/api/flows/route.post.test.ts:190:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  12 failed | 1 passed (13)
+   Start at  17:42:33
+   Duration  1.97s (transform 187ms, setup 0ms, import 367ms, tests 48ms, environment 0ms)
+

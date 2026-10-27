@@ -1,0 +1,14 @@
+Docker context: desktop-linux
+Command: docker run --pull=never -d --rm --name wacrm-flow-create-db-900673f96d --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL 16 image; tmpfs database; no ports or named volumes.
+Synthetic accounts, profiles, flow drafts, and template nodes only. Generated credentials are not recorded.
+PowerShell AST, fixture forced-RLS, NOBYPASSRLS, and minimum-grant checks passed.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --pull=never --rm --name wacrm-flow-create-runtime-900673f96d --network container:wacrm-flow-create-db-900673f96d --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_flow_create_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=4 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-flow-create-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 0
+PostgreSQL flow creation integration SUCCESS: forced RLS, NOBYPASSRLS, minimum grants, role/account isolation, draft creation, template graph persistence, atomic rollback, and identity cleanup.
+Bootstrap post-probe passed: plain and template drafts, default and explicit metadata, template graph, account ownership, draft status, and rollback were verified.
+Only synthetic fixtures were queried; no app/provider/network calls occurred.
+Cleanup: no residual task resources
+Overall result: SUCCESS

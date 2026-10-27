@@ -1,0 +1,82 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/whatsapp-config.test.ts src/app/api/whatsapp/send/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/repositories/whatsapp-config.test.ts (19 tests | 3 failed) 49ms
+     × updates the legacy token only for the verified account and config id 10ms
+     × returns false when RLS hides the legacy-token row from the current role 2ms
+     × requires a verified session before attempting a legacy-token update 1ms
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps legacy token upgrade in PostgreSQL and best-effort
+Error in WhatsApp send POST: TypeError: Cannot read properties of undefined (reading 'update')
+    at Module.POST (C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.ts:193:32)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/send/route.test.ts:291:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+ ❯ src/app/api/whatsapp/send/route.test.ts (15 tests | 1 failed) 96ms
+     × keeps legacy token upgrade in PostgreSQL and best-effort 28ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > updates the legacy token only for the verified account and config id
+TypeError: repository.upgradeLegacyToken is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:201:18
+    199|
+    200|     await expect(
+    201|       repository.upgradeLegacyToken(
+       |                  ^
+    202|         configA.configId,
+    203|         'synthetic-new-ciphertext'
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > returns false when RLS hides the legacy-token row from the current role
+TypeError: repository.upgradeLegacyToken is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:229:18
+    227|
+    228|     await expect(
+    229|       repository.upgradeLegacyToken(
+       |                  ^
+    230|         configA.configId,
+    231|         'synthetic-new-ciphertext'
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires a verified session before attempting a legacy-token update
+TypeError: repository.upgradeLegacyToken is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:240:18
+    238|
+    239|     await expect(
+    240|       repository.upgradeLegacyToken(
+       |                  ^
+    241|         configA.configId,
+    242|         'synthetic-new-ciphertext'
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > keeps legacy token upgrade in PostgreSQL and best-effort
+AssertionError: expected 500 to be 502 // Object.is equality
+
+- Expected
++ Received
+
+- 502
++ 500
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:299:29
+    297|     );
+    298|
+    299|     expect(response.status).toBe(502);
+       |                             ^
+    300|     expect(mocks.getConnectionConfig).toHaveBeenCalledOnce();
+    301|     expect(mocks.encrypt).toHaveBeenCalledWith(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  4 failed | 30 passed (34)
+   Start at  04:46:48
+   Duration  3.15s (transform 479ms, setup 0ms, import 837ms, tests 145ms, environment 1ms)
+

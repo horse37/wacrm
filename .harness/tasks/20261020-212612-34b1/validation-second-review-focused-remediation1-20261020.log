@@ -1,0 +1,12 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run --reporter=dot src/app/api/whatsapp/config/route.post.test.ts src/app/api/whatsapp/config/route.test.ts src/app/api/whatsapp/config/route.delete.test.ts src/lib/repositories/whatsapp-config.test.ts src/lib/auth/postgres-account-guard.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+······················································
+
+ Test Files  5 passed (5)
+      Tests  54 passed (54)
+   Start at  20:11:42
+   Duration  7.99s (transform 1.95s, setup 0ms, import 3.36s, tests 318ms, environment 3ms)
+

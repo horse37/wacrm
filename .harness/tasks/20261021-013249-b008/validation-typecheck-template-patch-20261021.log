@@ -1,0 +1,1 @@
+PASS — npm run typecheck (tsc --noEmit).

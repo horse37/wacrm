@@ -1,0 +1,19 @@
+Focused validation — PostgreSQL flow-list route
+Task: 20261020-132606-e55d
+Date: 2026-10-20 (Brasília)
+Repository: C:\Sistemas\wacrm
+Branch/HEAD: main / 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+TDD RED: before implementation, `npx vitest run src/app/api/flows/route.test.ts --maxWorkers=1 --no-file-parallelism` failed as expected (8 failed, 1 passed). GET returned the Supabase mock, did not call the PostgreSQL repository, and had no safe repository-error mapping.
+
+One intermediate post-implementation test run passed 18/20; two assertions used stale expected wording rather than `AppError`'s safe messages. Corrected the test expectations and reran final checks.
+
+Final checks:
+- PASS — `npx vitest run src/app/api/flows/route.test.ts src/lib/repositories/flow-list.test.ts --maxWorkers=1 --no-file-parallelism` (20/20).
+- PASS — `npx tsc --noEmit`.
+- PASS — targeted ESLint on route/repository source and tests with `--max-warnings=0`.
+- PASS — targeted Prettier check on route/repository source and tests plus task Markdown.
+- PASS — `git diff --check` (exit 0; existing working tree emits LF/CRLF normalization warnings).
+- PASS — disposable PostgreSQL 16 integration: `../20261020-015908-49b2/validation-postgres-flow-list-386d9c47eb.log`; forced RLS, NOBYPASSRLS, exact column grants, account/creator isolation, owner/agent/viewer access, stable order, allowlisted DTO, and identity cleanup; no residual task resources.
+
+The route test mocks the existing Supabase server-session verifier; no Supabase database/service was started or contacted. Docker database used synthetic data, `--network none`, tmpfs, read-only mounts, and `--rm`. No real credentials/data, app traffic, production, commit, push, or deploy. Task remains in_progress pending read-only review.

@@ -1,0 +1,9 @@
+# Disposition — Opus r2 caveat 2 — reviewer did not execute commands — 2026-10-22
+
+The Opus r2 artifact is a read-only code review and explicitly says it executed no commands. Its findings are code-reading findings; no test or database result is attributed to Opus.
+
+After that review, the implementer ran separate focused validations and preserved their logs. Examples include the P1 route gate (`validation-opus-f1-postgres-api-gate-20261022.log`), flow pause against disposable PostgreSQL (`validation-opus-f2-flow-pause-20261022.log`), invitation SQLSTATE classification (`validation-opus-f3-invitation-sqlstate-20261022.log`), the two parser fixes (`validation-opus-f4-node-test-parser-20261022.log`, `validation-opus-f5-review-parser-20261022.log`), and caveat 6b (`validation-opus-c6b-dashboard-validation-read-20261022.log`). Each implementation delta also has a separate read-only GPT-6 Luna review record.
+
+Disposition: preserve the distinction between reviewer inspection and implementer execution. The next Opus review prompt will require inspecting the listed validation logs and explicitly reporting whether the reviewer ran commands; no command execution will be claimed unless its own output proves it.
+
+This is a process/evidence limitation, not evidence that the validations failed. It does not approve the task, H-DATA-003, H-DB-003, or the working tree.

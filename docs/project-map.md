@@ -27,5 +27,6 @@ The existing plan `plano-de-acao/plano-de-acao-evolution-go-postgresql.html` tar
 
 - Keep existing behavior while replacing one provider/data boundary at a time.
 - Define account isolation and authorization before replacing RLS.
+- Every account-owned domain read or write must be scoped to the verified account ID in SQL; never query or mutate domain data without account scope.
 - Plan explicit replacements for Auth, Storage, and Realtime; self-hosted PostgreSQL covers the database only.
 - Do not migrate or remove an integration without an existing approved task and rollback/validation notes.

@@ -1,0 +1,11 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/account/transfer-ownership/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  15:03:19
+   Duration  3.96s (transform 366ms, setup 0ms, import 936ms, tests 77ms, environment 0ms)
+

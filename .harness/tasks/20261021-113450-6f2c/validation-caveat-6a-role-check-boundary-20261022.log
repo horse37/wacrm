@@ -1,0 +1,16 @@
+Opus r2 caveat 6a — role-check/query window disposition
+Date: 2026-10-22
+Scope: documentation/comment only. No SQL, migration, grant, RLS policy, or runtime behavior changed.
+
+Initial Prettier check failed on the edited Markdown files. Ran Prettier write on the scoped source/task/handoff/current-task files, then reran the check.
+Final: `npx prettier --check src/lib/db/postgres-pool.ts .harness/tasks/20261021-113450-6f2c/task.md .harness/tasks/20261021-113450-6f2c/handoffs/implementer.md .harness/current-task.md` — PASS, exit 0.
+Final: `git diff --check -- src/lib/db/postgres-pool.ts .harness/current-task.md` — PASS, exit 0. Task/handoff are untracked task artifacts; their content is covered by Prettier.
+
+Disposition is explicit: pool `onConnect` validates once per new physical connection and is not atomic with later queries. Database-role changes are trusted control-plane operations; drain/restart the pool after them. RLS remains the application account-isolation boundary. H-DB-003 and deployment readiness remain unresolved; no approval is implied.
+No behavior tests or database services were run because this delta only clarifies the existing check boundary.
+
+Independent GPT-6 Luna review round 1 returned REMEDIATION_REQUIRED only for temporal wording: database role/policy changes may affect existing sessions before pool recycle. Corrected source/task/handoff wording. Round 1 is preserved in review-opus-c6a-independent-20261022-r1.md; re-review pending. Final Prettier/diff checks must be rerun after this wording correction.
+
+Remediation after round 1: clarified that pool recycle reruns the guard on replacement connections; it is not required for PostgreSQL role/policy changes to take effect. Final Prettier check on source, task, handoff, and current-task files passed (exit 0). Final `git diff --check` on tracked source/current-task files passed (exit 0); task/handoff are untracked artifacts and were checked by Prettier. No tests or DB services were needed; runtime behavior did not change. Awaiting independent GPT-6 Luna round 2.
+
+Independent GPT-6 Luna round 2: APPROVE, zero findings and zero caveats, limited to caveat 6a. Record: review-opus-c6a-independent-20261022-r2.md. Round 1 remains preserved and did not approve.

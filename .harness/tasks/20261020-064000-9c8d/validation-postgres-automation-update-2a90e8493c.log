@@ -1,0 +1,21 @@
+Docker context: desktop-linux
+Command: docker run --pull=never -d --rm --name wacrm-automation-update-db-2a90e8493c --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image; tmpfs database; no ports or named volumes.
+Synthetic accounts, users, automations, steps, and pending execution only. Credentials generated at runtime and not recorded.
+PowerShell AST, forced-RLS, NOBYPASSRLS, RLS-policy, and minimum-grant checks passed.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Command: docker run --pull=never --rm --name wacrm-automation-update-node-2a90e8493c --network container:wacrm-automation-update-db-2a90e8493c --mount <read-only-repository> --workdir /source -e DATABASE_URL=postgres://wacrm_automation_update_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=4 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-update-rollback-integration.mjs
+Atomic rollback integration exit code: 0
+PostgreSQL automation-update rollback probe SUCCESS: parent and step tree remain unchanged after synthetic insert failure.
+Bootstrap rollback probe passed: parent, both steps, and pending execution step reference are unchanged after failed replacement.
+Command: docker run --pull=never --rm --name wacrm-automation-update-node-2a90e8493c --network container:wacrm-automation-update-db-2a90e8493c --mount <read-only-repository> --workdir /source -e DATABASE_URL=postgres://wacrm_automation_update_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=4 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-update-persistence-integration.mjs
+Main automation-update integration exit code: 0
+PostgreSQL automation-update integration SUCCESS: forced RLS, NOBYPASSRLS, least grants, account/owner isolation, allowlist, active validation, partial fields, nested replacement, pending-step FK behavior, rollback, draft activation, and cleanup.
+Command: docker run --pull=never --rm --name wacrm-automation-update-node-2a90e8493c --network container:wacrm-automation-update-db-2a90e8493c --mount <read-only-repository> --workdir /source -e DATABASE_URL=postgres://wacrm_automation_update_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=1 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-update-identity-integration.mjs
+Same-connection identity integration exit code: 0
+PostgreSQL automation-update identity cleanup SUCCESS: pool size 1; backend 103 reused after committed update; transaction-local auth.uid() is null and RLS hides the updated automation.
+Bootstrap post-probe passed: header-only patch, draft activation, step clearing, identity update, and ON DELETE SET NULL step behavior matched.
+Only synthetic task fixtures were queried; no provider/network calls occurred.
+Cleanup: no residual task resources
+Overall result: SUCCESS

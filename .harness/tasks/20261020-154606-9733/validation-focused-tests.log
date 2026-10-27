@@ -1,0 +1,11 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/account/invitations/route.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  15:53:52
+   Duration  4.81s (transform 439ms, setup 0ms, import 1.06s, tests 50ms, environment 0ms)
+

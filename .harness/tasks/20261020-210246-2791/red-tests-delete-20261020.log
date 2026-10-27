@@ -1,0 +1,134 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/whatsapp-config.test.ts src/app/api/whatsapp/config/route.delete.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/repositories/whatsapp-config.test.ts (10 tests | 3 failed) 32ms
+     × deletes only the current account config for an admin 8ms
+     × denies non-admin membership before attempting a delete 2ms
+     × requires a verified session before any delete transaction 1ms
+stderr | src/app/api/whatsapp/config/route.delete.test.ts > DELETE /api/whatsapp/config > deletes only through the PostgreSQL repository using verified identity
+Error in WhatsApp config DELETE: TypeError: Cannot read properties of undefined (reading 'select')
+    at resolveAccountId (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:26:21)
+    at Module.DELETE (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:465:29)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.delete.test.ts:65:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/config/route.delete.test.ts > DELETE /api/whatsapp/config > returns forbidden for non-admin membership without exposing DB details
+Error in WhatsApp config DELETE: TypeError: Cannot read properties of undefined (reading 'select')
+    at resolveAccountId (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:26:21)
+    at Module.DELETE (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:465:29)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.delete.test.ts:82:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+ ❯ src/app/api/whatsapp/config/route.delete.test.ts (4 tests | 3 failed) 49ms
+     × deletes only through the PostgreSQL repository using verified identity 19ms
+     × returns forbidden for non-admin membership without exposing DB details 4ms
+     × returns a safe database failure response 9ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > deletes only the current account config for an admin
+TypeError: repository.deleteConnectionConfig is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:174:29
+    172|     );
+    173|
+    174|     await expect(repository.deleteConnectionConfig()).resolves.toBeUnd…
+       |                             ^
+    175|
+    176|     const deleteCall = query.mock.calls.find(([sql]) =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > denies non-admin membership before attempting a delete
+TypeError: repository.deleteConnectionConfig is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:195:29
+    193|     );
+    194|
+    195|     await expect(repository.deleteConnectionConfig()).rejects.toEqual(
+       |                             ^
+    196|       new AppError('forbidden')
+    197|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/lib/repositories/whatsapp-config.test.ts > PostgreSQL WhatsApp config repository > requires a verified session before any delete transaction
+TypeError: repository.deleteConnectionConfig is not a function
+ ❯ src/lib/repositories/whatsapp-config.test.ts:208:29
+    206|     const repository = createPostgresWhatsAppConfigRepository(async ()…
+    207|
+    208|     await expect(repository.deleteConnectionConfig()).rejects.toEqual(
+       |                             ^
+    209|       new AppError('unauthorized')
+    210|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.delete.test.ts > DELETE /api/whatsapp/config > deletes only through the PostgreSQL repository using verified identity
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/config/route.delete.test.ts:67:29
+     65|     const response = await DELETE();
+     66|
+     67|     expect(response.status).toBe(200);
+       |                             ^
+     68|     expect(await response.json()).toEqual({ success: true });
+     69|     expect(mocks.createRepository).toHaveBeenCalledTimes(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.delete.test.ts > DELETE /api/whatsapp/config > returns forbidden for non-admin membership without exposing DB details
+AssertionError: expected 500 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 500
+
+ ❯ src/app/api/whatsapp/config/route.delete.test.ts:84:29
+     82|     const response = await DELETE();
+     83|
+     84|     expect(response.status).toBe(403);
+       |                             ^
+     85|     expect(await response.json()).toEqual({ error: 'Forbidden' });
+     86|     expect(mocks.legacyFrom).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.delete.test.ts > DELETE /api/whatsapp/config > returns a safe database failure response
+AssertionError: expected { error: 'Internal server error' } to deeply equal { Object (error) }
+
+- Expected
++ Received
+
+  {
+-   "error": "Failed to delete configuration",
++   "error": "Internal server error",
+  }
+
+ ❯ src/app/api/whatsapp/config/route.delete.test.ts:99:35
+     97|
+     98|     expect(response.status).toBe(500);
+     99|     expect(await response.json()).toEqual({
+       |                                   ^
+    100|       error: 'Failed to delete configuration',
+    101|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  6 failed | 8 passed (14)
+   Start at  18:04:53
+   Duration  2.81s (transform 433ms, setup 0ms, import 745ms, tests 82ms, environment 1ms)
+
+TDD RED command exit code: 1

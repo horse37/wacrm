@@ -1,0 +1,45 @@
+﻿Command: Docker Desktop PostgreSQL 16 migration-parity validation with postgres:16-alpine and node:22-bookworm; --network none, disposable tmpfs database, read-only repository mount.
+The PostgreSQL migration runner installs the checked-in migration chain, including 028. Synthetic identities and encrypted-registration placeholders only; no Supabase service, external network, real credentials, or persistent database.
+Migration runner output:
+[postgres-migrations] applied 001_initial_schema.sql
+[postgres-migrations] applied 002_pipelines_enhancements.sql
+[postgres-migrations] applied 003_broadcast_recipient_wamid.sql
+[postgres-migrations] applied 004_contact_delete_set_null.sql
+[postgres-migrations] applied 005_broadcast_counts_incremental.sql
+[postgres-migrations] applied 006_automations.sql
+[postgres-migrations] applied 007_automations_increment_counter.sql
+[postgres-migrations] applied 008_profile_avatars_storage.sql
+[postgres-migrations] applied 009_message_actions.sql
+[postgres-migrations] applied 010_flows.sql
+[postgres-migrations] applied 011_profile_beta_features.sql
+[postgres-migrations] applied 012_flows_increment_counter.sql
+[postgres-migrations] applied 013_whatsapp_config_phone_number_id_unique.sql
+[postgres-migrations] applied 014_message_templates_meta_integration.sql
+[postgres-migrations] applied 015_whatsapp_config_registration.sql
+[postgres-migrations] applied 016_flow_media.sql
+[postgres-migrations] applied 017_account_sharing.sql
+[postgres-migrations] applied 018_account_member_rpcs.sql
+[postgres-migrations] applied 019_invitation_rpcs.sql
+[postgres-migrations] applied 020_account_sharing_followups.sql
+[postgres-migrations] applied 021_account_default_currency.sql
+[postgres-migrations] applied 022_contact_phone_dedup.sql
+[postgres-migrations] applied 023_chat_media.sql
+[postgres-migrations] applied 024_zap_lead_integrations.sql
+[postgres-migrations] applied 025_zap_lead_events_and_heartbeat.sql
+[postgres-migrations] applied 026_zap_lead_generation_safe_heartbeat.sql
+[postgres-migrations] applied 027_restrict_broadcast_recompute_execute.sql
+[postgres-migrations] applied 028_zap_lead_runtime_read_policies.sql
+[postgres-migrations] complete: applied=28, skipped=0, total=28
+Runtime role migration preflight negative tests:
+PASS: migration rejects missing runtime role
+PASS: migration rejects SUPERUSER runtime role
+PASS: migration rejects BYPASSRLS runtime role
+PASS: migration rejects CREATEDB runtime role
+PASS: migration rejects CREATEROLE runtime role
+PASS: migration rejects membership in a BYPASSRLS role
+PASS: migration rejects membership in the postgres policy and owner role
+PASS: migration rejects membership in a protected relation owner role
+Applying test-only function EXECUTE grant in disposable PostgreSQL.
+Validation failure: file:///repo/scripts/testing/postgres-zap-lead-webhook-receipt-integration.mjs:32
+Cleanup: no residual task containers
+Overall result: FAILURE

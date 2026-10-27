@@ -1,0 +1,33 @@
+Docker context: desktop-linux
+Command: docker run --pull=never -d --rm --name wacrm-automation-update-db-7cebaae14d --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image; tmpfs database; no ports or named volumes.
+Synthetic accounts, users, automations, steps, and pending execution only. Credentials generated at runtime and not recorded.
+PowerShell AST, forced-RLS, NOBYPASSRLS, RLS-policy, and minimum-grant checks passed.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Command: docker run --pull=never --rm --name wacrm-automation-update-node-7cebaae14d --network container:wacrm-automation-update-db-7cebaae14d --mount <read-only-repository> --workdir /source -e DATABASE_URL=postgres://wacrm_automation_update_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=4 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-update-rollback-integration.mjs
+Atomic rollback integration exit code: 1
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+file:///source/src/lib/repositories/automation-update-persistence.ts:75
+export class AutomationActivationValidationError extends AppError {
+  constructor(readonly issues: ValidationIssue[]) {
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+    super('bad_request');
+
+SyntaxError [ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX]: TypeScript parameter property is not supported in strip-only mode
+    at parseTypeScript (node:internal/modules/typescript:63:40)
+    at processTypeScriptCode (node:internal/modules/typescript:133:42)
+    at stripTypeScriptModuleTypes (node:internal/modules/typescript:163:10)
+    at ModuleLoader.<anonymous> (node:internal/modules/esm/translators:660:29)
+    at #translate (node:internal/modules/esm/loader:559:20)
+    at afterLoad (node:internal/modules/esm/loader:612:29) {
+  code: 'ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX'
+}
+
+Node.js v22.23.3
+Validation failure: Atomic rollback integration failed with exit 1.
+Cleanup: no residual task resources
+Overall result: FAILURE

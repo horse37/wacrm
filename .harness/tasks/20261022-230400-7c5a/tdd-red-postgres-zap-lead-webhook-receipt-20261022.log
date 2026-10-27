@@ -1,0 +1,4 @@
+Command:
+npx vitest run src/lib/repositories/zap-lead-webhook-receipt.test.ts src/lib/zap-lead/events.test.ts --maxWorkers=1 --no-file-parallelism
+
+Result before repository wiring: FAILURE, as expected for TDD red. `events.test.ts` reported 3 failing assertions because webhook receipt acceptance still called the Supabase RPC. The new repository test also exposed that Vitest must mock the existing `server-only` marker; it was not a production-code failure. Three unrelated event tests passed. The test setup was corrected with the established `vi.mock('server-only', () => ({}))` pattern before implementation.

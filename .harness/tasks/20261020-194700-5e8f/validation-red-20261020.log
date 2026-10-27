@@ -1,0 +1,198 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/whatsapp/react/route.test.ts src/lib/repositories/message-reaction-target.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/repositories/message-reaction-target.test.ts (11 tests | 4 failed) 51ms
+     × returns a target without a provider message ID for an unsent message 16ms
+     × returns a target without a usable contact phone (null) 3ms
+     × returns a target without a usable contact phone () 2ms
+     × returns a target without a usable contact phone (   ) 4ms
+ ❯ src/app/api/whatsapp/react/route.test.ts (9 tests | 7 failed) 74ms
+     × uses PostgreSQL context, sends to the provider, then persists the reaction 36ms
+     × preserves the not-found response for an inaccessible message 3ms
+     × preserves the unsent-message response when provider ID is absent 3ms
+     × preserves the missing-phone response without contacting the provider 2ms
+     × returns the existing configuration response when no account config exists 5ms
+     × does not persist when the Meta provider rejects the reaction 4ms
+     × sends and persists an empty emoji as the actor reaction removal 4ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/message-reaction-target.test.ts > PostgreSQL message-reaction target repository > returns a target without a provider message ID for an unsent message
+AssertionError: promise rejected "AppError: The request is invalid. { …(2) }" instead of resolving
+ ❯ src/lib/repositories/message-reaction-target.test.ts:158:48
+    156|     );
+    157|
+    158|     await expect(repository.getTarget(messageA)).resolves.toEqual({
+       |                                                ^
+    159|       providerMessageId: null,
+    160|       contactPhone: targetA.contactPhone,
+
+Caused by: AppError: The request is invalid.
+ ❯ src/lib/repositories/message-reaction-target.ts:79:49
+ ❯ src/lib/repositories/message-reaction-target.test.ts:54:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request', sqlState: undefined }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  src/lib/repositories/message-reaction-target.test.ts > PostgreSQL message-reaction target repository > returns a target without a usable contact phone (null)
+ FAIL  src/lib/repositories/message-reaction-target.test.ts > PostgreSQL message-reaction target repository > returns a target without a usable contact phone ()
+ FAIL  src/lib/repositories/message-reaction-target.test.ts > PostgreSQL message-reaction target repository > returns a target without a usable contact phone (   )
+AssertionError: promise rejected "AppError: The request is invalid. { …(2) }" instead of resolving
+ ❯ src/lib/repositories/message-reaction-target.test.ts:179:50
+    177|       );
+    178|
+    179|       await expect(repository.getTarget(messageA)).resolves.toEqual({
+       |                                                  ^
+    180|         providerMessageId: targetA.providerMessageId,
+    181|         contactPhone: null,
+
+Caused by: AppError: The request is invalid.
+ ❯ src/lib/repositories/message-reaction-target.ts:80:44
+ ❯ src/lib/repositories/message-reaction-target.test.ts:54:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request', sqlState: undefined }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  src/app/api/whatsapp/react/route.test.ts > POST /api/whatsapp/react PostgreSQL route > uses PostgreSQL context, sends to the provider, then persists the reaction
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/react/route.test.ts:124:29
+    122|     const response = await POST(request());
+    123|
+    124|     expect(response.status).toBe(200);
+       |                             ^
+    125|     await expect(response.json()).resolves.toEqual({ success: true });
+    126|     expect(mocks.getUser).toHaveBeenCalledOnce();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  src/app/api/whatsapp/react/route.test.ts > POST /api/whatsapp/react PostgreSQL route > preserves the not-found response for an inaccessible message
+AssertionError: expected 500 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 500
+
+ ❯ src/app/api/whatsapp/react/route.test.ts:188:29
+    186|     const response = await POST(request());
+    187|
+    188|     expect(response.status).toBe(404);
+       |                             ^
+    189|     await expect(response.json()).resolves.toEqual({ error: 'Message n…
+    190|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  src/app/api/whatsapp/react/route.test.ts > POST /api/whatsapp/react PostgreSQL route > preserves the unsent-message response when provider ID is absent
+AssertionError: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ src/app/api/whatsapp/react/route.test.ts:197:29
+    195|     const response = await POST(request());
+    196|
+    197|     expect(response.status).toBe(400);
+       |                             ^
+    198|     await expect(response.json()).resolves.toEqual({
+    199|       error: 'Cannot react to a message that has not been sent to What…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  src/app/api/whatsapp/react/route.test.ts > POST /api/whatsapp/react PostgreSQL route > preserves the missing-phone response without contacting the provider
+AssertionError: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ src/app/api/whatsapp/react/route.test.ts:209:29
+    207|     const response = await POST(request());
+    208|
+    209|     expect(response.status).toBe(400);
+       |                             ^
+    210|     await expect(response.json()).resolves.toEqual({
+    211|       error: 'Contact phone number not found',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  src/app/api/whatsapp/react/route.test.ts > POST /api/whatsapp/react PostgreSQL route > returns the existing configuration response when no account config exists
+AssertionError: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ src/app/api/whatsapp/react/route.test.ts:221:29
+    219|     const response = await POST(request());
+    220|
+    221|     expect(response.status).toBe(400);
+       |                             ^
+    222|     await expect(response.json()).resolves.toEqual({
+    223|       error: 'WhatsApp not configured.',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  src/app/api/whatsapp/react/route.test.ts > POST /api/whatsapp/react PostgreSQL route > does not persist when the Meta provider rejects the reaction
+AssertionError: expected 500 to be 502 // Object.is equality
+
+- Expected
++ Received
+
+- 502
++ 500
+
+ ❯ src/app/api/whatsapp/react/route.test.ts:233:29
+    231|     const response = await POST(request());
+    232|
+    233|     expect(response.status).toBe(502);
+       |                             ^
+    234|     await expect(response.json()).resolves.toEqual({
+    235|       error: 'Meta API error: temporary provider error',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+ FAIL  src/app/api/whatsapp/react/route.test.ts > POST /api/whatsapp/react PostgreSQL route > sends and persists an empty emoji as the actor reaction removal
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/react/route.test.ts:243:29
+    241|     const response = await POST(request({ message_id: messageId, emoji…
+    242|
+    243|     expect(response.status).toBe(200);
+       |                             ^
+    244|     expect(mocks.sendReactionMessage).toHaveBeenCalledWith(
+    245|       expect.objectContaining({ emoji: '' }),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  11 failed | 9 passed (20)
+   Start at  16:50:50
+   Duration  2.67s (transform 296ms, setup 0ms, import 585ms, tests 124ms, environment 1ms)
+

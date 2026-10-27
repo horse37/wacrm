@@ -1,0 +1,23 @@
+Review remediation validation — PostgreSQL server-only client boundary
+Task: 20261020-130325-be1d
+Date: 2026-10-20 (Brasília)
+Repository: C:\Sistemas\wacrm
+Branch/HEAD: main / 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+Initial independent GPT-6 Luna review: NOT APPROVE, one P2. `runtimeImports` omitted TypeScript `ImportEqualsDeclaration`, allowing a client graph edge such as `import bridge = require('@/bridge')` to escape traversal.
+
+Correction: scanner now traverses literal `ExternalModuleReference` values in runtime import-equals declarations, ignores `isTypeOnly`, and emits `non-literal-runtime-import` for non-literal external references. Synthetic regression verifies transitive alias/import-equals traversal to `pg`, ignores a type-only import-equals edge, and fails closed for a non-literal reference.
+
+Final focused checks after formatting:
+- PASS — `node --test scripts/testing/postgres-server-boundary.test.mjs` (4/4).
+- PASS — `npx vitest run src/lib/db/postgres-pool.test.ts --maxWorkers=1 --no-file-parallelism` (13/13).
+- PASS — `npx tsc --noEmit`.
+- PASS — targeted ESLint on the scanner and pool files with `--max-warnings=0`.
+- PASS — targeted Prettier check on scanner and pool files.
+- PASS — `git diff --check` (exit 0; Git printed existing LF/CRLF normalization warnings for dirty files).
+
+No database or Docker was needed. No Supabase, credentials, real data, application traffic, production, commit, push, or deploy. Task remains in_progress pending read-only re-review; approval scope remains this boundary slice only.
+
+Record-only follow-up: Prettier check passed for task.md, handoffs/implementer.md, and review-request-gpt6-luna.md. `git diff --check` passed after the documentation correction. The original validation-final.log is explicitly labeled as the pre-remediation 3/3 baseline; this log remains the final 4/4 evidence.
+
+Final independent same-model GPT-6 Luna read-only re-review: exact APPROVE, zero findings, zero caveats. Review covered this server-only boundary slice and its records only; no tests, Docker, or database were run by the reviewer. H-DB-003/H-DATA-003 remain unapproved overall.

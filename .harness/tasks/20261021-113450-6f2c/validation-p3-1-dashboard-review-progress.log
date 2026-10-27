@@ -1,0 +1,19 @@
+Finding: P3-1 — dashboard review/task-state progress counts were optimistic and incomplete.
+
+Remediation:
+- Only the newest review file per task directory determines its latest decision; older APPROVE files cannot override a later remediation request.
+- A final explicit APPROVE remains valid when its body mentions an earlier REMEDIATION_REQUIRED, but is accepted only with explicit zero findings and zero caveats.
+- Dashboard distinguishes latest approved slice reviews from completed tasks whose latest review is approved. Task state remains separately visible.
+- Roadmap matching accepts Markdown backticks; `complete` and `completed` both render as `Concluída`.
+- Git status now uses `--untracked-files=all`.
+- Added unit coverage for review precedence, quoted earlier remediation, zero findings/caveats, backticked roadmap, and complete status.
+
+Validation:
+- Dashboard unit checks passed 10/10 across P2-4 and P3-1 test files.
+- Node syntax checks passed for dashboard server and review helper.
+- Focused Prettier check and focused `git diff --check` passed.
+- Current repository inventory: `git status --short --untracked-files=all` = 1400 entries; `--untracked-files=normal` = 392.
+- H-DATA-003 directories with a review file: 42; latest result APPROVE: 31; completed tasks with latest APPROVE: 4.
+- Regression scenario `20261020-212612-34b1`: backticked roadmap recognized; latest scoped review is APPROVE; Harness status remains `in_progress`; it is excluded from completed-task approvals.
+
+No database, Docker, Supabase, VPS, production, real data/credentials, commit, push, or deploy used.

@@ -1,0 +1,16 @@
+Opus r2 caveat 9 — automation repository callers and RLS boundary
+Date: 2026-10-22
+Scope: read-only source/migration inspection and documentation update.
+
+Evidence inspected:
+- `rg -n --glob '!**/*.test.*' --glob '!**/*.spec.*' "createPostgresAutomationPending|createPostgresAutomationLog" src` found one production consumer: `src/app/api/automations/[id]/logs/route.ts` calls the PostgreSQL `automation-logs` read repository. Other matches in `src` are repository declarations; no production callers were found for `automation-log-create`, `automation-log-append`, `automation-log-finalize`, `automation-pending-schedule`, `automation-pending-claim`, or `automation-pending-finalize`.
+- `src/lib/automations/engine.ts` uses the existing Supabase admin client to write automation logs and schedule pending executions; `src/app/api/automations/cron/route.ts` uses the Supabase admin client to read and claim due executions.
+- `supabase/migrations/006_automations.sql` describes pending executions as service-role-only. `supabase/migrations/017_account_sharing.sql` keeps pending executions without client RLS policies and replaces client log access with a SELECT-only policy. Inspected migrations do not provision `wacrm_runtime` write grants/policies for these tables.
+- `HANDOFF-CONTEXT.md` now records that these fixtures do not establish production integration or runtime write authorization; any future PostgreSQL writer integration requires the approved H-DB-003 privilege matrix.
+
+Checks:
+- `git diff --check -- HANDOFF-CONTEXT.md .harness/tasks/20261021-113450-6f2c/task.md .harness/tasks/20261021-113450-6f2c/handoffs/implementer.md`: PASS.
+- No application tests, Docker, PostgreSQL, Supabase, external service, production, real data, or credentials were accessed.
+- No commit, push, or deploy.
+
+Independent GPT-6 Luna read-only review of caveat 9 is pending. This record does not claim approval of caveat 9, the full Opus review, the task, H-DATA-003, or H-DB-003.

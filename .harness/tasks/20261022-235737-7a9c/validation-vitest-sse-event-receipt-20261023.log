@@ -1,0 +1,21 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/zap-lead/events.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/zap-lead/events.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/zap-lead/events.test.ts [ src/lib/zap-lead/events.test.ts ]
+Error: This module cannot be imported from a Client Component module. It should only be used from a Server Component.
+ ❯ Object.<anonymous> node_modules/server-only/index.js:1:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  00:21:23
+   Duration  1.71s (transform 153ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)
+

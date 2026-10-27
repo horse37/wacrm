@@ -6,6 +6,10 @@ import {
 
 const mocks = vi.hoisted(() => ({
   requireRole: vi.fn(),
+  eventStreamRepository: vi.fn(),
+  eventStreamGetIntegration: vi.fn(),
+  eventStreamGetCursor: vi.fn(),
+  webhookCredentialLookup: vi.fn(),
   encrypt: vi.fn(
     (value: string) =>
       `ciphertext:${Buffer.from(value, 'utf8').toString('base64')}`
@@ -18,6 +22,12 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock('@/lib/auth/account', () => ({ requireRole: mocks.requireRole }));
+vi.mock('@/lib/repositories/zap-lead-event-stream-read', () => ({
+  createPostgresZapLeadEventStreamReadRepository: mocks.eventStreamRepository,
+}));
+vi.mock('../repositories/zap-lead-webhook-credential-read', () => ({
+  lookupZapLeadWebhookCredential: mocks.webhookCredentialLookup,
+}));
 vi.mock('@/lib/whatsapp/encryption', () => ({
   encrypt: mocks.encrypt,
   decrypt: mocks.decrypt,
@@ -136,49 +146,79 @@ describe('Zap Lead credential storage', () => {
     expect(query.eq).toHaveBeenCalledWith('account_id', 'account-admin');
   });
 
-  it('loads the live cursor from the authenticated account state', async () => {
-    const makeQuery = (data: unknown) => {
-      const query = {
-        eq: vi.fn(),
-        maybeSingle: vi.fn().mockResolvedValue({ data, error: null }),
-        select: vi.fn(),
-      };
-      query.eq.mockReturnValue(query);
-      query.select.mockReturnValue(query);
-      return query;
-    };
-    const integrationQuery = makeQuery({
-      account_id: 'account-b',
-      api_base_url: 'https://zap.example.test',
-      encrypted_registration: `ciphertext:${Buffer.from(
+  it('loads the event stream target and cursor through the PostgreSQL repository', async () => {
+    const accountId = '10000000-0000-4000-8000-000000000001';
+    const userId = '00000000-0000-4000-8000-000000000001';
+    const cursor = '18fae01a-a5b8-4a7e-95af-453810e49dc9';
+    const from = vi.fn();
+    const getIntegration = vi.fn().mockResolvedValue({
+      accountId,
+      apiBaseUrl: 'https://zap.example.test',
+      encryptedRegistration: `ciphertext:${Buffer.from(
         JSON.stringify(registration),
         'utf8'
       ).toString('base64')}`,
     });
-    const stateQuery = makeQuery({
-      last_sse_cursor_id: '18fae01a-a5b8-4a7e-95af-453810e49dc9',
-    });
-    const from = vi.fn((table: string) =>
-      table === 'zap_lead_integrations' ? integrationQuery : stateQuery
-    );
+    const getCursor = vi.fn().mockResolvedValue(cursor);
     mocks.requireRole.mockResolvedValue({
-      accountId: 'account-b',
+      accountId,
+      userId,
       supabase: { from },
     });
+    mocks.eventStreamRepository.mockReturnValue({ getIntegration, getCursor });
 
     await expect(
       getZapLeadEventStreamTargetForCurrentAccount()
     ).resolves.toMatchObject({
-      accountId: 'account-b',
+      accountId,
       keyId: registration.keyId,
-      cursor: '18fae01a-a5b8-4a7e-95af-453810e49dc9',
+      cursor,
     });
-    expect(integrationQuery.eq).toHaveBeenCalledWith('account_id', 'account-b');
-    expect(stateQuery.eq).toHaveBeenCalledWith('account_id', 'account-b');
-    expect(stateQuery.eq).toHaveBeenCalledWith(
-      'integration_key_id',
-      registration.keyId
-    );
+    expect(mocks.eventStreamRepository).toHaveBeenCalledWith({
+      userId,
+      accountId,
+    });
+    expect(getCursor).toHaveBeenCalledWith(registration.keyId);
+    expect(from).not.toHaveBeenCalled();
+  });
+  it('returns null without reading a cursor when integration is absent', async () => {
+    const accountId = '10000000-0000-4000-8000-000000000001';
+    const userId = '00000000-0000-4000-8000-000000000001';
+    const from = vi.fn();
+    const getIntegration = vi.fn().mockResolvedValue(null);
+    const getCursor = vi.fn();
+    mocks.requireRole.mockResolvedValue({
+      accountId,
+      userId,
+      supabase: { from },
+    });
+    mocks.eventStreamRepository.mockReturnValue({ getIntegration, getCursor });
+
+    await expect(
+      getZapLeadEventStreamTargetForCurrentAccount()
+    ).resolves.toBeNull();
+    expect(getCursor).not.toHaveBeenCalled();
+    expect(from).not.toHaveBeenCalled();
+  });
+
+  it('hides cursor repository errors behind the existing generic message', async () => {
+    const accountId = '10000000-0000-4000-8000-000000000001';
+    const userId = '00000000-0000-4000-8000-000000000001';
+    const getIntegration = vi.fn().mockResolvedValue({
+      accountId,
+      apiBaseUrl: 'https://zap.example.test',
+      encryptedRegistration: `ciphertext:${Buffer.from(
+        JSON.stringify(registration),
+        'utf8'
+      ).toString('base64')}`,
+    });
+    const getCursor = vi.fn().mockRejectedValue(new Error('database detail'));
+    mocks.requireRole.mockResolvedValue({ accountId, userId });
+    mocks.eventStreamRepository.mockReturnValue({ getIntegration, getCursor });
+
+    await expect(
+      getZapLeadEventStreamTargetForCurrentAccount()
+    ).rejects.toThrow('Could not load Zap Lead event stream cursor');
   });
 
   it('loads heartbeat targets with their current key generation', async () => {
@@ -212,29 +252,44 @@ describe('Zap Lead credential storage', () => {
   });
 
   it('looks up incoming webhook credentials by key id and returns their account scope', async () => {
-    const query = {
-      eq: vi.fn(),
-      maybeSingle: vi.fn().mockResolvedValue({
-        data: {
-          account_id: 'account-c',
-          encrypted_registration: `ciphertext:${Buffer.from(
-            JSON.stringify(registration),
-            'utf8'
-          ).toString('base64')}`,
-        },
-        error: null,
-      }),
-    };
-    query.eq.mockReturnValue(query);
-    const select = vi.fn(() => query);
-    const from = vi.fn(() => ({ select }));
-    mocks.zapLeadAdminClient.mockReturnValue({ from });
+    mocks.webhookCredentialLookup.mockResolvedValue({
+      accountId: 'account-c',
+      encryptedRegistration: `ciphertext:${Buffer.from(
+        JSON.stringify(registration),
+        'utf8'
+      ).toString('base64')}`,
+    });
 
     await expect(
       getZapLeadWebhookCredential(registration.keyId)
     ).resolves.toEqual({ accountId: 'account-c', registration });
-    expect(from).toHaveBeenCalledWith('zap_lead_integrations');
-    expect(query.eq).toHaveBeenCalledWith('key_id', registration.keyId);
+    expect(mocks.webhookCredentialLookup).toHaveBeenCalledWith(
+      registration.keyId
+    );
+    expect(mocks.zapLeadAdminClient).not.toHaveBeenCalled();
+  });
+
+  it('rejects malformed webhook key ids before PostgreSQL lookup', async () => {
+    await expect(getZapLeadWebhookCredential('invalid')).resolves.toBeNull();
+    expect(mocks.webhookCredentialLookup).not.toHaveBeenCalled();
+  });
+
+  it('returns null when decrypted registration key does not match lookup key', async () => {
+    const otherRegistration = {
+      ...registration,
+      keyId: 'ak_111111111111111111111111',
+    };
+    mocks.webhookCredentialLookup.mockResolvedValue({
+      accountId: 'account-c',
+      encryptedRegistration: `ciphertext:${Buffer.from(
+        JSON.stringify(otherRegistration),
+        'utf8'
+      ).toString('base64')}`,
+    });
+
+    await expect(
+      getZapLeadWebhookCredential(registration.keyId)
+    ).resolves.toBeNull();
   });
 });
 

@@ -1,0 +1,12 @@
+Command: docker run -d --rm --name wacrm-db-contract-ff3df1d0de --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=db_contract_test -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database data is tmpfs; no named volumes or published ports.
+The repository is mounted read-only. The database login/password and SQL rows are generated for this run only.
+Disposable PostgreSQL Docker image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker exec <task-container> pg_isready -U db_contract_test -d postgres; exit 0.
+Command: docker run --rm --name wacrm-db-contract-node-ff3df1d0de --network container:wacrm-db-contract-ff3df1d0de --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://db_contract_test:<synthetic>@127.0.0.1:5432/postgres node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-db-contract-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Disposable Node Docker image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 0
+PostgreSQL DB contract integration SUCCESS: parameterized query, commit, rollback, and pooled connection cleanup.
+Cleanup: no residual task resources
+Overall result: SUCCESS

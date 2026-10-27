@@ -1,0 +1,6 @@
+COMMAND: npx prettier --write changed route and test
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --write src/app/api/account/invitations/[id]/route.ts src/app/api/account/invitations/[id]/route.test.ts
+src/app/api/account/invitations/[id]/route.ts 280ms
+src/app/api/account/invitations/[id]/route.test.ts 70ms
+EXIT_CODE=0

@@ -1,0 +1,27 @@
+Scope: remediation of independent GPT-6 Luna P2 review for PATCH /api/whatsapp/templates/[id].
+Result: PASS.
+
+Vitest:
+Command: npx vitest run 'src/app/api/whatsapp/templates/[id]/route.patch.test.ts' 'src/app/api/whatsapp/templates/[id]/route.test.ts' src/lib/repositories/template-edit-persistence.test.ts src/lib/repositories/template-lifecycle-context.test.ts src/lib/repositories/template-lifecycle-config.test.ts
+Result: 5 files passed; 49/49 tests passed.
+
+TypeScript:
+Command: npm run typecheck
+Result: PASS.
+
+ESLint:
+Command: npx eslint 'src/app/api/whatsapp/templates/[id]/route.ts' 'src/app/api/whatsapp/templates/[id]/route.patch.test.ts' src/lib/repositories/template-edit-persistence.ts src/lib/repositories/template-edit-persistence.test.ts scripts/testing/postgres-template-edit-persistence-integration.mjs --max-warnings=0
+Result: PASS; zero warnings and errors.
+
+Prettier:
+Result: PASS for all changed TypeScript and MJS files. PATCH response block in route.ts checked with --range-start 6445 --range-end 6791; full route remains intentionally unformatted outside this slice per prior baseline.
+
+Whitespace:
+Result: PASS for all changed task files, including git diff --check on the tracked route file. Git emitted only its LF-to-CRLF working-copy advisory.
+
+PostgreSQL:
+Result: PASS against disposable PostgreSQL 16 on Docker Desktop, forced RLS, synthetic fixtures, no published ports, isolated Node runner, read-only repository mount, tmpfs database, and zero residual containers.
+Evidence: validation-postgres-template-edit-persistence-f204f22358.log
+Regression sent a different name/language from those stored and verified the persisted values and exact 22-column response.
+
+No Supabase, Meta, real Auth, VPS, production, live traffic, real data, or credentials were accessed. No commit, push, or deploy.

@@ -1,0 +1,28 @@
+WACRM task 20261021-021057-20b3 — validation evidence
+Date: 2026-10-21 (America/Sao_Paulo)
+Scope: only the account-scoped conversation/contact lookup used by POST /api/whatsapp/send.
+
+TDD RED
+- Before the PostgreSQL lookup implementation, contract tests rejected the old route path: the `conversations` PostgREST call remained visible, and the positive contact-phone case returned 404 instead of the expected missing-WhatsApp-configuration response (400).
+
+Final focused validation
+- `npm test -- src/app/api/whatsapp/send/route.test.ts`: PASS, 5/5.
+- `npm run typecheck`: PASS.
+- Targeted ESLint with `--max-warnings=0` for route, route test, new repository and PostgreSQL integration script: PASS, zero warnings/errors.
+- Prettier check for route test, new repository and PostgreSQL integration script: PASS. The full legacy `route.ts` file has a pre-existing formatter baseline difference recorded in `../20261021-014944-3f34/validation-whatsapp-send-account-20261021.log`; it was not reformatted wholesale. The changed route block retains the file's established style.
+- PostgreSQL 16 disposable Docker Desktop integration: PASS. Evidence: `validation-postgres-whatsapp-send-conversation-9445f40974.log`. Runtime role had `NOBYPASSRLS`; positive phone projection, account filter, cross-account denial under RLS, and transaction-local identity cleanup passed. Container used `--network none`, read-only repository mount, tmpfs database and no published ports/volumes; cleanup reported no residual task containers.
+- `git diff --check`: PASS (exit 0). Git printed existing CRLF conversion notices for locally modified files.
+
+No Supabase, Meta/WhatsApp, VPS, production, real traffic, credentials or customer data were accessed. No commit, push, deploy or destructive Git operation occurred.
+Overall result: PASS.
+Remediation validation — 2026-10-21, 02:42 America/Sao_Paulo
+- Added focused route cases for missing contact, contact with a null phone, and invalid phone; each applicable 400 path asserts it does not look up `whatsapp_config`.
+- Formatted only `src/app/api/whatsapp/send/route.test.ts` with Prettier; did not reformat the legacy route module.
+- Vitest: PASS, 8/8 (`npm test -- src/app/api/whatsapp/send/route.test.ts`).
+- TypeScript: PASS (`npm run typecheck`).
+- ESLint: PASS, zero warnings/errors on route, route test, repository and existing PostgreSQL conversation-list integration script.
+- Prettier: PASS on route test, repository and existing PostgreSQL conversation-list integration script.
+- `git diff --check`: PASS (exit 0); Git emitted only LF/CRLF normalization advisories for pre-existing dirty files.
+- Existing disposable PostgreSQL 16/RLS proof remains applicable: remediation changed only route-test coverage/formatting, not route SQL, repository or integration logic. No Docker resource was started in this revalidation.
+- Internal read-only review: APPROVE, zero findings/caveats; record: eview-internal-remediation-20261021.md. Independent GPT-6 Luna review remains pending.
+- Independent GPT-6 Luna read-only review: APPROVE, zero findings/caveats, limited to this route lookup slice; see eview-gpt6-luna-final-20261021.md. H-DATA-003/H-DB-003 remain unapproved globally.

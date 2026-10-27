@@ -1,0 +1,5 @@
+src/app/api/whatsapp/config/route.ts 367ms
+src/app/api/whatsapp/config/route.post.test.ts 100ms
+src/lib/repositories/whatsapp-config.ts 58ms
+src/lib/repositories/whatsapp-config.test.ts 100ms
+.harness/tasks/20261020-212612-34b1/task.md 130ms

@@ -1,0 +1,161 @@
+Command: npx vitest run 'src/app/api/whatsapp/config/route.test.ts' --maxWorkers=1 --no-file-parallelism
+Exit code: 1
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/whatsapp/config/route.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/whatsapp/config/route.test.ts > GET /api/whatsapp/config > loads encrypted config from PostgreSQL and verifies it with Meta
+Error in WhatsApp config GET: TypeError: Cannot read properties of undefined (reading 'select')
+    at resolveAccountId (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:26:21)
+    at Module.GET (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:76:29)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.test.ts:103:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/config/route.test.ts > GET /api/whatsapp/config > preserves the no-account response when PostgreSQL membership is absent
+Error in WhatsApp config GET: TypeError: Cannot read properties of undefined (reading 'select')
+    at resolveAccountId (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:26:21)
+    at Module.GET (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:76:29)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.test.ts:127:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/app/api/whatsapp/config/route.test.ts > GET /api/whatsapp/config > preserves the no-config response when account has no saved connection
+Error in WhatsApp config GET: TypeError: Cannot read properties of undefined (reading 'select')
+    at resolveAccountId (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:26:21)
+    at Module.GET (C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.ts:76:29)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Sistemas/wacrm/src/app/api/whatsapp/config/route.test.ts:142:22
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+ ❯ src/app/api/whatsapp/config/route.test.ts (7 tests | 6 failed) 66ms
+     × loads encrypted config from PostgreSQL and verifies it with Meta 24ms
+     × preserves the no-account response when PostgreSQL membership is absent 4ms
+     × preserves the no-config response when account has no saved connection 10ms
+     × preserves the safe database-error response 4ms
+     × preserves the corrupted-token response without calling Meta 3ms
+     × preserves Meta verification failures without returning credential material 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/whatsapp/config/route.test.ts > GET /api/whatsapp/config > loads encrypted config from PostgreSQL and verifies it with Meta
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/config/route.test.ts:105:29
+    103|     const response = await getConfig();
+    104|
+    105|     expect(response.status).toBe(200);
+       |                             ^
+    106|     expect(await response.json()).toEqual({ connected: true, phone_inf…
+    107|     expect(mocks.createRepository).toHaveBeenCalledTimes(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.test.ts > GET /api/whatsapp/config > preserves the no-account response when PostgreSQL membership is absent
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/config/route.test.ts:129:29
+    127|     const response = await getConfig();
+    128|
+    129|     expect(response.status).toBe(200);
+       |                             ^
+    130|     expect(await response.json()).toEqual({
+    131|       connected: false,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.test.ts > GET /api/whatsapp/config > preserves the no-config response when account has no saved connection
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/config/route.test.ts:144:29
+    142|     const response = await getConfig();
+    143|
+    144|     expect(response.status).toBe(200);
+       |                             ^
+    145|     expect(await response.json()).toEqual({
+    146|       connected: false,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.test.ts > GET /api/whatsapp/config > preserves the safe database-error response
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/config/route.test.ts:161:29
+    159|     const response = await getConfig();
+    160|
+    161|     expect(response.status).toBe(200);
+       |                             ^
+    162|     expect(await response.json()).toEqual({
+    163|       connected: false,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.test.ts > GET /api/whatsapp/config > preserves the corrupted-token response without calling Meta
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/config/route.test.ts:182:29
+    180|     const response = await getConfig();
+    181|
+    182|     expect(response.status).toBe(200);
+       |                             ^
+    183|     expect(await response.json()).toMatchObject({
+    184|       connected: false,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/app/api/whatsapp/config/route.test.ts > GET /api/whatsapp/config > preserves Meta verification failures without returning credential material
+AssertionError: expected 500 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 500
+
+ ❯ src/app/api/whatsapp/config/route.test.ts:200:29
+    198|     const response = await getConfig();
+    199|
+    200|     expect(response.status).toBe(200);
+       |                             ^
+    201|     expect(await response.json()).toEqual({
+    202|       connected: false,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 1 passed (7)
+   Start at  13:57:44
+   Duration  3.17s (transform 264ms, setup 0ms, import 474ms, tests 66ms, environment 0ms)
+

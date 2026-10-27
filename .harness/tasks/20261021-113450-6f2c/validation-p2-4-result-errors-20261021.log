@@ -1,0 +1,16 @@
+P2-4 — gaps in validation-result classification
+
+Remediation:
+- Failure classification now recognizes unprefixed `Result: FAIL`/`FAILURE` before any success signal, including `Exit code: 0` or passing test summaries.
+- Vitest `Errors N error(s)` with N > 0 is a failure even when `Tests N passed` appears later. Zero reported errors alone do not turn a passing summary into failure.
+- Added regression tests for both `Result: FAIL` precedence cases, unhandled Vitest errors, and `Errors 0`.
+
+Validation:
+- TDD regression run before parser fix reproduced all three gaps: 3 expected failures, zero-count control passed.
+- `node --test .harness/dashboard-validation-result.test.mjs`: SUCCESS 9/9.
+- `node --check .harness/dashboard-validation-result.mjs` and dashboard server: SUCCESS.
+- Focused Prettier check for parser, tests, and server: SUCCESS.
+- `git diff --check`: SUCCESS; existing LF/CRLF conversion warnings only.
+- No database or Docker needed; this is local log classification only.
+
+Awaiting independent GPT-6 Luna read-only review; no approval presumed.

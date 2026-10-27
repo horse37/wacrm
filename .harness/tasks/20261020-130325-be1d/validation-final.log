@@ -1,0 +1,13 @@
+Pre-remediation baseline validation — postgres-server-boundary
+The 3/3 scanner count below predates the ImportEqualsDeclaration regression and is superseded by validation-review-remediation.log, which records the final 4/4 result.
+Task: 20261020-130325-be1d
+Repository: C:\Sistemas\wacrm
+Branch/HEAD: main / 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+SUCCESS — node --test scripts/testing/postgres-server-boundary.test.mjs (3/3). Scanned all discovered use client TS/TSX/JS/JSX entries; no client runtime graph reaches pg, postgres-pool/postgres-client, or repositories. Synthetic cases confirmed transitive alias/export traversal, dynamic imports, and ignored type-only import/export edges.
+SUCCESS — npx vitest run src/lib/db/postgres-pool.test.ts --maxWorkers=1 --no-file-parallelism (13/13).
+SUCCESS — npx tsc --noEmit.
+SUCCESS — targeted ESLint with --max-warnings=0 for postgres-pool.ts, postgres-pool.test.ts, and postgres-server-boundary.test.mjs.
+SUCCESS — Prettier check for both changed pool files, the boundary test, task.md, and handoffs/implementer.md.
+SUCCESS — git diff --check; exit 0. Git printed line-ending normalization warnings for files already dirty before this task.
+No Docker/PostgreSQL was started; this slice validates a static import boundary and opens no database connection. No Supabase, credentials, real data, traffic, production, commit, push, or deploy.

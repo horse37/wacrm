@@ -1,0 +1,20 @@
+Opus 5.5 full-tree r2 — finding 3: distinguish RPC rejection from EXECUTE ACL denial
+Date: 2026-10-22 (America/Sao_Paulo)
+
+TDD reproduction
+- Added separate cases for SQLSTATE 42501 from routine exec_stmt_raise and routine aclcheck_error.
+- Before the implementation change, the ACL case failed: it was returned as unauthorized instead of db_error.
+
+Implementation
+- toAppError preserves PostgreSQL routine metadata for SQLSTATE 42501 without exposing it through enumerable error properties.
+- Invitation redemption maps 42501 to unauthorized only when routine is exec_stmt_raise. Other 42501 errors remain db_error, which follows the route's existing sanitized 500 and console logging path.
+- Regression tests exercise both routines through the real withTransaction implementation with a mocked pg PoolClient, including rollback/release and safe messages.
+
+Final validation
+- `npx vitest run src/lib/repositories/invitation-redemption.test.ts "src/app/api/invitations/[token]/redeem/route.test.ts"`: PASS, 21/21.
+- `npx eslint --max-warnings=0 src/lib/db/errors.ts src/lib/repositories/invitation-redemption.ts src/lib/repositories/invitation-redemption.test.ts`: PASS, 0 warnings/errors.
+- `npx prettier --check src/lib/db/errors.ts src/lib/repositories/invitation-redemption.ts src/lib/repositories/invitation-redemption.test.ts`: PASS.
+- `npx tsc --noEmit`: PASS.
+- `git diff --check -- src/lib/db/errors.ts src/lib/repositories/invitation-redemption.ts src/lib/repositories/invitation-redemption.test.ts`: PASS, exit 0.
+
+No PostgreSQL, Docker, Supabase, persistent DB, external service, production, real data, or credentials were accessed for this slice. No commit, push, or deploy. GPT-6 Luna independent read-only review is pending; do not begin finding 4 before APPROVE with zero findings and zero caveats.

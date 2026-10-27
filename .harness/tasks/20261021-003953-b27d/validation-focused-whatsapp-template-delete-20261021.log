@@ -1,0 +1,5 @@
+Validação focada da rota DELETE e dos três repositórios usados.
+Comando: `npx vitest run 'src/app/api/whatsapp/templates/[id]/route.test.ts' src/lib/repositories/template-lifecycle-context.test.ts src/lib/repositories/template-lifecycle-config.test.ts src/lib/repositories/template-delete-persistence.test.ts src/lib/repositories/template-delete-persistence.postgres.test.ts`
+Resultado: PASS.
+Exit code: 0.
+Resumo: 34 testes aprovados; 2 testes de integração opt-in ignorados neste ciclo sem banco.

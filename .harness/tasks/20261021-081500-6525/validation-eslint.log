@@ -1,0 +1,9 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run eslint src/lib/repositories/zap-lead-event-stream-read.ts src/lib/repositories/zap-lead-event-stream-read.test.ts src/lib/zap-lead/credentials.ts src/lib/zap-lead/credentials.test.ts --max-warnings=0
+ESLint found too many warnings (maximum: 0).
+
+C:\Sistemas\wacrm\src\lib\zap-lead\credentials.ts
+  26:11  warning  'StoredEventStreamTarget' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 1 problem (0 errors, 1 warning)
+

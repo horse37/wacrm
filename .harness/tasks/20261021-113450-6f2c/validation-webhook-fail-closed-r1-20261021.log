@@ -1,0 +1,14 @@
+# Webhook fail-closed validation — 2026-10-21
+
+Scope: `POST /api/zap-lead/webhook` opt-in guard and its regression test only.
+
+- `npm exec -- vitest run src/app/api/zap-lead/webhook/route.test.ts` — PASS, 18/18.
+- `npx tsc --noEmit` — PASS (exit 0).
+- `npx eslint src/app/api/zap-lead/webhook/route.ts src/app/api/zap-lead/webhook/route.test.ts --max-warnings=0` — PASS (exit 0; no warnings).
+- `npx prettier --check src/app/api/zap-lead/webhook/route.ts src/app/api/zap-lead/webhook/route.test.ts` — PASS.
+- `git diff --check -- src/app/api/zap-lead/webhook/route.ts src/app/api/zap-lead/webhook/route.test.ts` — PASS (exit 0; Git printed only LF-to-CRLF advisory warnings).
+- Live dashboard `GET http://127.0.0.1:49214/api/status` — PASS; task `20261021-113450-6f2c` is `in_progress`, latest review `REMEDIATION_REQUIRED`; branch `main`, HEAD `7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c`.
+
+No database, Docker, Supabase, VPS, production, real data, or real credentials were used. No environment enabling value was set in the process; test explicitly verifies that an unset/empty `WACRM_ZAP_LEAD_WEBHOOK_POSTGRES_ENABLED` returns 503 before credential lookup and event persistence. No migration, schema, RLS, or grant change was made. No commit, push, or deploy occurred.
+
+Review pending: independent GPT-6 Luna read-only review limited to this guard and regression test. No approval is presumed.

@@ -1,0 +1,20 @@
+Achado Opus 5.5 5 — contrato de resgate de convite — revalidação 2026-10-22
+
+Cobertura integrada adicionada após ressalva do primeiro review independente:
+- `invitation-redemption.test.ts` agora importa o `withTransaction` real e substitui somente `getPostgresPool` por pool/cliente simulado em memória.
+- Para SQLSTATE `22023`, `23505` e `42501`, a chamada do repositório atravessa a transação real, converte para `bad_request`, `conflict` e `unauthorized`, respectivamente, executa `ROLLBACK`, libera o cliente uma vez e não expõe mensagem privada do driver.
+- Caminho positivo verifica `BEGIN`, identidade transacional via `set_config`, digest normalizado parametrizado, RPC, `COMMIT` e liberação do cliente.
+- Testes da rota mantêm asserções de status/texto estáveis para os seis códigos e não exposição do hash.
+
+Validações finais:
+- Vitest focado: 20/20 em 2 arquivos (11 da rota, 9 do repositório/transação real simulada).
+- `npx tsc --noEmit`: passou.
+- ESLint focado com `--max-warnings=0`: passou.
+- Prettier `--check` nos quatro arquivos TS envolvidos: passou.
+- `git diff --check`: exit 0; Git emitiu apenas avisos informativos LF/CRLF preexistentes.
+
+Limite da prova: não foi aberto PostgreSQL nem Docker; pool e cliente são simulados, mas a implementação real de `withTransaction` e o repositório são executados juntos. Nenhuma integração Supabase, migration, schema, RLS, grants ou banco persistente foi tocado.
+
+Revisão independente GPT-6 Luna da correção da ressalva: pendente. Não avançar ao achado 6 antes de `APPROVE`, zero achados e zero ressalvas.
+
+Revisão independente GPT-6 Luna round 2: `APPROVE`, zero achados/ressalvas, limitada ao achado 5 — contrato de resgate e integração com `withTransaction` real. Resposta: `review-opus-f5-independent-20261022-r2.md`. Revisor confirmou conversão SQLSTATE, rollback/liberação, mensagens/status estáveis e sanitização; não executou validações nem acessou serviços/bancos.

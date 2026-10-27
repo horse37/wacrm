@@ -1,0 +1,13 @@
+npm notice run wacrm@0.2.2 test
+npm notice run vitest run src/lib/repositories/invitation-redemption.test.ts src/app/api/invitations/[token]/redeem/route.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  2 passed (2)
+      Tests  20 passed (20)
+   Start at  14:42:56
+   Duration  7.07s (transform 415ms, setup 0ms, import 929ms, tests 248ms, environment 1ms)
+
+
+Exit code: 0

@@ -1,0 +1,4 @@
+Task 20261021-004200-f8b0 — `POST /api/whatsapp/templates/sync`
+Comando: `npx vitest run 'src/app/api/whatsapp/templates/sync/route.test.ts' --maxWorkers=1 --no-file-parallelism`
+Código de saída: 1 (RED esperado antes da migração da rota).
+Resultado: 7 testes; 6 falharam e o caso de sessão sem autenticação passou. As falhas mostraram que o handler legado chegava a `supabase.from(...)` em vez de usar os guards/repositórios PostgreSQL esperados. Nenhum banco nem Meta externo foi acessado; `fetch` estava simulado.

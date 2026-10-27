@@ -1,0 +1,43 @@
+Docker context: desktop-linux
+Command: docker run --pull=never -d --rm --name wacrm-flow-node-db-205722f3b1 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL 16 image; tmpfs database; no ports or named volumes.
+Synthetic accounts, profiles, flows, and nodes only. Generated credentials are not recorded.
+PowerShell AST, fixture forced-RLS, NOBYPASSRLS, and minimum-grant checks passed.
+Disposable PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Command: docker run --pull=never --rm --name wacrm-flow-node-runtime-205722f3b1 --network container:wacrm-flow-node-db-205722f3b1 --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_flow_node_runtime:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=4 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-flow-node-graph-replace-integration.mjs
+Disposable Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Node integration exit code: 1
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+
+Caught error:
+
+AppError: The database operation failed.
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///source/scripts/testing/postgres-flow-node-graph-replace-integration.mjs:133:3 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: AppError: The database operation failed.
+      at toAppError (file:///source/src/lib/db/errors.ts:64:10)
+      at Object.query (file:///source/src/lib/db/postgres-client.ts:56:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async file:///source/src/lib/repositories/flow-node-graph-replace.ts:151:22
+      at async withTransaction (file:///source/src/lib/db/postgres-client.ts:63:18)
+      at async Object.replaceForFlow (file:///source/src/lib/repositories/flow-node-graph-replace.ts:144:20)
+      at async waitForActual (node:assert:644:5)
+      at async Function.rejects (node:assert:767:25)
+      at async file:///source/scripts/testing/postgres-flow-node-graph-replace-integration.mjs:133:3 {
+    code: 'db_error'
+  },
+  expected: [Function (anonymous)],
+  operator: 'rejects',
+  diff: 'simple'
+}
+
+Node.js v22.23.3
+Validation failure: Flow-node graph PostgreSQL integration failed with exit 1.
+Cleanup: no residual task resources
+Overall result: FAILURE

@@ -1,0 +1,1 @@
+PASS — ESLint direcionado nos handlers, testes e repositório de edição com --max-warnings=0; zero erros e zero avisos.

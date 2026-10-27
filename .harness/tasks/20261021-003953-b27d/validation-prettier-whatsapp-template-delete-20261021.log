@@ -1,0 +1,3 @@
+Resultado: PASS para imports, helper de erro e handler DELETE adicionados, verificados por faixa; os dois arquivos de teste passaram por inteiro.
+Limite: o arquivo completo da rota já não passava Prettier em `HEAD`; a formatação completa alteraria trechos GET/PATCH fora do escopo, que foram preservados.
+Exit code: 0 para as verificações escopadas.

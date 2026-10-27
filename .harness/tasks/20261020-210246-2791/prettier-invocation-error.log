@@ -1,0 +1,498 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/app/api/whatsapp/config/route.ts --range-start=15893 --range-end=import { NextResponse } from 'next/server'
+npm notice run import { createClient } from '@/lib/supabase/server'
+npm notice run import { createClient as createAdminClient } from '@supabase/supabase-js'
+npm notice run import {
+npm notice run   registerPhoneNumber,
+npm notice run   subscribeWabaToApp,
+npm notice run   verifyPhoneNumber,
+npm notice run } from '@/lib/whatsapp/meta-api'
+npm notice run import { encrypt, decrypt } from '@/lib/whatsapp/encryption'
+npm notice run import { toAppError } from '@/lib/db/errors'
+npm notice run import { createPostgresWhatsAppConfigRepository } from '@/lib/repositories/whatsapp-config'
+npm notice run
+npm notice run /**
+npm notice run  * Resolve the caller's account_id for the existing Supabase-backed
+npm notice run  * POST and DELETE handlers. Keep this separate from GET, which uses
+npm notice run  * the PostgreSQL account guard and config repository.
+npm notice run  *
+npm notice run  * Returns null if the user has no profile or no account; callers
+npm notice run  * should treat that the same as "not connected".
+npm notice run  */
+npm notice run async function resolveAccountId(
+npm notice run   supabase: Awaited<ReturnType<typeof createClient>>,
+npm notice run   userId: string,
+npm notice run ): Promise<string | null> {
+npm notice run   const { data, error } = await supabase
+npm notice run     .from('profiles')
+npm notice run     .select('account_id')
+npm notice run     .eq('user_id', userId)
+npm notice run     .maybeSingle()
+npm notice run   if (error || !data?.account_id) return null
+npm notice run   return data.account_id as string
+npm notice run }
+npm notice run
+npm notice run // Lazy-initialised service-role client. We need it to detect a
+npm notice run // phone_number_id already claimed by a *different* user — under RLS,
+npm notice run // the user's own session can't see other users' rows, so the conflict
+npm notice run // would be invisible without the service role.
+npm notice run // eslint-disable-next-line @typescript-eslint/no-explicit-any
+npm notice run let _adminClient: any = null
+npm notice run function supabaseAdmin() {
+npm notice run   if (!_adminClient) {
+npm notice run     _adminClient = createAdminClient(
+npm notice run       process.env.NEXT_PUBLIC_SUPABASE_URL!,
+npm notice run       process.env.SUPABASE_SERVICE_ROLE_KEY!
+npm notice run     )
+npm notice run   }
+npm notice run   return _adminClient
+npm notice run }
+npm notice run
+npm notice run /**
+npm notice run  * GET /api/whatsapp/config
+npm notice run  *
+npm notice run  * Used by the "Test API Connection" button and by the page to check
+npm notice run  * whether the saved config is healthy. Returns 200 in all non-auth cases
+npm notice run  * so the UI can render an appropriate message rather than show a 500.
+npm notice run  *
+npm notice run  * Response shape:
+npm notice run  *   { connected: true,  phone_info: {...} }
+npm notice run  *   { connected: false, reason: 'no_config',        message: '...' }
+npm notice run  *   { connected: false, reason: 'token_corrupted',  message: '...', needs_reset: true }
+npm notice run  *   { connected: false, reason: 'meta_api_error',   message: '...' }
+npm notice run  */
+npm notice run export async function GET() {
+npm notice run   try {
+npm notice run     const supabase = await createClient();
+npm notice run
+npm notice run     const {
+npm notice run       data: { user },
+npm notice run       error: authError,
+npm notice run     } = await supabase.auth.getUser();
+npm notice run
+npm notice run     if (authError || !user) {
+npm notice run       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+npm notice run     }
+npm notice run
+npm notice run     const repository = createPostgresWhatsAppConfigRepository(async () => ({
+npm notice run       userId: user.id,
+npm notice run     }));
+npm notice run     let config: Awaited<ReturnType<typeof repository.getConnectionConfig>>;
+npm notice run     try {
+npm notice run       config = await repository.getConnectionConfig();
+npm notice run     } catch (error) {
+npm notice run       const appError = toAppError(error);
+npm notice run       if (appError.code === 'forbidden') {
+npm notice run         return NextResponse.json(
+npm notice run           {
+npm notice run             connected: false,
+npm notice run             reason: 'no_account',
+npm notice run             message: 'Your profile is not linked to an account.',
+npm notice run           },
+npm notice run           { status: 200 }
+npm notice run         );
+npm notice run       }
+npm notice run       if (appError.code === 'db_error' || appError.code === 'conflict') {
+npm notice run         console.error('Error fetching whatsapp_config:', appError.message);
+npm notice run         return NextResponse.json(
+npm notice run           {
+npm notice run             connected: false,
+npm notice run             reason: 'db_error',
+npm notice run             message: 'Failed to fetch configuration',
+npm notice run           },
+npm notice run           { status: 200 }
+npm notice run         );
+npm notice run       }
+npm notice run       throw error;
+npm notice run     }
+npm notice run
+npm notice run     if (!config) {
+npm notice run       return NextResponse.json(
+npm notice run         {
+npm notice run           connected: false,
+npm notice run           reason: 'no_config',
+npm notice run           message:
+npm notice run             'No WhatsApp configuration saved yet. Fill in the form and click Save Configuration.',
+npm notice run         },
+npm notice run         { status: 200 }
+npm notice run       );
+npm notice run     }
+npm notice run
+npm notice run     // Try to decrypt the stored token with the current ENCRYPTION_KEY.
+npm notice run     // If this fails, the key changed (or was never consistent across envs).
+npm notice run     let accessToken: string;
+npm notice run     try {
+npm notice run       accessToken = decrypt(config.encryptedAccessToken);
+npm notice run     } catch (err) {
+npm notice run       console.error('[whatsapp/config GET] Token decryption failed:', err);
+npm notice run       return NextResponse.json(
+npm notice run         {
+npm notice run           connected: false,
+npm notice run           reason: 'token_corrupted',
+npm notice run           needs_reset: true,
+npm notice run           message:
+npm notice run             'The stored access token cannot be decrypted with the current ENCRYPTION_KEY. This usually means the key changed, or it differs between environments (local vs Hostinger vs Vercel). Click "Reset Configuration" below, then re-save.',
+npm notice run         },
+npm notice run         { status: 200 }
+npm notice run       );
+npm notice run     }
+npm notice run
+npm notice run     // Validate credentials against Meta
+npm notice run     try {
+npm notice run       const phoneInfo = await verifyPhoneNumber({
+npm notice run         phoneNumberId: config.phoneNumberId,
+npm notice run         accessToken,
+npm notice run       });
+npm notice run       return NextResponse.json({ connected: true, phone_info: phoneInfo });
+npm notice run     } catch (err) {
+npm notice run       const message =
+npm notice run         err instanceof Error ? err.message : 'Unknown Meta API error';
+npm notice run       console.error(
+npm notice run         '[whatsapp/config GET] Meta API verification failed:',
+npm notice run         message
+npm notice run       );
+npm notice run       return NextResponse.json(
+npm notice run         {
+npm notice run           connected: false,
+npm notice run           reason: 'meta_api_error',
+npm notice run           message: `Meta API rejected the credentials: ${message}`,
+npm notice run         },
+npm notice run         { status: 200 }
+npm notice run       );
+npm notice run     }
+npm notice run   } catch (error) {
+npm notice run     console.error('Error in WhatsApp config GET:', error);
+npm notice run     return NextResponse.json(
+npm notice run       { connected: false, reason: 'unknown', message: 'Internal server error' },
+npm notice run       { status: 500 }
+npm notice run     );
+npm notice run   }
+npm notice run }
+npm notice run
+npm notice run /**
+npm notice run  * POST /api/whatsapp/config
+npm notice run  *
+npm notice run  * Saves or updates the WhatsApp config for the authenticated user.
+npm notice run  * Verifies credentials with Meta first, then encrypts and stores.
+npm notice run  */
+npm notice run export async function POST(request: Request) {
+npm notice run   try {
+npm notice run     const supabase = await createClient()
+npm notice run
+npm notice run     const {
+npm notice run       data: { user },
+npm notice run       error: authError,
+npm notice run     } = await supabase.auth.getUser()
+npm notice run
+npm notice run     if (authError || !user) {
+npm notice run       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+npm notice run     }
+npm notice run
+npm notice run     const accountId = await resolveAccountId(supabase, user.id)
+npm notice run     if (!accountId) {
+npm notice run       return NextResponse.json(
+npm notice run         { error: 'Your profile is not linked to an account.' },
+npm notice run         { status: 403 },
+npm notice run       )
+npm notice run     }
+npm notice run
+npm notice run     const body = await request.json()
+npm notice run     const { phone_number_id, waba_id, access_token, verify_token, pin } = body
+npm notice run
+npm notice run     if (!access_token || !phone_number_id) {
+npm notice run       return NextResponse.json(
+npm notice run         { error: 'access_token and phone_number_id are required' },
+npm notice run         { status: 400 }
+npm notice run       )
+npm notice run     }
+npm notice run
+npm notice run     if (pin !== undefined && pin !== null && pin !== '') {
+npm notice run       if (typeof pin !== 'string' || !/^\d{6}$/.test(pin)) {
+npm notice run         return NextResponse.json(
+npm notice run           { error: 'PIN must be exactly 6 digits.' },
+npm notice run           { status: 400 }
+npm notice run         )
+npm notice run       }
+npm notice run     }
+npm notice run
+npm notice run     // Reject if another account has already claimed this phone_number_id.
+npm notice run     // wacrm is single-tenant-per-WhatsApp-number — letting two accounts
+npm notice run     // bind the same number causes the webhook's `.single()` lookup to
+npm notice run     // throw PGRST116 ("multiple rows"), silently dropping every
+npm notice run     // inbound message. See issue #136. Post-multi-user we key on
+npm notice run     // account_id (not user_id) since teammates inside the same account
+npm notice run     // all share one config; the conflict is between accounts.
+npm notice run     const { data: claimed, error: claimedError } = await supabaseAdmin()
+npm notice run       .from('whatsapp_config')
+npm notice run       .select('account_id')
+npm notice run       .eq('phone_number_id', phone_number_id)
+npm notice run       .neq('account_id', accountId)
+npm notice run       .maybeSingle()
+npm notice run
+npm notice run     if (claimedError) {
+npm notice run       console.error('Error checking phone_number_id ownership:', claimedError)
+npm notice run       return NextResponse.json(
+npm notice run         { error: 'Failed to validate configuration' },
+npm notice run         { status: 500 }
+npm notice run       )
+npm notice run     }
+npm notice run
+npm notice run     if (claimed) {
+npm notice run       return NextResponse.json(
+npm notice run         {
+npm notice run           error:
+npm notice run             'This WhatsApp phone number is already linked to another account on this instance. Each phone number can only be connected to one wacrm user.',
+npm notice run         },
+npm notice run         { status: 409 }
+npm notice run       )
+npm notice run     }
+npm notice run
+npm notice run     // Verify credentials with Meta BEFORE saving
+npm notice run     let phoneInfo
+npm notice run     try {
+npm notice run       phoneInfo = await verifyPhoneNumber({
+npm notice run         phoneNumberId: phone_number_id,
+npm notice run         accessToken: access_token,
+npm notice run       })
+npm notice run     } catch (err) {
+npm notice run       const message = err instanceof Error ? err.message : 'Unknown Meta API error'
+npm notice run       console.error('Meta API verification failed during save:', message)
+npm notice run       return NextResponse.json(
+npm notice run         { error: `Meta API error: ${message}` },
+npm notice run         { status: 400 }
+npm notice run       )
+npm notice run     }
+npm notice run
+npm notice run     // Encrypt sensitive tokens before storing
+npm notice run     let encryptedAccessToken: string
+npm notice run     let encryptedVerifyToken: string | null
+npm notice run     try {
+npm notice run       encryptedAccessToken = encrypt(access_token)
+npm notice run       encryptedVerifyToken = verify_token ? encrypt(verify_token) : null
+npm notice run     } catch (err) {
+npm notice run       const message = err instanceof Error ? err.message : 'Unknown encryption error'
+npm notice run       console.error('Encryption failed:', message)
+npm notice run       return NextResponse.json(
+npm notice run         {
+npm notice run           error:
+npm notice run             'Failed to encrypt token. Check that ENCRYPTION_KEY is a valid 64-character hex string in your environment variables.',
+npm notice run         },
+npm notice run         { status: 500 }
+npm notice run       )
+npm notice run     }
+npm notice run
+npm notice run     // Look up any pre-existing row for this account so we know whether
+npm notice run     // this number is already registered with Meta — if so we can skip
+npm notice run     // /register when the user didn't provide a PIN this time around.
+npm notice run     const { data: existing } = await supabase
+npm notice run       .from('whatsapp_config')
+npm notice run       .select('id, registered_at, phone_number_id')
+npm notice run       .eq('account_id', accountId)
+npm notice run       .maybeSingle()
+npm notice run
+npm notice run     const sameNumber =
+npm notice run       existing?.phone_number_id === phone_number_id &&
+npm notice run       existing?.registered_at != null
+npm notice run
+npm notice run     // Step 1: register the phone number for inbound webhooks.
+npm notice run     //
+npm notice run     // Attempted on first save AND whenever the user supplies a fresh
+npm notice run     // PIN (e.g. they rotated the 2FA PIN in Meta Manager). Skipped
+npm notice run     // when the same number is already registered and no PIN was
+npm notice run     // supplied — re-registering an already-active number with a
+npm notice run     // stale PIN would actually fail and undo the active subscription.
+npm notice run     let registeredAt: string | null = existing?.registered_at ?? null
+npm notice run     let registrationError: string | null = null
+npm notice run     // True when registration was deliberately skipped because no PIN
+npm notice run     // was supplied (see below). Distinct from registrationError — this
+npm notice run     // is not a failure, just an incomplete-but-valid save.
+npm notice run     let registrationSkipped = false
+npm notice run
+npm notice run     const needsRegistration = !sameNumber || (typeof pin === 'string' && pin.length > 0)
+npm notice run     if (needsRegistration) {
+npm notice run       if (!pin) {
+npm notice run         // No PIN provided. Meta TEST numbers (Developer Console) are
+npm notice run         // pre-registered by Meta and expose no two-step verification
+npm notice run         // PIN to set, so requiring one made them impossible to connect
+npm notice run         // (issue #242). The /register + PIN step only matters for
+npm notice run         // production numbers under a shared WABA (issue #136), so treat
+npm notice run         // it as best-effort: skip it, save the (already Meta-verified)
+npm notice run         // credentials as connected, and leave registered_at null. The
+npm notice run         // UI surfaces a separate "Not registered" banner with a path to
+npm notice run         // add a PIN later for users who do need inbound webhook routing.
+npm notice run         registrationSkipped = true
+npm notice run       } else {
+npm notice run         try {
+npm notice run           await registerPhoneNumber({
+npm notice run             phoneNumberId: phone_number_id,
+npm notice run             accessToken: access_token,
+npm notice run             pin,
+npm notice run           })
+npm notice run           registeredAt = new Date().toISOString()
+npm notice run         } catch (err) {
+npm notice run           registrationError =
+npm notice run             err instanceof Error ? err.message : 'Unknown Meta API error'
+npm notice run           console.error('Phone number /register failed:', registrationError)
+npm notice run           // We deliberately fall through and still save the row so the
+npm notice run           // user can retry without re-entering everything. The UI
+npm notice run           // surfaces `last_registration_error` so they see WHY it's
+npm notice run           // not actually live yet.
+npm notice run         }
+npm notice run       }
+npm notice run     }
+npm notice run
+npm notice run     // Step 2: subscribe the WABA to this app. Idempotent on Meta's
+npm notice run     // side, so we call on every save and persist the timestamp.
+npm notice run     // Skipped only when there's no waba_id (legacy rows from before
+npm notice run     // we required it).
+npm notice run     let subscribedAppsAt: string | null = null
+npm notice run     if (waba_id) {
+npm notice run       try {
+npm notice run         await subscribeWabaToApp({
+npm notice run           wabaId: waba_id,
+npm notice run           accessToken: access_token,
+npm notice run         })
+npm notice run         subscribedAppsAt = new Date().toISOString()
+npm notice run       } catch (err) {
+npm notice run         const message = err instanceof Error ? err.message : String(err)
+npm notice run         console.warn('WABA subscribed_apps failed (non-fatal):', message)
+npm notice run         // Subscription failures are rare once the App has the right
+npm notice run         // permissions; we don't block save on them — the diagnostic
+npm notice run         // endpoint surfaces this state too.
+npm notice run       }
+npm notice run     }
+npm notice run
+npm notice run     // Persist everything in one shot. If /register failed we still
+npm notice run     // store the credentials and the error so the UI can guide the
+npm notice run     // user through a retry.
+npm notice run     const baseRow = {
+npm notice run       phone_number_id,
+npm notice run       waba_id: waba_id || null,
+npm notice run       access_token: encryptedAccessToken,
+npm notice run       verify_token: encryptedVerifyToken,
+npm notice run       status: registrationError ? 'disconnected' : 'connected',
+npm notice run       connected_at: registrationError ? null : new Date().toISOString(),
+npm notice run       registered_at: registrationError ? null : registeredAt,
+npm notice run       subscribed_apps_at: subscribedAppsAt ?? null,
+npm notice run       last_registration_error: registrationError,
+npm notice run       updated_at: new Date().toISOString(),
+npm notice run     }
+npm notice run
+npm notice run     if (existing) {
+npm notice run       const { error: updateError } = await supabase
+npm notice run         .from('whatsapp_config')
+npm notice run         .update(baseRow)
+npm notice run         .eq('account_id', accountId)
+npm notice run
+npm notice run       if (updateError) {
+npm notice run         console.error('Error updating whatsapp_config:', updateError)
+npm notice run         return NextResponse.json(
+npm notice run           { error: 'Failed to update configuration' },
+npm notice run           { status: 500 }
+npm notice run         )
+npm notice run       }
+npm notice run     } else {
+npm notice run       // Insert with both columns: `account_id` is the tenancy key
+npm notice run       // (NOT NULL post-017, UNIQUE so duplicates trip the constraint
+npm notice run       // up-front), `user_id` is the audit column identifying which
+npm notice run       // member of the account saved the config.
+npm notice run       const { error: insertError } = await supabase
+npm notice run         .from('whatsapp_config')
+npm notice run         .insert({
+npm notice run           account_id: accountId,
+npm notice run           user_id: user.id,
+npm notice run           ...baseRow,
+npm notice run         })
+npm notice run
+npm notice run       if (insertError) {
+npm notice run         console.error('Error inserting whatsapp_config:', insertError)
+npm notice run         return NextResponse.json(
+npm notice run           { error: 'Failed to save configuration' },
+npm notice run           { status: 500 }
+npm notice run         )
+npm notice run       }
+npm notice run     }
+npm notice run
+npm notice run     if (registrationError) {
+npm notice run       // Save succeeded but the number isn't actually live. Return
+npm notice run       // 200 with a structured error so the UI can show the specific
+npm notice run       // remediation step instead of a generic toast.
+npm notice run       return NextResponse.json({
+npm notice run         success: false,
+npm notice run         saved: true,
+npm notice run         registered: false,
+npm notice run         registration_error: registrationError,
+npm notice run         phone_info: phoneInfo,
+npm notice run       })
+npm notice run     }
+npm notice run
+npm notice run     return NextResponse.json({
+npm notice run       success: true,
+npm notice run       saved: true,
+npm notice run       registered: registeredAt != null,
+npm notice run       // Credentials are valid and saved, but inbound webhook
+npm notice run       // registration was skipped because no PIN was supplied (e.g. a
+npm notice run       // Meta test number). The UI shows the "Not registered" banner
+npm notice run       // rather than claiming the number is fully live.
+npm notice run       registration_skipped: registrationSkipped,
+npm notice run       phone_info: phoneInfo,
+npm notice run     })
+npm notice run   } catch (error) {
+npm notice run     console.error('Error in WhatsApp config POST:', error)
+npm notice run     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+npm notice run   }
+npm notice run }
+npm notice run
+npm notice run /**
+npm notice run  * DELETE /api/whatsapp/config
+npm notice run  *
+npm notice run  * Removes the authenticated user's WhatsApp configuration row.
+npm notice run  * Used by the "Reset Configuration" button to recover from a corrupted
+npm notice run  * encrypted token (mismatched ENCRYPTION_KEY across environments).
+npm notice run  */
+npm notice run export async function DELETE() {
+npm notice run   try {
+npm notice run     const supabase = await createClient();
+npm notice run
+npm notice run     const {
+npm notice run       data: { user },
+npm notice run       error: authError,
+npm notice run     } = await supabase.auth.getUser();
+npm notice run
+npm notice run     if (authError || !user) {
+npm notice run       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+npm notice run     }
+npm notice run
+npm notice run     const repository = createPostgresWhatsAppConfigRepository(async () => ({
+npm notice run       userId: user.id,
+npm notice run     }));
+npm notice run
+npm notice run     try {
+npm notice run       await repository.deleteConnectionConfig();
+npm notice run       return NextResponse.json({ success: true });
+npm notice run     } catch (error) {
+npm notice run       const appError = toAppError(error);
+npm notice run       if (appError.code === 'unauthorized') {
+npm notice run         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+npm notice run       }
+npm notice run       if (appError.code === 'forbidden' || appError.sqlState === '42501') {
+npm notice run         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+npm notice run       }
+npm notice run
+npm notice run       console.error('Error deleting whatsapp_config:', appError.message);
+npm notice run       return NextResponse.json(
+npm notice run         { error: 'Failed to delete configuration' },
+npm notice run         { status: 500 }
+npm notice run       );
+npm notice run     }
+npm notice run   } catch (error) {
+npm notice run     console.error('Error in WhatsApp config DELETE:', error);
+npm notice run     return NextResponse.json(
+npm notice run       { error: 'Internal server error' },
+npm notice run       { status: 500 }
+npm notice run     );
+npm notice run   }
+npm notice run }
+npm notice run .Length
+Linha de comando muito longa.
+Exit code: 1

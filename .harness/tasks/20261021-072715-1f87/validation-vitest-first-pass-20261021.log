@@ -1,0 +1,12 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/zap-lead-registration-read.test.ts src/app/api/zap-lead/registration/route.get.test.ts --reporter=dot
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+········
+
+ Test Files  2 passed (2)
+      Tests  8 passed (8)
+   Start at  07:37:43
+   Duration  3.09s (transform 234ms, setup 0ms, import 520ms, tests 50ms, environment 1ms)
+

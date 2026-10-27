@@ -1,0 +1,18 @@
+Finding: P2-4 — mixed Vitest output could be labelled as passed.
+
+Remediation:
+- Added an explicit validation-result classifier shared by the dashboard server.
+- Vitest FAIL file lines and failed Test Files/Tests summaries now take precedence over passing summaries and exit code.
+- Removed generic incidental `passed` text as a success signal.
+- ANSI color sequences are stripped before classification.
+- Added regression coverage for mixed output, ANSI failures, incidental `passed`, explicit success, and failure precedence.
+
+Validation:
+- `node --test .harness/dashboard-validation-result.test.mjs` — passed 5/5.
+- `node --check .harness/dashboard-validation-result.mjs` — passed.
+- `node --check .harness/dashboard-server.mjs` — passed.
+- `npx prettier --check .harness/dashboard-server.mjs .harness/dashboard-validation-result.mjs .harness/dashboard-validation-result.test.mjs` — passed.
+- `git diff --check` — passed; existing CRLF conversion warnings only.
+- An initial Prettier check failed before formatting; `prettier --write` corrected both files and the final check passed.
+
+No database, Docker, Supabase, VPS, production, real data/credentials, commit, push, or deploy used.

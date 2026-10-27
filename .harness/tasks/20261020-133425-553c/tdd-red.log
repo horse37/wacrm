@@ -1,0 +1,120 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/flows/[id]/route.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/app/api/flows/[id]/route.test.ts (5 tests | 4 failed) 33ms
+     × loads editor DTO from PostgreSQL using verified session identity 15ms
+     × maps repository not_found errors to safe HTTP status and message 3ms
+     × maps repository db_error errors to safe HTTP status and message 1ms
+     × does not expose raw repository errors 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > loads editor DTO from PostgreSQL using verified session identity
+AssertionError: expected { …(2) } to deeply equal { flow: { …(7) }, nodes: [ { …(5) } ] }
+
+- Expected
++ Received
+
+  {
+    "flow": {
+-     "description": null,
+-     "entry_node_id": "start",
+      "id": "11111111-1111-4111-8111-111111111111",
+-     "name": "Synthetic flow",
+-     "status": "draft",
+-     "trigger_config": {
+-       "keywords": [
+-         "synthetic",
+-       ],
+    },
+-     "trigger_type": "keyword",
+-   },
+-   "nodes": [
+-     {
+-       "config": {
+-         "next_node_key": "end",
+-       },
+-       "node_key": "start",
+-       "node_type": "start",
+-       "position_x": 0,
+-       "position_y": 0,
+-     },
+-   ],
++   "nodes": [],
+  }
+
+ ❯ src/app/api/flows/[id]/route.test.ts:98:35
+     96|
+     97|     expect(response.status).toBe(200);
+     98|     expect(await response.json()).toEqual(editorData);
+       |                                   ^
+     99|     expect(mocks.createFlowEditorLoadRepository).toHaveBeenCalledTimes…
+    100|     expect(mocks.createFlowEditorLoadRepository).toHaveBeenCalledWith(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > maps repository not_found errors to safe HTTP status and message
+AssertionError: expected 200 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 200
+
+ ❯ src/app/api/flows/[id]/route.test.ts:121:31
+    119|       const response = await getFlow();
+    120|
+    121|       expect(response.status).toBe(status);
+       |                               ^
+    122|       expect(await response.json()).toEqual({ error: message });
+    123|       expect(mocks.authenticatedFrom).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > maps repository db_error errors to safe HTTP status and message
+AssertionError: expected 200 to be 500 // Object.is equality
+
+- Expected
++ Received
+
+- 500
++ 200
+
+ ❯ src/app/api/flows/[id]/route.test.ts:121:31
+    119|       const response = await getFlow();
+    120|
+    121|       expect(response.status).toBe(status);
+       |                               ^
+    122|       expect(await response.json()).toEqual({ error: message });
+    123|       expect(mocks.authenticatedFrom).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/app/api/flows/[id]/route.test.ts > GET /api/flows/[id] > does not expose raw repository errors
+AssertionError: expected 200 to be 500 // Object.is equality
+
+- Expected
++ Received
+
+- 500
++ 200
+
+ ❯ src/app/api/flows/[id]/route.test.ts:135:29
+    133|     const response = await getFlow();
+    134|
+    135|     expect(response.status).toBe(500);
+       |                             ^
+    136|     expect(await response.json()).toEqual({
+    137|       error: 'The database operation failed.',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 1 passed (5)
+   Start at  13:36:27
+   Duration  1.62s (transform 135ms, setup 0ms, import 287ms, tests 33ms, environment 0ms)
+

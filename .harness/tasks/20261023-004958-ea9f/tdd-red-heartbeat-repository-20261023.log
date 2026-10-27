@@ -1,0 +1,31 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/zap-lead/events.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/zap-lead/events.test.ts (9 tests | 1 failed) 42ms
+     × delegates all heartbeat writes without using Supabase RPC 13ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/zap-lead/events.test.ts > Zap Lead event receipt persistence > delegates all heartbeat writes without using Supabase RPC
+AssertionError: promise rejected "Error: Could not persist Zap Lead health …" instead of resolving
+ ❯ src/lib/zap-lead/events.test.ts:149:5
+    147|     await expect(
+    148|       recordZapLeadHealthSuccess('account-a', sseReceipt.keyId, checke…
+    149|     ).resolves.toBe(false);
+       |     ^
+    150|     await expect(
+    151|       recordZapLeadHealthFailure(
+
+Caused by: Error: Could not persist Zap Lead health success
+ ❯ Module.recordZapLeadHealthSuccess src/lib/zap-lead/events.ts:55:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 passed (9)
+   Start at  00:56:50
+   Duration  2.03s (transform 180ms, setup 0ms, import 260ms, tests 42ms, environment 0ms)
+

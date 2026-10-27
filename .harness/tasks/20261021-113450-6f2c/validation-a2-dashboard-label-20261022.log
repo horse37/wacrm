@@ -1,0 +1,217 @@
+Validation: dashboard review-progress + dashboard HTTP contract
+TAP version 13
+# Subtest: uses named review rounds instead of file modification time
+ok 1 - uses named review rounds instead of file modification time
+  ---
+  duration_ms: 14.3857
+  type: 'test'
+  ...
+# Subtest: does not treat the referenced Opus round as a newer Luna review round
+ok 2 - does not treat the referenced Opus round as a newer Luna review round
+  ---
+  duration_ms: 3.8748
+  type: 'test'
+  ...
+# Subtest: keeps every finding scope visible when one scope remains unresolved
+ok 3 - keeps every finding scope visible when one scope remains unresolved
+  ---
+  duration_ms: 0.8399
+  type: 'test'
+  ...
+# Subtest: associates a multi-scope review with every finding it declares
+ok 4 - associates a multi-scope review with every finding it declares
+  ---
+  duration_ms: 0.696
+  type: 'test'
+  ...
+# Subtest: does not choose between conflicting reviews with the same recorded order
+ok 5 - does not choose between conflicting reviews with the same recorded order
+  ---
+  duration_ms: 0.6464
+  type: 'test'
+  ...
+# Subtest: accepts explicit final approval that mentions an earlier remediation
+ok 6 - accepts explicit final approval that mentions an earlier remediation
+  ---
+  duration_ms: 0.4147
+  type: 'test'
+  ...
+# Subtest: rejects conflicting explicit final verdicts
+ok 7 - rejects conflicting explicit final verdicts
+  ---
+  duration_ms: 2.5755
+  type: 'test'
+  ...
+# Subtest: accepts Portuguese reviewer handoff with explicit empty findings and caveats
+ok 8 - accepts Portuguese reviewer handoff with explicit empty findings and caveats
+  ---
+  duration_ms: 0.5294
+  type: 'test'
+  ...
+# Subtest: accepts explicit zero counts stated beside the approval verdict
+ok 9 - accepts explicit zero counts stated beside the approval verdict
+  ---
+  duration_ms: 7.2566
+  type: 'test'
+  ...
+# Subtest: parses verdict and count values wrapped in inline code in review fields
+ok 10 - parses verdict and count values wrapped in inline code in review fields
+  ---
+  duration_ms: 1.0071
+  type: 'test'
+  ...
+# Subtest: ignores failure examples mentioned in review body after final approval
+ok 11 - ignores failure examples mentioned in review body after final approval
+  ---
+  duration_ms: 0.7181
+  type: 'test'
+  ...
+# Subtest: ignores result lines inside plain-text examples and fenced code
+ok 12 - ignores result lines inside plain-text examples and fenced code
+  ---
+  duration_ms: 0.5871
+  type: 'test'
+  ...
+# Subtest: keeps a real Result failure conflicting with an approval
+ok 13 - keeps a real Result failure conflicting with an approval
+  ---
+  duration_ms: 0.3198
+  type: 'test'
+  ...
+# Subtest: ignores finding and caveat counts inside examples and code
+ok 14 - ignores finding and caveat counts inside examples and code
+  ---
+  duration_ms: 0.6869
+  type: 'test'
+  ...
+# Subtest: retains a positive finding count after an example boundary
+ok 15 - retains a positive finding count after an example boundary
+  ---
+  duration_ms: 0.5003
+  type: 'test'
+  ...
+# Subtest: does not infer zero counts from qualified or contradictory inline claims
+ok 16 - does not infer zero counts from qualified or contradictory inline claims
+  ---
+  duration_ms: 0.8076
+  type: 'test'
+  ...
+# Subtest: groups review rounds by referenced Opus finding and reviewer round
+ok 17 - groups review rounds by referenced Opus finding and reviewer round
+  ---
+  duration_ms: 0.8649
+  type: 'test'
+  ...
+# Subtest: does not treat code-only caveats as zero caveats
+ok 18 - does not treat code-only caveats as zero caveats
+  ---
+  duration_ms: 0.9394
+  type: 'test'
+  ...
+# Subtest: does not accept approval without explicit zero findings and caveats
+ok 19 - does not accept approval without explicit zero findings and caveats
+  ---
+  duration_ms: 0.3009
+  type: 'test'
+  ...
+# Subtest: does not let historical zero findings override a positive current count
+ok 20 - does not let historical zero findings override a positive current count
+  ---
+  duration_ms: 0.6682
+  type: 'test'
+  ...
+# Subtest: does not treat zero critical findings as zero findings overall
+ok 21 - does not treat zero critical findings as zero findings overall
+  ---
+  duration_ms: 0.4572
+  type: 'test'
+  ...
+# Subtest: finds root reviews and handoff reviewer record, but not other handoff documents
+ok 22 - finds root reviews and handoff reviewer record, but not other handoff documents
+  ---
+  duration_ms: 44.3892
+  type: 'test'
+  ...
+# Subtest: uses all roadmap tasks as denominator and reports review coverage separately
+ok 23 - uses all roadmap tasks as denominator and reports review coverage separately
+  ---
+  duration_ms: 3.1574
+  type: 'test'
+  ...
+# Subtest: recognizes H-DATA-003 roadmap with Markdown backticks
+ok 24 - recognizes H-DATA-003 roadmap with Markdown backticks
+  ---
+  duration_ms: 0.4498
+  type: 'test'
+  ...
+# Subtest: reads bold task status and labels complete as concluded
+ok 25 - reads bold task status and labels complete as concluded
+  ---
+  duration_ms: 0.6938
+  type: 'test'
+  ...
+# Subtest: ignores approval-boundary references in a review scope
+ok 26 - ignores approval-boundary references in a review scope
+  ---
+  duration_ms: 0.8871
+  type: 'test'
+  ...
+# Subtest: falls back to the task group when Scope only denies broader approval
+ok 27 - falls back to the task group when Scope only denies broader approval
+  ---
+  duration_ms: 0.6017
+  type: 'test'
+  ...
+# Subtest: recognizes explicit zero counts in qualified caveat fields
+ok 28 - recognizes explicit zero counts in qualified caveat fields
+  ---
+  duration_ms: 0.2922
+  type: 'test'
+  ...
+# Subtest: groups free-text scopes by stable review name and ignores roadmap exclusions
+ok 29 - groups free-text scopes by stable review name and ignores roadmap exclusions
+  ---
+  duration_ms: 0.6935
+  type: 'test'
+  ...
+# Subtest: groups A3 rounds under their finding label instead of changing prose scope
+ok 30 - groups A3 rounds under their finding label instead of changing prose scope
+  ---
+  duration_ms: 1.641
+  type: 'test'
+  ...
+# Subtest: explicit Scope IDs override conflicting finding IDs in filenames
+ok 31 - explicit Scope IDs override conflicting finding IDs in filenames
+  ---
+  duration_ms: 0.8455
+  type: 'test'
+  ...
+# Subtest: parses A1-A5 labels and keeps excluded filename scopes unresolved
+ok 32 - parses A1-A5 labels and keeps excluded filename scopes unresolved
+  ---
+  duration_ms: 1.5181
+  type: 'test'
+  ...
+# Subtest: does not count the provenance index as a reviewer report
+ok 33 - does not count the provenance index as a reviewer report
+  ---
+  duration_ms: 0.8686
+  type: 'test'
+  ...
+# Subtest: dashboard handles page refresh, hostile Host, and refresh failure
+ok 34 - dashboard handles page refresh, hostile Host, and refresh failure
+  ---
+  duration_ms: 11043.9904
+  type: 'test'
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20718.1652
+node test exit: 0
+node check server exit: 0; test exit: 0; Prettier exit: 0; git diff --check exit: 0

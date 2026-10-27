@@ -1,10 +1,9 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { decrypt } from '@/lib/whatsapp/encryption'
-import {
-  getSubscribedApps,
-  verifyPhoneNumber,
-} from '@/lib/whatsapp/meta-api'
+import { NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { toAppError } from '@/lib/db/errors';
+import { createPostgresWhatsAppConfigRepository } from '@/lib/repositories/whatsapp-config';
+import { decrypt } from '@/lib/whatsapp/encryption';
+import { getSubscribedApps, verifyPhoneNumber } from '@/lib/whatsapp/meta-api';
 
 /**
  * GET /api/whatsapp/config/verify-registration
@@ -29,49 +28,51 @@ import {
  * what the UI badges on.
  */
 export async function GET() {
-  const supabase = await createClient()
+  const supabase = await createClient();
   const {
     data: { user },
     error: authError,
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
   if (authError || !user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // whatsapp_config is one-row-per-account post-017. Resolve the
-  // caller's account_id so a teammate who joined an existing account
-  // sees the same registration state as the admin who set it up.
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('account_id')
-    .eq('user_id', user.id)
-    .maybeSingle()
-  const accountId = profile?.account_id as string | undefined
-  if (!accountId) {
-    return NextResponse.json({
-      live: false,
-      checks: { config_exists: false },
-      message: 'Your profile is not linked to an account.',
-    })
+  const repository = createPostgresWhatsAppConfigRepository(async () => ({
+    userId: user.id,
+  }));
+  let config;
+  try {
+    config = await repository.getRegistrationDiagnostics();
+  } catch (error) {
+    const appError = toAppError(error);
+    if (appError.code === 'forbidden') {
+      return NextResponse.json({
+        live: false,
+        checks: { config_exists: false },
+        message: 'Your profile is not linked to an account.',
+      });
+    }
+    console.error('Failed to load WhatsApp registration diagnostics:', {
+      code: appError.code,
+      sqlState: appError.sqlState,
+    });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
-
-  const { data: config } = await supabase
-    .from('whatsapp_config')
-    .select('*')
-    .eq('account_id', accountId)
-    .maybeSingle()
 
   if (!config) {
     return NextResponse.json({
       live: false,
       checks: { config_exists: false },
       message: 'No WhatsApp configuration saved yet.',
-    })
+    });
   }
 
-  let accessToken: string
+  let accessToken: string;
   try {
-    accessToken = decrypt(config.access_token)
+    accessToken = decrypt(config.encryptedAccessToken);
   } catch {
     return NextResponse.json({
       live: false,
@@ -80,77 +81,71 @@ export async function GET() {
         token_decryptable: false,
       },
       message:
-        'Stored access token can\'t be decrypted — likely ENCRYPTION_KEY changed. Re-enter the token to repair.',
-    })
+        "Stored access token can't be decrypted — likely ENCRYPTION_KEY changed. Re-enter the token to repair.",
+    });
   }
 
   const checks: {
-    config_exists: boolean
-    token_decryptable: boolean
-    phone_metadata_ok: boolean
-    waba_subscribed_to_app: boolean | null
-    locally_marked_registered: boolean
+    config_exists: boolean;
+    token_decryptable: boolean;
+    phone_metadata_ok: boolean;
+    waba_subscribed_to_app: boolean | null;
+    locally_marked_registered: boolean;
   } = {
     config_exists: true,
     token_decryptable: true,
     phone_metadata_ok: false,
     waba_subscribed_to_app: null,
-    locally_marked_registered: config.registered_at != null,
-  }
-  const errors: string[] = []
+    locally_marked_registered: config.registeredAt != null,
+  };
+  const errors: string[] = [];
 
-  // 1. Phone metadata
   try {
     await verifyPhoneNumber({
-      phoneNumberId: config.phone_number_id,
+      phoneNumberId: config.phoneNumberId,
       accessToken,
-    })
-    checks.phone_metadata_ok = true
+    });
+    checks.phone_metadata_ok = true;
   } catch (err) {
     errors.push(
-      `Phone metadata check failed: ${err instanceof Error ? err.message : String(err)}`,
-    )
+      `Phone metadata check failed: ${err instanceof Error ? err.message : String(err)}`
+    );
   }
 
-  // 2. WABA subscription — only meaningful if we have a waba_id
-  if (config.waba_id) {
+  if (config.wabaId) {
     try {
       const subs = await getSubscribedApps({
-        wabaId: config.waba_id,
+        wabaId: config.wabaId,
         accessToken,
-      })
-      // Meta returns the apps subscribed to this WABA. If the list
-      // is non-empty, OUR app is in there (the access_token we used
-      // belongs to our app — Meta wouldn't return data for an app
-      // the token can't see). Treat any entry as success.
-      checks.waba_subscribed_to_app = subs.length > 0
+      });
+      checks.waba_subscribed_to_app = subs.length > 0;
       if (!checks.waba_subscribed_to_app) {
         errors.push(
-          'WABA has no subscribed apps. Re-save the configuration to subscribe.',
-        )
+          'WABA has no subscribed apps. Re-save the configuration to subscribe.'
+        );
       }
     } catch (err) {
       errors.push(
-        `WABA subscription check failed: ${err instanceof Error ? err.message : String(err)}`,
-      )
+        `WABA subscription check failed: ${err instanceof Error ? err.message : String(err)}`
+      );
     }
   } else {
     errors.push(
-      'No WABA ID on file — webhooks can\'t be wired without it. Add it in the form and re-save.',
-    )
+      "No WABA ID on file — webhooks can't be wired without it. Add it in the form and re-save."
+    );
   }
 
   const live =
     checks.phone_metadata_ok &&
     (checks.waba_subscribed_to_app ?? false) &&
-    checks.locally_marked_registered
+    checks.locally_marked_registered;
 
   return NextResponse.json({
     live,
     checks,
     errors,
-    last_registration_error: config.last_registration_error ?? null,
-    registered_at: config.registered_at ?? null,
-    subscribed_apps_at: config.subscribed_apps_at ?? null,
-  })
+    last_registration_error: config.lastRegistrationError,
+    registered_at: config.registeredAt,
+    subscribed_apps_at: config.subscribedAppsAt,
+  });
 }

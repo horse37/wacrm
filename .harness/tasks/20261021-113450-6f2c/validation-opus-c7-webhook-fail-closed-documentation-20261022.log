@@ -1,0 +1,18 @@
+# Opus r2 caveat 7 — webhook flag behavior documented
+# Date: 2026-10-22 (America/Sao_Paulo)
+# Scope: documentation-only clarification; no code or runtime configuration changed.
+
+Source inspection: `src/app/api/zap-lead/webhook/route.ts` checks
+`WACRM_ZAP_LEAD_WEBHOOK_POSTGRES_CREDENTIAL_LOOKUP_ENABLED` against the exact
+string `1` before reading request headers. Missing or different values return
+HTTP 503 with `Zap Lead webhook temporarily unavailable`.
+
+`HANDOFF-CONTEXT.md` now documents that default unavailability explicitly and
+states that no silent fallback occurs. Existing focused implementation test
+evidence is `validation-webhook-fail-closed-r2-20261021.log`; this documentation
+change did not rerun application tests.
+
+`git diff --check -- HANDOFF-CONTEXT.md`: PASS, exit 0.
+
+No database, Docker, Supabase, production, external service, real data, or
+credentials were accessed. No commit, push, or deploy.

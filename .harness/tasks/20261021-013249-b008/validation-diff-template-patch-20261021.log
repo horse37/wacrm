@@ -1,0 +1,2 @@
+PASS — git diff --check nos arquivos da fatia; zero whitespace errors. Git emitiu somente avisos locais LF→CRLF em arquivos já alterados.
+PASS — PowerShell AST do runner; zero trailing whitespace nos arquivos novos/atualizados.

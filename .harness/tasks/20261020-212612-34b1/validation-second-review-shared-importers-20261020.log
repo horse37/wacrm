@@ -1,0 +1,741 @@
+Discovered importer test files: 89
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run --reporter=dot --maxWorkers=1 --no-file-parallelism src\app\api\automations\[id]\route.test.ts src\app\api\invitations\[token]\redeem\route.test.ts src\app\api\automations\[id]\logs\route.test.ts src\app\api\account\transfer-ownership\route.test.ts src\app\api\account\route.test.ts src\app\api\flows\[id]\runs\route.test.ts src\app\api\automations\[id]\duplicate\route.test.ts src\app\api\flows\[id]\route.test.ts src\app\api\automations\route.test.ts src\app\api\whatsapp\react\route.test.ts src\app\api\flows\[id]\activate\route.test.ts src\app\api\account\members\[userId]\route.test.ts src\app\api\account\members\route.test.ts src\app\api\flows\route.post.test.ts src\app\api\flows\route.test.ts src\app\api\whatsapp\config\route.post.test.ts src\app\api\whatsapp\config\route.test.ts src\app\api\whatsapp\config\route.delete.test.ts src\app\api\account\invitations\[id]\route.test.ts src\app\api\account\invitations\route.test.ts src\lib\auth\postgres-account-guard.test.ts src\lib\repositories\account-invitation-revoke.test.ts src\lib\repositories\account-invitation-create.test.ts src\lib\repositories\account-invitations.test.ts src\lib\repositories\account-member-removal.test.ts src\lib\repositories\account-members.test.ts src\lib\repositories\account-member-role.test.ts src\lib\repositories\account-ownership-transfer.test.ts src\lib\repositories\accounts.test.ts src\lib\repositories\approved-automation-templates.test.ts src\lib\repositories\approved-broadcast-templates.test.ts src\lib\repositories\automation-create-persistence.test.ts src\lib\repositories\automation-delete-persistence.test.ts src\lib\repositories\automation-duplicate-persistence.test.ts src\lib\repositories\automation-list.test.ts src\lib\repositories\automation-editor.test.ts src\lib\repositories\automation-log-append.test.ts src\lib\repositories\automation-log-create.test.ts src\lib\repositories\automation-log-finalize.test.ts src\lib\repositories\automation-logs.test.ts src\lib\repositories\automation-pending-claim.test.ts src\lib\repositories\automation-pending-finalize.test.ts src\lib\repositories\automation-pending-schedule.test.ts src\lib\repositories\automation-update-persistence.test.ts src\lib\repositories\broadcast-detail.test.ts src\lib\repositories\broadcast-list.test.ts src\lib\repositories\contact-custom-values.test.ts src\lib\repositories\contact-deal-list.test.ts src\lib\repositories\contact-list.test.ts src\lib\repositories\contact-note-list.test.ts src\lib\repositories\contact-tags.test.ts src\lib\repositories\conversation-list.test.ts src\lib\repositories\conversation-messages.test.ts src\lib\repositories\custom-field-list.test.ts src\lib\repositories\flow-create-persistence.test.ts src\lib\repositories\flow-delete-persistence.test.ts src\lib\repositories\flow-editor-load.test.ts src\lib\repositories\flow-header-update.test.ts src\lib\repositories\flow-list.test.ts src\lib\repositories\flow-node-graph-replace.test.ts src\lib\repositories\flow-run-event-list.test.ts src\lib\repositories\flow-run-list.test.ts src\lib\repositories\flow-status-transition.test.ts src\lib\repositories\inbox-approved-templates.test.ts src\lib\repositories\invitation-preview.test.ts src\lib\repositories\invitation-redemption.test.ts src\lib\repositories\message-reaction-persistence.test.ts src\lib\repositories\message-reaction-target.test.ts src\lib\repositories\pipeline-deal-create.test.ts src\lib\repositories\pipeline-deal-delete.test.ts src\lib\repositories\pipeline-deal-details-update.test.ts src\lib\repositories\pipeline-deal-list.test.ts src\lib\repositories\pipeline-deal-stage-move.test.ts src\lib\repositories\pipeline-deal-status-update.test.ts src\lib\repositories\pipeline-list.test.ts src\lib\repositories\pipeline-stage-list.test.ts src\lib\repositories\tag-list.test.ts src\lib\repositories\template-delete-persistence.test.ts src\lib\repositories\template-edit-persistence.test.ts src\lib\repositories\template-editor-detail.test.ts src\lib\repositories\template-lifecycle-config.test.ts src\lib\repositories\template-lifecycle-context.test.ts src\lib\repositories\template-manager-catalog.test.ts src\lib\repositories\template-manager-counts.test.ts src\lib\repositories\template-send-definition.test.ts src\lib\repositories\template-submit-persistence.test.ts src\lib\repositories\template-sync-match.test.ts src\lib\repositories\template-sync-persistence.test.ts src\lib\repositories\whatsapp-config.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/invitations/[token]/redeem/route.test.ts > POST /api/invitations/[token]/redeem > maps repository db_error failures to safe HTTP responses
+[redeem] unexpected repository error: AppError: The database operation failed.
+    at C:/Sistemas/wacrm/src/app/api/invitations/[token]/redeem/route.test.ts:167:53
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10) {
+  code: 'db_error',
+  sqlState: undefined,
+  reason: undefined
+}
+
+stderr | src/app/api/account/route.test.ts > PATCH /api/account PostgreSQL route > keeps unexpected PostgreSQL errors generic
+[PATCH /api/account] PostgreSQL update error: Error: private database detail
+    at C:/Sistemas/wacrm/src/app/api/account/route.test.ts:181:40
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | src/app/api/account/members/route.test.ts > GET /api/account/members PostgreSQL route > keeps database failures generic
+[GET /api/account/members] PostgreSQL fetch error: Error: private database detail
+    at C:/Sistemas/wacrm/src/app/api/account/members/route.test.ts:122:7
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+······································x····································································x·····················································x·································································································x·········································x············x·····················································x·····················x·····························································x····································································································x···············································x······x···········x···········································x·······x···························································································x·····x··········x···························x······x·····x·················································xxx·······xx·········xx·····xx·······xx···xx···
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 34 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/account-invitation-create.test.ts > PostgreSQL account invitation creation repository > requires admin role before issuing an insert
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/account-invitation-create.test.ts:99:42
+     97|     );
+     98|
+     99|     await expect(repository.create(input)).rejects.toEqual(
+       |                                          ^
+    100|       new AppError('forbidden')
+    101|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/34]⎯
+
+ FAIL  src/lib/repositories/account-invitation-revoke.test.ts > PostgreSQL account invitation revocation repository > denies agent callers before deleting invitations
+ FAIL  src/lib/repositories/account-invitation-revoke.test.ts > PostgreSQL account invitation revocation repository > denies viewer callers before deleting invitations
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/account-invitation-revoke.test.ts:86:51
+     84|       );
+     85|
+     86|       await expect(repository.revoke(invitationId)).rejects.toEqual(
+       |                                                   ^
+     87|         new AppError('forbidden')
+     88|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/34]⎯
+
+ FAIL  src/lib/repositories/account-invitations.test.ts > PostgreSQL account invitations repository > denies agent callers before querying invitations
+ FAIL  src/lib/repositories/account-invitations.test.ts > PostgreSQL account invitations repository > denies viewer callers before querying invitations
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/account-invitations.test.ts:131:48
+    129|       );
+    130|
+    131|       await expect(repository.listOutstanding()).rejects.toEqual(
+       |                                                ^
+    132|         new AppError('forbidden')
+    133|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/34]⎯
+
+ FAIL  src/lib/repositories/account-member-removal.test.ts > PostgreSQL account member removal repository > requires admin+ before calling the removal RPC for agent callers
+ FAIL  src/lib/repositories/account-member-removal.test.ts > PostgreSQL account member removal repository > requires admin+ before calling the removal RPC for viewer callers
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/account-member-removal.test.ts:92:52
+     90|       );
+     91|
+     92|       await expect(repository.removeMember(targetA)).rejects.toEqual(
+       |                                                    ^
+     93|         new AppError('forbidden')
+     94|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/34]⎯
+
+ FAIL  src/lib/repositories/account-member-role.test.ts > PostgreSQL account member role repository > requires admin+ before calling the role function for agent callers
+ FAIL  src/lib/repositories/account-member-role.test.ts > PostgreSQL account member role repository > requires admin+ before calling the role function for viewer callers
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/account-member-role.test.ts:92:57
+     90|       );
+     91|
+     92|       await expect(repository.setRole(targetA, 'viewer')).rejects.toEq…
+       |                                                         ^
+     93|         new AppError('forbidden')
+     94|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/34]⎯
+
+ FAIL  src/lib/repositories/account-ownership-transfer.test.ts > PostgreSQL account ownership transfer repository > requires an owner before calling the transfer RPC for admin callers
+ FAIL  src/lib/repositories/account-ownership-transfer.test.ts > PostgreSQL account ownership transfer repository > requires an owner before calling the transfer RPC for agent callers
+ FAIL  src/lib/repositories/account-ownership-transfer.test.ts > PostgreSQL account ownership transfer repository > requires an owner before calling the transfer RPC for viewer callers
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/account-ownership-transfer.test.ts:89:50
+     87|       );
+     88|
+     89|       await expect(repository.transferTo(targetA)).rejects.toEqual(
+       |                                                  ^
+     90|         new AppError('forbidden')
+     91|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/34]⎯
+
+ FAIL  src/lib/repositories/accounts.test.ts > PostgreSQL account repository > denies agent before issuing an account update
+ FAIL  src/lib/repositories/accounts.test.ts > PostgreSQL account repository > denies viewer before issuing an account update
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/accounts.test.ts:105:58
+    103|       const repository = createPostgresAccountRepository(async () => s…
+    104|
+    105|       await expect(repository.rename('Renamed Account A')).rejects.toE…
+       |                                                          ^
+    106|         new AppError('forbidden')
+    107|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/34]⎯
+
+ FAIL  src/lib/repositories/automation-create-persistence.test.ts > PostgreSQL automation-create persistence repository > denies viewers before inserting an automation
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/automation-create-persistence.test.ts:147:5
+    145|     await expect(
+    146|       repository().createAutomation({ ...validActiveInput })
+    147|     ).rejects.toEqual(new AppError('forbidden'));
+       |     ^
+    148|     expect(
+    149|       query.mock.calls.some(([sql]) =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/34]⎯
+
+ FAIL  src/lib/repositories/automation-delete-persistence.test.ts > PostgreSQL automation-delete persistence repository > denies viewers before the delete query
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/automation-delete-persistence.test.ts:81:63
+     79|     );
+     80|
+     81|     await expect(repository.deleteOwnedAutomation(automationA)).reject…
+       |                                                               ^
+     82|       new AppError('forbidden')
+     83|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/34]⎯
+
+ FAIL  src/lib/repositories/automation-duplicate-persistence.test.ts > PostgreSQL automation-duplicate persistence repository > denies viewers before inserting an automation
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/automation-duplicate-persistence.test.ts:176:5
+    174|     await expect(
+    175|       repository().duplicateOwnedAutomation(sourceAutomationA)
+    176|     ).rejects.toEqual(new AppError('forbidden'));
+       |     ^
+    177|     expect(
+    178|       query.mock.calls.some(([sql]) =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/34]⎯
+
+ FAIL  src/lib/repositories/automation-update-persistence.test.ts > PostgreSQL automation-update persistence repository > denies viewers before loading or updating automation data
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/automation-update-persistence.test.ts:123:5
+    121|     await expect(
+    122|       repository.patchOwnedAutomation(automationA, { name: 'Changed' })
+    123|     ).rejects.toEqual(new AppError('forbidden'));
+       |     ^
+    124|     expect(
+    125|       query.mock.calls.some(([sql]) =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/34]⎯
+
+ FAIL  src/lib/repositories/flow-create-persistence.test.ts > PostgreSQL flow creation persistence repository > denies viewers before inserting a flow
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/flow-create-persistence.test.ts:103:52
+    101|     );
+    102|
+    103|     await expect(repository.createDraft(validInput)).rejects.toEqual(
+       |                                                    ^
+    104|       new AppError('forbidden')
+    105|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/34]⎯
+
+ FAIL  src/lib/repositories/flow-delete-persistence.test.ts > PostgreSQL flow-delete persistence repository > denies viewers before the delete query
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/flow-delete-persistence.test.ts:81:51
+     79|     );
+     80|
+     81|     await expect(repository.deleteOwnedFlow(flowA)).rejects.toEqual(
+       |                                                   ^
+     82|       new AppError('forbidden')
+     83|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/34]⎯
+
+ FAIL  src/lib/repositories/flow-header-update.test.ts > PostgreSQL flow-header update repository > denies viewers before issuing the update query
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/flow-header-update.test.ts:83:5
+     81|     await expect(
+     82|       repository.updateForFlow(flowA, { name: 'Updated' })
+     83|     ).rejects.toEqual(new AppError('forbidden'));
+       |     ^
+     84|     expect(
+     85|       query.mock.calls.some(([sql]) =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/34]⎯
+
+ FAIL  src/lib/repositories/flow-node-graph-replace.test.ts > PostgreSQL flow-node graph replacement repository > denies viewers before deleting existing nodes
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/flow-node-graph-replace.test.ts:111:5
+    109|     await expect(
+    110|       repository.replaceForFlow(flowA, replacementNodes)
+    111|     ).rejects.toEqual(new AppError('forbidden'));
+       |     ^
+    112|     expect(
+    113|       query.mock.calls.some(([sql]) =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/34]⎯
+
+ FAIL  src/lib/repositories/flow-status-transition.test.ts > PostgreSQL flow status transition repository > denies viewers before locking the flow
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/flow-status-transition.test.ts:120:63
+    118|     );
+    119|
+    120|     await expect(repository.transitionForFlow(flowA, 'active')).reject…
+       |                                                               ^
+    121|       new AppError('forbidden')
+    122|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/34]⎯
+
+ FAIL  src/lib/repositories/message-reaction-persistence.test.ts > PostgreSQL message-reaction persistence repository > denies accounts below agent role before reading the message
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/message-reaction-persistence.test.ts:95:62
+     93|     );
+     94|
+     95|     await expect(repository.saveAgentReaction(messageA, '👍')).rejects…
+       |                                                              ^
+     96|       new AppError('forbidden')
+     97|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/34]⎯
+
+ FAIL  src/lib/repositories/message-reaction-target.test.ts > PostgreSQL message-reaction target repository > denies a caller below agent role before reading the target
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/message-reaction-target.test.ts:85:48
+     83|     );
+     84|
+     85|     await expect(repository.getTarget(messageA)).rejects.toEqual(
+       |                                                ^
+     86|       new AppError('forbidden')
+     87|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/34]⎯
+
+ FAIL  src/lib/repositories/pipeline-deal-create.test.ts > PostgreSQL pipeline deal-create repository > denies viewers before attempting the insert
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/pipeline-deal-create.test.ts:97:51
+     95|     );
+     96|
+     97|     await expect(repository.createDeal(validInput)).rejects.toEqual(
+       |                                                   ^
+     98|       new AppError('forbidden')
+     99|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/34]⎯
+
+ FAIL  src/lib/repositories/pipeline-deal-delete.test.ts > PostgreSQL pipeline deal-delete repository > denies viewers before the delete query
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/pipeline-deal-delete.test.ts:81:46
+     79|     );
+     80|
+     81|     await expect(repository.deleteDeal(dealA)).rejects.toEqual(
+       |                                              ^
+     82|       new AppError('forbidden')
+     83|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/34]⎯
+
+ FAIL  src/lib/repositories/pipeline-deal-details-update.test.ts > PostgreSQL pipeline deal-details-update repository > denies viewers before the update query
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/pipeline-deal-details-update.test.ts:98:54
+     96|     );
+     97|
+     98|     await expect(repository.updateDetails(validInput)).rejects.toEqual(
+       |                                                      ^
+     99|       new AppError('forbidden')
+    100|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/34]⎯
+
+ FAIL  src/lib/repositories/pipeline-deal-stage-move.test.ts > PostgreSQL pipeline deal stage-move repository > denies viewers before the update query
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/pipeline-deal-stage-move.test.ts:82:55
+     80|     );
+     81|
+     82|     await expect(repository.moveToStage(dealA, stageA)).rejects.toEqua…
+       |                                                       ^
+     83|       new AppError('forbidden')
+     84|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/34]⎯
+
+ FAIL  src/lib/repositories/pipeline-deal-status-update.test.ts > PostgreSQL pipeline deal status-update repository > denies viewers before the update query
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/pipeline-deal-status-update.test.ts:82:52
+     80|     );
+     81|
+     82|     await expect(repository.setStatus(dealA, 'won')).rejects.toEqual(
+       |                                                    ^
+     83|       new AppError('forbidden')
+     84|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/34]⎯
+
+ FAIL  src/lib/repositories/template-delete-persistence.test.ts > PostgreSQL template-delete persistence repository > denies non-admins before issuing the delete query
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/template-delete-persistence.test.ts:81:54
+     79|     );
+     80|
+     81|     await expect(repository.deleteTemplate(templateA)).rejects.toEqual(
+       |                                                      ^
+     82|       new AppError('forbidden')
+     83|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/34]⎯
+
+ FAIL  src/lib/repositories/template-edit-persistence.test.ts > PostgreSQL template-edit persistence repository > requires admin membership before writing
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/template-edit-persistence.test.ts:131:5
+    129|         },
+    130|       })
+    131|     ).rejects.toEqual(new AppError('forbidden'));
+       |     ^
+    132|     expect(
+    133|       queries.some(([sql]) =>
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/34]⎯
+
+ FAIL  src/lib/repositories/template-submit-persistence.test.ts > PostgreSQL template-submit persistence repository > requires admin membership before opening the write transaction
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/template-submit-persistence.test.ts:122:53
+    120|     );
+    121|
+    122|     await expect(repository.upsertOne(validSnapshot)).rejects.toEqual(
+       |                                                     ^
+    123|       new AppError('forbidden')
+    124|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/34]⎯
+
+ FAIL  src/lib/repositories/template-sync-persistence.test.ts > PostgreSQL template-sync persistence repository > requires admin membership before opening the write transaction
+AssertionError: expected AppError: The operation is not allowed. { …(3) } to deeply equal AppError: The operation is not allowed. { …(3) }
+
+- Expected
++ Received
+
+  AppError {
+    "message": "The operation is not allowed.",
+    "name": "AppError",
+    "code": "forbidden",
+    "sqlState": undefined,
+-   "reason": undefined,
++   "reason": "insufficient_role",
+  }
+
+ ❯ src/lib/repositories/template-sync-persistence.test.ts:121:53
+    119|     );
+    120|
+    121|     await expect(repository.upsertOne(validSnapshot)).rejects.toEqual(
+       |                                                     ^
+    122|       new AppError('forbidden')
+    123|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/34]⎯
+
+
+ Test Files  27 failed | 62 passed (89)
+      Tests  34 failed | 885 passed (919)
+   Start at  20:12:24
+   Duration  163.82s (transform 4.96s, setup 0ms, import 13.46s, tests 3.44s, environment 28ms)
+

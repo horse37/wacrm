@@ -1,0 +1,13 @@
+Disposable PostgreSQL postgres:15, --network none, tmpfs data directory, synthetic per-run passwords.
+Bootstrap: scripts/testing/postgres-migration-bootstrap.sql (test-only roles).
+== pool-runtime: node exit code 0
+v22.23.3
+pool runtime integration SUCCESS: user=wacrm_runtime application_name=wacrm-web select=ok create_table=denied(42501)
+== pool-privileged-role-rejected: node exit code 0
+v22.23.3
+pool privileged-role integration SUCCESS: superuser rejected before query
+== runner-fixture: node exit code 0
+v22.23.3
+runner fixture integration SUCCESS: apply=3, replay=skipped 3, gap refused, failure rolled back, corrected applied once, replay skipped 4, changed checksum refused
+Cleanup: no residual task resources
+Overall result: SUCCESS

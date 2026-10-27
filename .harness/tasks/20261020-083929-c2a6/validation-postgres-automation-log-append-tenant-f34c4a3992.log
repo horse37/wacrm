@@ -1,0 +1,31 @@
+﻿Command: docker run -d --rm --name wacrm-automation-log-append-tenant-db-f34c4a3992 --network none --tmpfs /var/lib/postgresql/data:rw,nosuid,nodev,size=384m -e POSTGRES_USER=automation_log_append_tenant_bootstrap -e POSTGRES_PASSWORD=<synthetic-generated> -e POSTGRES_DB=postgres --mount <read-only-repository> postgres:16-alpine
+Disposable PostgreSQL image: postgres:16-alpine; database is tmpfs; no published ports or named volumes.
+Synthetic tenants/logs only. Bootstrap/runtime passwords are randomly generated and are not recorded.
+PostgreSQL image ID: sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+Node image ID: sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8
+Command: docker run --rm --name wacrm-automation-log-append-tenant-node-f34c4a3992 --network container:wacrm-automation-log-append-tenant-db-f34c4a3992 --mount type=bind,source=C:\Sistemas\wacrm,target=/source,readonly --workdir /source -e DATABASE_URL=postgres://wacrm_automation_log_append_tenant_job:<synthetic-generated>@127.0.0.1:5432/postgres -e PG_POOL_MAX=1 node:22-bookworm node --conditions=react-server --import ./scripts/testing/register-typescript-extensionless-loader.mjs --experimental-strip-types --experimental-default-type=module scripts/testing/postgres-automation-log-append-tenant-integration.mjs
+Node container shares only the disposable database network namespace; repository mount is read-only.
+Node integration exit code: 0
+PostgreSQL automation-log append tenant integration SUCCESS: PostgreSQL 16, test-only membership policy, forced RLS, NOBYPASSRLS, minimum column grants, same-account append, cross-account/viewer denial, ordered concurrent append, status/error preservation, safe constraint rollback, transaction-local identity cleanup.
+Validation failure: docker exec failed with exit 1
+ERROR:  invalid input syntax for type json
+LINE 8:       AND steps_executed @> '[{step_id:50000000-0000-4000-80...
+                                    ^
+DETAIL:  Token "step_id" is invalid.
+QUERY:  NOT EXISTS (
+    SELECT 1 FROM public.automation_logs
+    WHERE id = '60000000-0000-4000-8000-000000000001'
+      AND jsonb_array_length(steps_executed) = 5
+      AND steps_executed -> 0 ->> 'step_id' = '50000000-0000-4000-8000-000000000000'
+      AND steps_executed -> 1 ->> 'step_id' = '50000000-0000-4000-8000-000000000001'
+      AND steps_executed -> 2 ->> 'step_id' = '50000000-0000-4000-8000-000000000002'
+      AND steps_executed @> '[{step_id:50000000-0000-4000-8000-000000000003}]'::jsonb
+      AND steps_executed @> '[{step_id:50000000-0000-4000-8000-000000000004}]'::jsonb
+      AND status = 'partial'
+      AND error_message = 'UPDATED_ERROR'
+      AND private_payload = 'SYNTHETIC_PRIVATE_PAYLOAD'
+  )
+CONTEXT:  JSON data, line 1: [{step_id...
+PL/pgSQL function inline_code_block line 6 at IF
+Cleanup: no residual task resources
+Overall result: FAILURE

@@ -1,0 +1,135 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/whatsapp-send-flow-run.test.ts src/app/api/whatsapp/send/route.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > does not persist a message when the WhatsApp provider rejects the send
+Meta API send failed for all variants: synthetic Meta send failure
+
+ ❯ src/app/api/whatsapp/send/route.test.ts (24 tests | 1 failed) 142ms
+     × does not persist a message when the WhatsApp provider rejects the send 31ms
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts (6 tests | 4 failed) 58ms
+     × pauses the active run for the verified account and contact 28ms
+     × fails closed when RLS filters an active run from the UPDATE 7ms
+     × fails closed when PostgreSQL returns more than one active run 6ms
+     × propagates database failures to the route best-effort boundary 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-flow-run.test.ts > PostgreSQL WhatsApp send flow-run repository > pauses the active run for the verified account and contact
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts:54:5
+     52|     await expect(
+     53|       repository.pauseActiveForAgentReply(contactId, endedAt)
+     54|     ).resolves.toBe(true);
+       |     ^
+     55|
+     56|     expect(mocks.transactionQuery).toHaveBeenNthCalledWith(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-flow-run.test.ts > PostgreSQL WhatsApp send flow-run repository > fails closed when RLS filters an active run from the UPDATE
+AssertionError: promise resolved "false" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+false
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts:106:5
+    104|     await expect(
+    105|       repository.pauseActiveForAgentReply(contactId, endedAt)
+    106|     ).rejects.toMatchObject({ code: 'db_error' });
+       |     ^
+    107|   });
+    108|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-flow-run.test.ts > PostgreSQL WhatsApp send flow-run repository > fails closed when PostgreSQL returns more than one active run
+AssertionError: promise resolved "false" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+false
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts:143:5
+    141|     await expect(
+    142|       repository.pauseActiveForAgentReply(contactId, endedAt)
+    143|     ).rejects.toMatchObject({ code: 'db_error' });
+       |     ^
+    144|   });
+    145|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/lib/repositories/whatsapp-send-flow-run.test.ts > PostgreSQL WhatsApp send flow-run repository > propagates database failures to the route best-effort boundary
+AssertionError: promise resolved "false" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+false
+
+ ❯ src/lib/repositories/whatsapp-send-flow-run.test.ts:166:5
+    164|     await expect(
+    165|       repository.pauseActiveForAgentReply(contactId, endedAt)
+    166|     ).rejects.toThrow('synthetic database failure');
+       |     ^
+    167|   });
+    168| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/app/api/whatsapp/send/route.test.ts > POST /api/whatsapp/send account resolution > does not persist a message when the WhatsApp provider rejects the send
+AssertionError: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array [
+      "40000000-0000-4000-8000-000000000001",
+      "2026-10-22T19:04:15.112Z",
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/app/api/whatsapp/send/route.test.ts:810:48
+
+    808|     expect(response.status).toBe(502);
+    809|     expect(mocks.insertSentMessage).not.toHaveBeenCalled();
+    810|     expect(mocks.pauseActiveForAgentReply).not.toHaveBeenCalled();
+       |                                                ^
+    811|   });
+    812|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+ Test Files  2 failed (2)
+      Tests  5 failed | 25 passed (30)
+   Start at  16:04:12
+   Duration  4.98s (transform 458ms, setup 0ms, import 770ms, tests 200ms, environment 1ms)
+
+
+exit_code=1
+
+SUPERSEDED: temporary repository-test query matcher mismatch; final test suite is recorded in validation-opus-f2-flow-pause-20261022.log.

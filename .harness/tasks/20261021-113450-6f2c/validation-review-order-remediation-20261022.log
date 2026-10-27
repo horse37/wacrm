@@ -1,0 +1,14 @@
+Scope: Opus review finding 1 only — review ordering and broad-scope veto.
+Repository: C:\Sistemas\wacrm
+Branch: main
+HEAD: 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+Regression-first evidence:
+- Before the fix, the three new regression cases failed (33 passed, 3 failed).
+- After the fix, dashboard tests passed 49/49:
+  node --test .harness/dashboard-review-progress.test.mjs .harness/dashboard-validation-result.test.mjs .harness/dashboard-http.test.mjs .harness/dashboard-server-http.test.mjs
+- Node syntax checks passed for dashboard-review-progress.mjs and dashboard-review-progress.test.mjs.
+- Prettier check passed for both target files.
+- git diff --check exited 0. Git emitted existing LF/CRLF conversion notices for modified working-tree files.
+
+No database, Docker, network service, Supabase, VPS, production, real traffic, data, or credentials were accessed. No commit, push, or deploy.

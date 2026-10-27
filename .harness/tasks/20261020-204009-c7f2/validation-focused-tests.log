@@ -1,0 +1,11 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/flows/route.test.ts src/app/api/flows/route.post.test.ts src/lib/repositories/flow-create-persistence.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+
+ Test Files  3 passed (3)
+      Tests  29 passed (29)
+   Start at  17:47:27
+   Duration  6.76s (transform 850ms, setup 0ms, import 2.05s, tests 224ms, environment 3ms)
+

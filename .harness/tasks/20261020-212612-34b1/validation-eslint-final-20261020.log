@@ -1,0 +1,4 @@
+Started 2026-10-20T18:44:18.1290788-03:00
+npm notice run wacrm@0.2.2 npx
+npm notice run eslint --max-warnings=0 src/app/api/whatsapp/config/route.ts src/app/api/whatsapp/config/route.post.test.ts src/lib/repositories/whatsapp-config.ts src/lib/repositories/whatsapp-config.test.ts scripts/testing/postgres-whatsapp-config-post-integration.mjs
+Exit code: 0

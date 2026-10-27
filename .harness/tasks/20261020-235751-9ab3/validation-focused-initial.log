@@ -1,0 +1,27 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/whatsapp/config/verify-registration/route.test.ts src/lib/repositories/whatsapp-config-registration-diagnostics.test.ts src/lib/repositories/whatsapp-config.test.ts --reporter=dot --no-color
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+··························x
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/whatsapp/config/verify-registration/route.test.ts > GET /api/whatsapp/config/verify-registration PostgreSQL route > maps PostgreSQL failures to a safe server response
+TypeError: Response.clone: Body has already been consumed.
+ ❯ src/app/api/whatsapp/config/verify-registration/route.test.ts:196:42
+    194|     });
+    195|     expect(mocks.verifyPhoneNumber).not.toHaveBeenCalled();
+    196|     expect(JSON.stringify(await response.clone().json())).not.toContai…
+       |                                          ^
+    197|       'synthetic private database detail'
+    198|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 26 passed (27)
+   Start at  21:03:01
+   Duration  4.46s (transform 604ms, setup 0ms, import 1.02s, tests 120ms, environment 1ms)
+

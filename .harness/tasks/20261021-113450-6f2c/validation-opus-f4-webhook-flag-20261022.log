@@ -1,0 +1,9 @@
+Achado Opus 5.5 4 — fronteira da flag do webhook — 2026-10-22
+TDD RED: POST com a flag antiga WACRM_ZAP_LEAD_WEBHOOK_POSTGRES_ENABLED=1 ainda leu o corpo sem a nova flag específica; esperado 503 fail-closed. Reprodução: route.test.ts, 20 aprovados/1 falho.
+Correção: rota usa WACRM_ZAP_LEAD_WEBHOOK_POSTGRES_CREDENTIAL_LOOKUP_ENABLED; comentário esclarece que flag cobre somente lookup de credencial PostgreSQL e que persistência do recibo continua no RPC Supabase existente. Teste prova flag antiga, sozinha, não habilita leitura do corpo nem lookup/persistência.
+Vitest focado: route.test.ts 21/21 passou.
+TypeScript: npx tsc --noEmit passou.
+ESLint: rota e teste com --max-warnings=0 passou.
+Prettier: rota e teste --check passou.
+git diff --check dos dois arquivos passou; Git exibiu apenas aviso informativo de conversão LF/CRLF.
+Sem PostgreSQL/Docker: a alteração é somente nome/semântica do gate e teste; nenhum banco/serviço acessado.

@@ -1,0 +1,88 @@
+P3-1 round 8 remediation validation
+Date: 2026-10-21 America/Sao_Paulo
+Repository: C:\Sistemas\wacrm
+Scope: dashboard review verdict and count parsing only
+
+TDD RED before implementation: node --test .harness/dashboard-review-progress.test.mjs -> 23 passed, 1 failed (example Findings/Caveats incorrectly changed classification).
+Command: node --test .harness/dashboard-review-progress.test.mjs
+✔ uses named review rounds instead of file modification time (13.7288ms)
+✔ does not treat the referenced Opus round as a newer Luna review round (2.7561ms)
+✔ keeps every finding scope visible when one scope remains unresolved (1.3153ms)
+✔ associates a multi-scope review with every finding it declares (0.7721ms)
+✔ does not choose between conflicting reviews with the same recorded order (0.8392ms)
+✔ accepts explicit final approval that mentions an earlier remediation (0.3892ms)
+✔ rejects conflicting explicit final verdicts (0.4648ms)
+✔ accepts Portuguese reviewer handoff with explicit empty findings and caveats (0.3299ms)
+✔ accepts explicit zero counts stated beside the approval verdict (6.4239ms)
+✔ ignores failure examples mentioned in review body after final approval (1.4068ms)
+✔ ignores result lines inside plain-text examples and fenced code (4.0197ms)
+✔ keeps a real Result failure conflicting with an approval (0.5352ms)
+✔ ignores finding and caveat counts inside examples and code (0.7095ms)
+✔ retains a positive finding count after an example boundary (0.4811ms)
+✔ does not infer zero counts from qualified or contradictory inline claims (1.084ms)
+✔ groups review rounds by referenced Opus finding and reviewer round (1.4323ms)
+✔ does not treat code-only caveats as zero caveats (0.8533ms)
+✔ does not accept approval without explicit zero findings and caveats (0.3998ms)
+✔ does not let historical zero findings override a positive current count (0.388ms)
+✔ does not treat zero critical findings as zero findings overall (0.323ms)
+✔ finds root reviews and handoff reviewer record, but not other handoff documents (39.9929ms)
+✔ uses all roadmap tasks as denominator and reports review coverage separately (1.0804ms)
+✔ recognizes H-DATA-003 roadmap with Markdown backticks (0.3566ms)
+✔ reads bold task status and labels complete as concluded (0.7419ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2345.6832
+Exit code: 0
+Command: node --check .harness/dashboard-review-progress.mjs and .harness/dashboard-review-progress.test.mjs
+Exit codes: source=0, test=0
+Command: npx --no-install prettier --check .harness/dashboard-review-progress.mjs .harness/dashboard-review-progress.test.mjs
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check .harness/dashboard-review-progress.mjs .harness/dashboard-review-progress.test.mjs
+Checking formatting...
+All matched files use Prettier code style!
+Exit code: 0
+Command: git diff --check
+warning: in the working copy of '.harness/current-task.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.harness/tasks/20261016-122249401-af84/handoffs/implementer.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'HANDOFF-CONTEXT.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/project-map.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/migrate-postgres.test.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/(dashboard)/automations/[id]/logs/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/(dashboard)/automations/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/invitations/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/invitations/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/members/[userId]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/members/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/account/transfer-ownership/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/automations/[id]/duplicate/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/automations/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/automations/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/flows/[id]/activate/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/flows/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/flows/[id]/runs/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/flows/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/invitations/[token]/peek/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/invitations/[token]/redeem/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/broadcast/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/config/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/config/verify-registration/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/react/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/send/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/templates/[id]/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/templates/submit/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/whatsapp/templates/sync/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/zap-lead/registration/route.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/api/zap-lead/registration/route.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/db/postgres-pool.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/db/postgres-pool.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/zap-lead/credentials.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/zap-lead/credentials.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/types/index.ts', LF will be replaced by CRLF the next time Git touches it
+Exit code: 0 (Git check applies tracked files; Prettier checks changed untracked source and test files)

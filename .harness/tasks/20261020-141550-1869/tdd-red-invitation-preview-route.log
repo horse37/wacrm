@@ -1,0 +1,126 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/app/api/invitations/[token]/peek/route.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/app/api/invitations/[token]/peek/route.test.ts (7 tests | 5 failed) 109ms
+     × rate-limits by the original client IP, hashes the token, then reads PostgreSQL 56ms
+     × preserves the public not_found response from the repository 17ms
+     × preserves the public expired response from the repository 6ms
+     × preserves the public used response from the repository 5ms
+     × hides repository failures behind the existing server_error response 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/app/api/invitations/[token]/peek/route.test.ts > GET /api/invitations/[token]/peek > rate-limits by the original client IP, hashes the token, then reads PostgreSQL
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ src/app/api/invitations/[token]/peek/route.test.ts:92:43
+     90|       windowMs: 60_000,
+     91|     });
+     92|     expect(mocks.createPreviewRepository).toHaveBeenCalledTimes(1);
+       |                                           ^
+     93|     expect(mocks.peekByTokenHash).toHaveBeenCalledWith(tokenHash);
+     94|     expect(mocks.createClient).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/app/api/invitations/[token]/peek/route.test.ts > GET /api/invitations/[token]/peek > preserves the public not_found response from the repository
+AssertionError: expected { ok: true, …(3) } to deeply equal { ok: false, reason: 'not_found' }
+
+- Expected
++ Received
+
+  {
+-   "ok": false,
+-   "reason": "not_found",
++   "account_name": "Synthetic Account",
++   "expires_at": "2026-10-26T12:00:00.000Z",
++   "ok": true,
++   "role": "agent",
+  }
+
+ ❯ src/app/api/invitations/[token]/peek/route.test.ts:106:37
+    104|
+    105|       expect(response.status).toBe(200);
+    106|       expect(await response.json()).toEqual({ ok: false, reason });
+       |                                     ^
+    107|       expect(mocks.createClient).not.toHaveBeenCalled();
+    108|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/app/api/invitations/[token]/peek/route.test.ts > GET /api/invitations/[token]/peek > preserves the public expired response from the repository
+AssertionError: expected { ok: true, …(3) } to deeply equal { ok: false, reason: 'expired' }
+
+- Expected
++ Received
+
+  {
+-   "ok": false,
+-   "reason": "expired",
++   "account_name": "Synthetic Account",
++   "expires_at": "2026-10-26T12:00:00.000Z",
++   "ok": true,
++   "role": "agent",
+  }
+
+ ❯ src/app/api/invitations/[token]/peek/route.test.ts:106:37
+    104|
+    105|       expect(response.status).toBe(200);
+    106|       expect(await response.json()).toEqual({ ok: false, reason });
+       |                                     ^
+    107|       expect(mocks.createClient).not.toHaveBeenCalled();
+    108|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/app/api/invitations/[token]/peek/route.test.ts > GET /api/invitations/[token]/peek > preserves the public used response from the repository
+AssertionError: expected { ok: true, …(3) } to deeply equal { ok: false, reason: 'used' }
+
+- Expected
++ Received
+
+  {
+-   "ok": false,
+-   "reason": "used",
++   "account_name": "Synthetic Account",
++   "expires_at": "2026-10-26T12:00:00.000Z",
++   "ok": true,
++   "role": "agent",
+  }
+
+ ❯ src/app/api/invitations/[token]/peek/route.test.ts:106:37
+    104|
+    105|       expect(response.status).toBe(200);
+    106|       expect(await response.json()).toEqual({ ok: false, reason });
+       |                                     ^
+    107|       expect(mocks.createClient).not.toHaveBeenCalled();
+    108|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/app/api/invitations/[token]/peek/route.test.ts > GET /api/invitations/[token]/peek > hides repository failures behind the existing server_error response
+AssertionError: expected 200 to be 500 // Object.is equality
+
+- Expected
++ Received
+
+- 500
++ 200
+
+ ❯ src/app/api/invitations/[token]/peek/route.test.ts:142:29
+    140|     const body = await response.json();
+    141|
+    142|     expect(response.status).toBe(500);
+       |                             ^
+    143|     expect(body).toEqual({ ok: false, reason: 'server_error' });
+    144|     expect(JSON.stringify(body)).not.toContain('synthetic database det…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 2 passed (7)
+   Start at  14:17:19
+   Duration  3.38s (transform 190ms, setup 0ms, import 488ms, tests 109ms, environment 0ms)
+

@@ -1,0 +1,20 @@
+Focused validation — PostgreSQL flow run history route
+Task: 20261020-134355-7c49
+Date: 2026-10-20 (Brasília)
+Repository: C:\Sistemas\wacrm
+Branch/HEAD: main / 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c
+
+TDD RED: `npx vitest run 'src/app/api/flows/[id]/runs/route.test.ts' --maxWorkers=1 --no-file-parallelism` failed as expected (4 failed, 1 passed). Existing route returned Supabase flow/run data and did not delegate to the PostgreSQL repositories.
+
+Final checks:
+- PASS — focused route and repository Vitest: `npx vitest run 'src/app/api/flows/[id]/runs/route.test.ts' src/lib/repositories/flow-run-list.test.ts src/lib/repositories/flow-run-event-list.test.ts --maxWorkers=1 --no-file-parallelism` (38/38).
+- PASS — `npx tsc --noEmit`.
+- PASS — targeted ESLint on route and test with `--max-warnings=0`.
+- PASS — targeted Prettier check on route, test, task, and handoff.
+- PASS — `git diff --check` (exit 0; existing worktree reports line-ending normalization warnings).
+- PASS — PostgreSQL 16 forced-RLS run-list validation: `../20261020-021450-d087/validation-postgres-flow-run-list-c1eed83bf3.log`; verified `NOBYPASSRLS`, exact column grants, account/flow/creator isolation, same-account contact, 50-row stable order, minimal DTO, hidden not-found, identity cleanup, and no residual resources.
+- PASS — PostgreSQL 16 forced-RLS event-list validation: `../20261020-022155-f192/validation-postgres-flow-run-event-list-6af25e9193.log`; verified `NOBYPASSRLS`, exact column grants, account/flow/creator isolation, recent-50-run scope, complete timeline ordering, minimal DTO, hidden not-found, identity cleanup, and no residual resources.
+
+Route tests mock the existing verified server-session call. Docker used synthetic accounts, `--network none`, tmpfs, read-only mounts, and `--rm`; no Supabase service, real credentials/data, application traffic, or production was used. No commit, push, or deploy occurred.
+
+The event-list repository remains best-effort at the route boundary; a failure returns run history with an empty `events` list and logs only the safe AppError message. H-DB-003/H-DATA-003 remain unapproved overall.

@@ -9,6 +9,10 @@ import {
 
 export const runtime = 'nodejs';
 
+// Credential lookup and receipt persistence use server-only PostgreSQL paths.
+// This gate does not provision runtime EXECUTE privileges for the receipt function.
+const POSTGRES_CREDENTIAL_LOOKUP_ENABLED_ENV =
+  'WACRM_ZAP_LEAD_WEBHOOK_POSTGRES_CREDENTIAL_LOOKUP_ENABLED';
 const MAX_BODY_BYTES = 64 * 1024;
 const RFC3339_TIMESTAMP =
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/i;
@@ -169,6 +173,10 @@ function errorResponse(status: number, error: string) {
 }
 
 export async function POST(request: Request) {
+  if (process.env[POSTGRES_CREDENTIAL_LOOKUP_ENABLED_ENV] !== '1') {
+    return errorResponse(503, 'Zap Lead webhook is temporarily unavailable');
+  }
+
   const keyId = request.headers.get('X-Zap-Key');
   const timestamp = request.headers.get('X-Zap-Timestamp');
   const nonce = request.headers.get('X-Zap-Nonce');

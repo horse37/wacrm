@@ -1,0 +1,108 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/automation-pending-finalize.test.ts --maxWorkers=1 --no-file-parallelism
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/repositories/automation-pending-finalize.test.ts (10 tests | 5 failed) 41ms
+     × transitions a running execution to done with a guarded, parameterized update 15ms
+     × transitions a running execution to failed with a guarded, parameterized update 2ms
+     × returns false when the ID is missing or no longer running 1ms
+     × maps an invalid update row count to a safe database error 9ms
+     × propagates database failures without driver details 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/automation-pending-finalize.test.ts > PostgreSQL automation pending-execution finalize repository > transitions a running execution to done with a guarded, parameterized update
+ FAIL  src/lib/repositories/automation-pending-finalize.test.ts > PostgreSQL automation pending-execution finalize repository > transitions a running execution to failed with a guarded, parameterized update
+AssertionError: promise rejected "AppError: The request is invalid. { code: '…' }" instead of resolving
+ ❯ src/lib/repositories/automation-pending-finalize.test.ts:50:7
+     48|       await expect(
+     49|         repository.finalize(writerA, executionId, status)
+     50|       ).resolves.toBe(true);
+       |       ^
+     51|
+     52|       expect(mocks.withTransaction).toHaveBeenCalledTimes(1);
+
+Caused by: AppError: The request is invalid.
+ ❯ validateInput src/lib/repositories/automation-pending-finalize.ts:16:11
+ ❯ Object.finalize src/lib/repositories/automation-pending-finalize.ts:37:28
+ ❯ src/lib/repositories/automation-pending-finalize.test.ts:49:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/lib/repositories/automation-pending-finalize.test.ts > PostgreSQL automation pending-execution finalize repository > returns false when the ID is missing or no longer running
+AssertionError: promise rejected "AppError: The request is invalid. { code: '…' }" instead of resolving
+ ❯ src/lib/repositories/automation-pending-finalize.test.ts:82:5
+     80|     await expect(
+     81|       repository.finalize(writerA, executionId, 'done')
+     82|     ).resolves.toBe(false);
+       |     ^
+     83|   });
+     84|
+
+Caused by: AppError: The request is invalid.
+ ❯ validateInput src/lib/repositories/automation-pending-finalize.ts:16:11
+ ❯ Object.finalize src/lib/repositories/automation-pending-finalize.ts:37:28
+ ❯ src/lib/repositories/automation-pending-finalize.test.ts:81:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/lib/repositories/automation-pending-finalize.test.ts > PostgreSQL automation pending-execution finalize repository > maps an invalid update row count to a safe database error
+AssertionError: expected AppError: The request is invalid. { code: '…' } to deeply equal AppError: The database operation failed. { code: '…' }
+
+- Expected
++ Received
+
+  AppError {
+-   "message": "The database operation failed.",
++   "message": "The request is invalid.",
+    "name": "AppError",
+-   "code": "db_error",
++   "code": "bad_request",
+  }
+
+ ❯ src/lib/repositories/automation-pending-finalize.test.ts:127:5
+    125|     await expect(
+    126|       repository.finalize(writerA, executionId, 'failed')
+    127|     ).rejects.toEqual(new AppError('db_error'));
+       |     ^
+    128|   });
+    129|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/lib/repositories/automation-pending-finalize.test.ts > PostgreSQL automation pending-execution finalize repository > propagates database failures without driver details
+AssertionError: expected AppError: The request is invalid. { code: '…' } to be AppError: The database operation failed. { code: '…' } // Object.is equality
+
+- Expected
++ Received
+
+  AppError {
+-   "message": "The database operation failed.",
++   "message": "The request is invalid.",
+    "name": "AppError",
+-   "code": "db_error",
++   "code": "bad_request",
+  }
+
+ ❯ src/lib/repositories/automation-pending-finalize.test.ts:137:5
+    135|     await expect(
+    136|       repository.finalize(writerA, executionId, 'done')
+    137|     ).rejects.toBe(failure);
+       |     ^
+    138|   });
+    139| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 5 passed (10)
+   Start at  12:25:32
+   Duration  1.63s (transform 135ms, setup 0ms, import 194ms, tests 41ms, environment 0ms)
+
+TDD RED exit code: 1

@@ -1,0 +1,8 @@
+Task: 20261021-024500-6a71 — POST /api/whatsapp/templates/submit
+Date: 2026-10-20 America/Sao_Paulo
+
+Command before route implementation:
+npx vitest run src/app/api/whatsapp/templates/submit/route.test.ts
+
+Exit code: 1 (expected RED).
+All 4 initial regression cases failed because the old handler still called `supabase.from('profiles')`; test setup intentionally exposed only Auth and the route's future PostgreSQL dependencies. The failures confirmed the handler had not yet been migrated.

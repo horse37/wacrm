@@ -1,0 +1,20 @@
+Task: 20261021-090800-c1f7 — postgres-zap-lead-webhook-credential-read
+Scope: focused credential lookup only; no webhook traffic, Supabase, VPS, production, real data, or real credentials.
+
+TDD RED
+Command: npx vitest run src/lib/repositories/zap-lead-webhook-credential-read.test.ts
+Result: expected failure before implementation; module did not exist and Vitest collected zero tests.
+
+Focused GREEN
+Command: npx vitest run --reporter=dot src/lib/repositories/zap-lead-webhook-credential-read.test.ts src/lib/zap-lead/credentials.test.ts src/app/api/zap-lead/webhook/route.test.ts
+Result: PASS — 3 files, 35 tests.
+
+TypeScript: npx tsc --noEmit — PASS.
+ESLint: focused files with --max-warnings=0 — PASS.
+Prettier: focused TypeScript and integration runner --check — PASS.
+Diff whitespace: git diff --check — PASS.
+PostgreSQL: Docker Desktop PostgreSQL 16 forced-RLS/least-privilege proof — PASS; latest evidence is validation-postgres-zap-lead-webhook-credential-read-1f468faf5c.log.
+
+No full suite/build/E2E was run; scope contains no UI or application build changes. Existing local modifications were preserved.
+
+Superseded note (after independent review): this first proof used a SECURITY DEFINER function owned by postgres. GPT-6 Luna found that a real superuser owner would bypass RLS; the fixture did not model that case. Do not use the earlier PostgreSQL proof as final evidence. Corrected direct-RLS design and replacement validation are recorded in validation-remediation-20261021.md and validation-postgres-zap-lead-webhook-credential-read-09bc28440e.log.

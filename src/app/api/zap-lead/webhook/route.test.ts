@@ -1,5 +1,5 @@
 import { createHash, createHmac } from 'node:crypto';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
   getZapLeadWebhookCredential: vi.fn(),
@@ -107,6 +107,10 @@ function createRequest(
 describe('Zap Lead webhook route', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubEnv(
+      'WACRM_ZAP_LEAD_WEBHOOK_POSTGRES_CREDENTIAL_LOOKUP_ENABLED',
+      '1'
+    );
     vi.useFakeTimers();
     vi.setSystemTime(new Date(timestamp));
     mocks.getZapLeadWebhookCredential.mockResolvedValue({
@@ -120,6 +124,71 @@ describe('Zap Lead webhook route', () => {
       },
     });
     mocks.acceptZapLeadWebhookEvent.mockResolvedValue('accepted');
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.useRealTimers();
+  });
+
+  it.each([
+    ['unset', undefined],
+    ['empty', ''],
+    ['a non-enabled value', 'true'],
+  ] as const)(
+    'fails closed before reading the request body when the PostgreSQL credential lookup flag is %s',
+    async (_description, configuredValue) => {
+      const flag = 'WACRM_ZAP_LEAD_WEBHOOK_POSTGRES_CREDENTIAL_LOOKUP_ENABLED';
+      if (configuredValue === undefined) {
+        delete process.env[flag];
+      } else {
+        vi.stubEnv(flag, configuredValue);
+      }
+
+      const request = createRequest();
+      const getReader = vi.fn(() => {
+        throw new Error(
+          'request body must not be read while webhook processing is disabled'
+        );
+      });
+      Object.defineProperty(request, 'body', {
+        configurable: true,
+        value: { getReader },
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(503);
+      expect(await response.json()).toEqual({
+        error: 'Zap Lead webhook is temporarily unavailable',
+      });
+      expect(getReader).not.toHaveBeenCalled();
+      expect(mocks.getZapLeadWebhookCredential).not.toHaveBeenCalled();
+      expect(mocks.acceptZapLeadWebhookEvent).not.toHaveBeenCalled();
+    }
+  );
+
+  it('keeps the legacy broad PostgreSQL flag fail-closed', async () => {
+    delete process.env[
+      'WACRM_ZAP_LEAD_WEBHOOK_POSTGRES_CREDENTIAL_LOOKUP_ENABLED'
+    ];
+    vi.stubEnv('WACRM_ZAP_LEAD_WEBHOOK_POSTGRES_ENABLED', '1');
+
+    const request = createRequest();
+    const getReader = vi.fn(() => {
+      throw new Error('request body must not be read with the legacy flag');
+    });
+    Object.defineProperty(request, 'body', {
+      configurable: true,
+      value: { getReader },
+    });
+
+    const response = await POST(request);
+
+    expect(response.status).toBe(503);
+    expect(getReader).not.toHaveBeenCalled();
+    expect(mocks.getZapLeadWebhookCredential).not.toHaveBeenCalled();
+    expect(mocks.acceptZapLeadWebhookEvent).not.toHaveBeenCalled();
   });
 
   it('accepts a signed event and persists only its technical receipt', async () => {

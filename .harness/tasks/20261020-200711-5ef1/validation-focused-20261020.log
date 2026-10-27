@@ -1,0 +1,23 @@
+Task: 20261020-200711-5ef1 — PostgreSQL flow activation route
+Date: 2026-10-20 (America/Sao_Paulo)
+
+TDD RED before implementation:
+  npx vitest run src/app/api/flows/[id]/activate/route.test.ts --reporter=dot
+  Expected: 6 failures / 2 passes. Data/status cases failed because the old route called Supabase instead of the PostgreSQL repository; auth and invalid-request behavior already passed.
+  Raw output: validation-red-20261020.log
+
+Focused route suite after implementation:
+  npx vitest run src/app/api/flows/[id]/activate/route.test.ts --reporter=dot
+  PASS — 1 file, 9/9 tests. Covers auth, invalid JSON/status, draft/active/archive delegation, blocked activation with full issues, warning-only activation, missing/cross-account flow, safe authorization/database errors, and absence of Supabase data/admin calls.
+
+Static checks:
+  npx tsc --noEmit — PASS, exit 0.
+  npx eslint 'src/app/api/flows/[id]/activate/route.ts' 'src/app/api/flows/[id]/activate/route.test.ts' --max-warnings=0 — PASS, exit 0, zero warnings.
+  npx prettier --check 'src/app/api/flows/[id]/activate/route.ts' 'src/app/api/flows/[id]/activate/route.test.ts' — PASS.
+  git diff --check — PASS, exit 0; existing LF-to-CRLF notices only.
+
+PostgreSQL repository evidence reused because repository/SQL/schema/RLS/grants were not changed:
+  `.harness/tasks/20261020-053426-5b29/validation-postgres-flow-status-704320c842.log`
+  Independent repository-slice review: `.harness/tasks/20261020-053426-5b29/review-post-lock-20261020.md`
+
+No Supabase database/service access, live data, production, or commit/push/deploy. Existing auth call remains unchanged and mocked in route tests. H-DATA-003/H-DB-003 remain unapproved overall.

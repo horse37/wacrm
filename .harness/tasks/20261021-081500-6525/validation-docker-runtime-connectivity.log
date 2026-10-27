@@ -1,0 +1,5 @@
+               current_user               | rolbypassrls 
+------------------------------------------+--------------
+ wacrm_zap_lead_event_stream_read_runtime | f
+(1 row)
+

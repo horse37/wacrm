@@ -1,0 +1,115 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/repositories/automation-pending-schedule.test.ts --maxWorkers=1 --no-file-parallelism --reporter=dot
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+xxx··············xx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/repositories/automation-pending-schedule.test.ts > PostgreSQL automation pending-execution schedule repository > inserts a pending execution and returns only the generated UUID
+AssertionError: promise rejected "AppError: The request is invalid. { code: '…' }" instead of resolving
+ ❯ src/lib/repositories/automation-pending-schedule.test.ts:63:64
+     61|     const repository = createPostgresAutomationPendingScheduleReposito…
+     62|
+     63|     await expect(repository.schedule(writerContext, validInput)).resol…
+       |                                                                ^
+     64|       '40000000-0000-4000-8000-000000000001'
+     65|     );
+
+Caused by: AppError: The request is invalid.
+ ❯ validateInput src/lib/repositories/automation-pending-schedule.ts:100:11
+ ❯ Object.schedule src/lib/repositories/automation-pending-schedule.ts:121:32
+ ❯ src/lib/repositories/automation-pending-schedule.test.ts:63:29
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/lib/repositories/automation-pending-schedule.test.ts > PostgreSQL automation pending-execution schedule repository > stores an empty context when the caller omits it
+AssertionError: promise rejected "AppError: The request is invalid. { code: '…' }" instead of resolving
+ ❯ src/lib/repositories/automation-pending-schedule.test.ts:99:59
+     97|     Reflect.deleteProperty(input, 'context');
+     98|
+     99|     await expect(repository.schedule(writerContext, input)).resolves.t…
+       |                                                           ^
+    100|       '40000000-0000-4000-8000-000000000001'
+    101|     );
+
+Caused by: AppError: The request is invalid.
+ ❯ validateInput src/lib/repositories/automation-pending-schedule.ts:100:11
+ ❯ Object.schedule src/lib/repositories/automation-pending-schedule.ts:121:32
+ ❯ src/lib/repositories/automation-pending-schedule.test.ts:99:29
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'bad_request' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/lib/repositories/automation-pending-schedule.test.ts > PostgreSQL automation pending-execution schedule repository > uses trusted writer identity when payload includes forged tenant fields
+AppError: The request is invalid.
+ ❯ validateInput src/lib/repositories/automation-pending-schedule.ts:100:11
+     98|     input.nextStepPosition < 0
+     99|   ) {
+    100|     throw new AppError('bad_request');
+       |           ^
+    101|   }
+    102|
+ ❯ Object.schedule src/lib/repositories/automation-pending-schedule.ts:121:32
+ ❯ src/lib/repositories/automation-pending-schedule.test.ts:114:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/lib/repositories/automation-pending-schedule.test.ts > PostgreSQL automation pending-execution schedule repository > rejects a malformed generated identifier as a safe database error
+AssertionError: expected AppError: The request is invalid. { code: '…' } to deeply equal AppError: The database operation failed. { code: '…' }
+
+- Expected
++ Received
+
+  AppError {
+-   "message": "The database operation failed.",
++   "message": "The request is invalid.",
+    "name": "AppError",
+-   "code": "db_error",
++   "code": "bad_request",
+  }
+
+ ❯ src/lib/repositories/automation-pending-schedule.test.ts:174:64
+    172|     const repository = createPostgresAutomationPendingScheduleReposito…
+    173|
+    174|     await expect(repository.schedule(writerContext, validInput)).rejec…
+       |                                                                ^
+    175|       new AppError('db_error')
+    176|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/lib/repositories/automation-pending-schedule.test.ts > PostgreSQL automation pending-execution schedule repository > propagates database failures without driver details
+AssertionError: expected AppError: The request is invalid. { code: '…' } to be AppError: The database operation failed. { code: '…' } // Object.is equality
+
+- Expected
++ Received
+
+  AppError {
+-   "message": "The database operation failed.",
++   "message": "The request is invalid.",
+    "name": "AppError",
+-   "code": "db_error",
++   "code": "bad_request",
+  }
+
+ ❯ src/lib/repositories/automation-pending-schedule.test.ts:184:64
+    182|     const repository = createPostgresAutomationPendingScheduleReposito…
+    183|
+    184|     await expect(repository.schedule(writerContext, validInput)).rejec…
+       |                                                                ^
+    185|   });
+    186| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 14 passed (19)
+   Start at  12:09:45
+   Duration  1.49s (transform 129ms, setup 0ms, import 180ms, tests 40ms, environment 0ms)
+

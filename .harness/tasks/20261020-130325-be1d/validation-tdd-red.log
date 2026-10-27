@@ -1,0 +1,3 @@
+TDD RED — postgres-server-boundary
+Command: node --test scripts/testing/postgres-server-boundary.test.mjs
+Result: exit 1 as expected before the pool fix. The transitive import graph and type-only cases passed; the runtime-module guard failed because src/lib/db/postgres-pool.ts did not import server-only.

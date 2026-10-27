@@ -1,0 +1,2 @@
+postgres:16-alpine
+node:22-bookworm

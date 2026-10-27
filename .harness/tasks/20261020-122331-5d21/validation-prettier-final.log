@@ -1,0 +1,5 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run prettier --check src/lib/repositories/automation-pending-finalize.ts src/lib/repositories/automation-pending-finalize.test.ts scripts/testing/postgres-automation-pending-finalize-tenant-integration.mjs .harness/tasks/20261020-122331-5d21/task.md .harness/tasks/20261020-122331-5d21/handoffs/implementer.md
+Checking formatting...
+All matched files use Prettier code style!
+exit=0

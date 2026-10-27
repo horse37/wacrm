@@ -25,6 +25,8 @@ const poolMocks = vi.hoisted(() => {
   return { instances, MockPool };
 });
 
+vi.mock('server-only', () => ({}));
+
 vi.mock('pg', () => ({ Pool: poolMocks.MockPool }));
 
 const poolOnGlobal = globalThis as typeof globalThis & {
@@ -35,6 +37,30 @@ async function loadPoolModule() {
   vi.resetModules();
   return import('./postgres-pool');
 }
+
+type TestPgClient = {
+  query: (text: string) => Promise<{ rows: Array<Record<string, unknown>> }>;
+};
+
+type TestConnectionHook = (client: TestPgClient) => Promise<void>;
+
+function getConnectionHook(): TestConnectionHook {
+  const hook = poolMocks.instances[0]?.config.onConnect;
+  if (typeof hook !== 'function') {
+    throw new Error('PostgreSQL role verification hook is missing');
+  }
+  return hook as unknown as TestConnectionHook;
+}
+
+const safeRuntimeRole = {
+  current_is_superuser: false,
+  session_is_superuser: false,
+  current_bypasses_rls: false,
+  session_bypasses_rls: false,
+  current_is_role_admin: false,
+  session_is_role_admin: false,
+  member_of_privileged_role: false,
+};
 
 describe('getPostgresPool', () => {
   beforeEach(() => {
@@ -103,13 +129,90 @@ describe('getPostgresPool', () => {
 
     expect(second).toBe(first);
     expect(poolMocks.instances).toHaveLength(1);
-    expect(poolMocks.instances[0]?.config).toEqual({
+    expect(poolMocks.instances[0]?.config).toMatchObject({
       connectionString: 'postgres://synthetic:synthetic@localhost:5432/wacrm',
       max: 4,
       idleTimeoutMillis: 12000,
       connectionTimeoutMillis: 2500,
       application_name: 'wacrm-web',
     });
+    expect(poolMocks.instances[0]?.config.onConnect).toBeTypeOf('function');
+  });
+
+  it('verifies the PostgreSQL role before a newly connected client is acquired', async () => {
+    const { getPostgresPool } = await loadPoolModule();
+    getPostgresPool();
+    const onConnect = getConnectionHook();
+    const query = vi.fn().mockResolvedValue({ rows: [safeRuntimeRole] });
+    const client: TestPgClient = {
+      query,
+    };
+
+    await expect(onConnect(client)).resolves.toBeUndefined();
+    expect(client.query).toHaveBeenCalledTimes(1);
+    expect(client.query).toHaveBeenCalledWith(
+      expect.stringContaining('pg_catalog.pg_has_role')
+    );
+    const roleQuery = query.mock.calls[0]?.[0];
+    expect(roleQuery).toContain("'postgres'");
+    expect(roleQuery).toContain("owned_table.relkind IN ('r', 'p')");
+    expect(roleQuery).toContain('owned_namespace.nspname');
+  });
+
+  it.each([
+    { label: 'current superuser', field: 'current_is_superuser' },
+    { label: 'session superuser', field: 'session_is_superuser' },
+    { label: 'current BYPASSRLS', field: 'current_bypasses_rls' },
+    { label: 'session BYPASSRLS', field: 'session_bypasses_rls' },
+    { label: 'current role administrator', field: 'current_is_role_admin' },
+    { label: 'session role administrator', field: 'session_is_role_admin' },
+    {
+      label: 'membership in privileged role',
+      field: 'member_of_privileged_role',
+    },
+  ])('rejects $label before handing out a client', async ({ field }) => {
+    const { getPostgresPool } = await loadPoolModule();
+    getPostgresPool();
+    const onConnect = getConnectionHook();
+    const client: TestPgClient = {
+      query: vi.fn().mockResolvedValue({
+        rows: [{ ...safeRuntimeRole, [field]: true }],
+      }),
+    };
+
+    await expect(onConnect(client)).rejects.toThrow(
+      'PostgreSQL pool requires a least-privilege role that cannot bypass row-level security'
+    );
+    expect(client.query).toHaveBeenCalledTimes(1);
+  });
+
+  it('fails closed when PostgreSQL role privileges cannot be verified', async () => {
+    const { getPostgresPool } = await loadPoolModule();
+    getPostgresPool();
+    const onConnect = getConnectionHook();
+    const client: TestPgClient = {
+      query: vi.fn().mockResolvedValue({ rows: [] }),
+    };
+
+    await expect(onConnect(client)).rejects.toThrow(
+      'PostgreSQL pool requires a least-privilege role that cannot bypass row-level security'
+    );
+  });
+
+  it('fails closed when PostgreSQL role privilege inspection errors', async () => {
+    const { getPostgresPool } = await loadPoolModule();
+    getPostgresPool();
+    const onConnect = getConnectionHook();
+    const client: TestPgClient = {
+      query: vi.fn().mockRejectedValue(new Error('private catalog details')),
+    };
+
+    await expect(onConnect(client)).rejects.toThrow(
+      'PostgreSQL pool requires a least-privilege role that cannot bypass row-level security'
+    );
+    await expect(onConnect(client)).rejects.not.toThrow(
+      'private catalog details'
+    );
   });
 
   it('logs only the PostgreSQL error code for idle-client errors', async () => {

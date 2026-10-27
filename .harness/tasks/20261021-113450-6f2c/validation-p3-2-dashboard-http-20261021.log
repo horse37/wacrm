@@ -1,0 +1,17 @@
+# P3-2 dashboard HTTP validation — 2026-10-21 13:19 BRT
+
+- `node --test .harness/dashboard-http.test.mjs .harness/dashboard-server-http.test.mjs`: PASS, 3/3.
+- The HTTP integration confirms the page fetches `/api/status` without cache and schedules refresh every 20 minutes. The status API returned HTTP 200 with `Cache-Control: no-store`; its `checkedAt` timestamp fell within the request interval.
+- The same integration confirms hostile `Host` returns 403 and status-persistence failure returns HTTP 500 with the documented JSON error.
+- `npx prettier --check .harness/dashboard-server.mjs .harness/dashboard-http.mjs .harness/dashboard-http.test.mjs .harness/dashboard-server-http.test.mjs`: PASS. The first check flagged the expanded HTTP test; Prettier formatted it and the final check passed.
+- `node --check` passed for all four dashboard JavaScript files.
+- `git diff --check`: exit 0. Git emitted only existing LF-to-CRLF working-copy notices.
+- No database, Docker, Supabase, external service, or real data/credential access was used.
+
+## Live dashboard proof after review round 1
+
+- The owner restarted the local panel. Listener PID 9980 on `127.0.0.1:49213` started after the current dashboard source modification time and replaced old PID 14696.
+- `GET /dashboard.html`: HTTP 200; bootstrap placeholder absent; page contains a no-cache `/api/status` fetch and the 20-minute polling interval.
+- `GET /api/status`: `checkedAt=2026-10-21T17:44:10.515Z`; branch `main`; HEAD `7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c`; task `20261021-113450-6f2c` in progress; 1407 dirty entries, matching `git status --porcelain=v1 --untracked-files=all`.
+- Round 1 returned `REMEDIATION_REQUIRED`; this live proof addressed its only finding. Round 2 later returned `APPROVE`, zero findings/caveats, as recorded below.
+- Independent GPT-6 Luna read-only re-review round 2 returned `APPROVE`, zero findings and zero caveats, limited to P3-2. Record: `review-p3-2-independent-20261021-r2.md`. Reviewer ran no tests/builds and changed no files, Git state, processes, or services.

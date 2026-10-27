@@ -1,0 +1,20 @@
+Opus 5.5 full-tree r2 — finding 4: recognize node:test failure output
+Date: 2026-10-22 (America/Sao_Paulo)
+
+TDD reproduction
+- Added regressions for `ℹ fail 1`, `# fail 1`, and `not ok 1 - ...`, each combined with unrelated successful test/exit-code output.
+- Before the parser change, the test run failed: `ℹ fail 1` was classified as PASS because `Exit code: 0` was recognized.
+- Added negative checks that `ℹ fail 0` and `# fail 0` do not count as failures.
+
+Implementation
+- `.harness/dashboard-validation-result.mjs` now recognizes nonzero `ℹ fail N` and `# fail N` summaries and TAP `not ok` records before evaluating success evidence.
+- No unrelated parser behavior changed.
+
+Final validation
+- `node --test .harness/dashboard-validation-result.test.mjs`: PASS, 13/13.
+- `node --check .harness/dashboard-validation-result.mjs`: PASS.
+- `node --check .harness/dashboard-validation-result.test.mjs`: PASS.
+- `npx prettier --check .harness/dashboard-validation-result.mjs .harness/dashboard-validation-result.test.mjs`: PASS. An initial check flagged test formatting; Prettier wrote the test file, then final check passed.
+- `git diff --check -- .harness/dashboard-validation-result.mjs .harness/dashboard-validation-result.test.mjs`: PASS, exit 0.
+
+No database, Docker, Supabase, external service, real data, or credentials were accessed. No commit, push, or deploy. Independent GPT-6 Luna read-only review is pending; do not begin finding 5 before APPROVE with zero findings and zero caveats.

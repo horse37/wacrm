@@ -1,0 +1,48 @@
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run src/lib/zap-lead/events.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+ ❯ src/lib/zap-lead/events.test.ts (6 tests | 1 failed) 44ms
+     × persists only technical SSE receipt fields and its event cursor 14ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/zap-lead/events.test.ts > Zap Lead event receipt persistence > persists only technical SSE receipt fields and its event cursor
+AssertionError: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array [
+      "record_zap_lead_sse_event",
+      Object {
+        "p_account_id": "account-a",
+        "p_event_id": "18fae01a-a5b8-4a7e-95af-453810e49dc9",
+        "p_event_type": "conversation.message.created",
+        "p_expected_cursor": "b725b80f-3f64-4bcb-9020-92336bce6ebd",
+        "p_key_id": "ak_000000000000000000000000",
+        "p_occurred_at": "2026-10-13T12:30:00.000Z",
+      },
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/lib/zap-lead/events.test.ts:72:24
+     70|       recordZapLeadSseEvent(sseReceipt, expectedCursor)
+     71|     ).resolves.toBe('accepted');
+     72|  expect(mocks.rpc).not.toHaveBeenCalled();
+       |                        ^
+     73|  expect(mocks.withTransaction).toHaveBeenCalledOnce();
+     74|  expect(mocks.query).toHaveBeenCalledWith(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  00:14:15
+   Duration  2.00s (transform 147ms, setup 0ms, import 222ms, tests 44ms, environment 0ms)
+

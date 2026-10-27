@@ -1,0 +1,6 @@
+TDD RED — GET /api/flows PostgreSQL persistence
+
+Command: `npx vitest run src/app/api/flows/route.test.ts --maxWorkers=1 --no-file-parallelism`
+Result before implementation: failed as expected (8 failed, 1 passed).
+
+The current route returned the mocked Supabase result instead of PostgreSQL DTOs, did not delegate the verified user ID to the repository, and did not map repository errors to safe status/messages. The unauthenticated 401 test passed before implementation.

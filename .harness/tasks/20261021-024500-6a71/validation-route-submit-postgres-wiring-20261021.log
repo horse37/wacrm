@@ -1,0 +1,27 @@
+Task: 20261021-024500-6a71 — POST /api/whatsapp/templates/submit
+Scope: route wiring only; existing PostgreSQL repositories were not changed.
+
+Vitest focused:
+Command: npx vitest run src/app/api/whatsapp/templates/submit/route.test.ts src/lib/repositories/template-submit-persistence.test.ts src/lib/repositories/template-lifecycle-config.test.ts src/lib/auth/postgres-account-guard.test.ts
+Result: PASS — 4 files, 57/57 tests.
+
+TypeScript:
+Command: npm run typecheck
+Result: PASS.
+
+ESLint:
+Command: npx eslint src/app/api/whatsapp/templates/submit/route.ts src/app/api/whatsapp/templates/submit/route.test.ts src/lib/repositories/template-submit-persistence.ts src/lib/repositories/template-lifecycle-config.ts src/lib/auth/postgres-account-guard.ts --max-warnings=0
+Result: PASS — zero warnings/errors.
+
+Prettier:
+Command: npx prettier --check src/app/api/whatsapp/templates/submit/route.ts src/app/api/whatsapp/templates/submit/route.test.ts .harness/tasks/20261021-024500-6a71/task.md .harness/tasks/20261021-013249-b008/task.md .harness/tasks/20261021-013249-b008/review-gpt6-luna-final-20261021.md .harness/tasks/20261021-013249-b008/handoffs/implementer.md
+Result: PASS.
+
+Whitespace:
+Command: git diff --check
+Result: PASS. Git emitted only line-ending conversion advisories for existing Windows worktree files.
+
+PostgreSQL:
+No repository implementation or SQL changed in this route-wiring task. Reused approved disposable PostgreSQL 16 forced-RLS evidence for the exact persistence repository: `.harness/tasks/20261020-035839-2f1e/validation-postgres-template-submit-persistence-8580d82154.log`.
+
+Auth and Meta were mocked in route tests. No Supabase database/service, real Meta, VPS, production, real data or credentials were accessed. No commit, push, or deploy.

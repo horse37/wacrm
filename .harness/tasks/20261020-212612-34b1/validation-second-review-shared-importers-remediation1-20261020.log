@@ -1,0 +1,56 @@
+Discovered importer test files: 89; database URLs unset for this unit-test run.
+npm notice run wacrm@0.2.2 npx
+npm notice run vitest run --reporter=dot --maxWorkers=4 src\lib\auth\postgres-account-guard.test.ts src\app\api\automations\[id]\route.test.ts src\app\api\flows\[id]\runs\route.test.ts src\app\api\account\invitations\route.test.ts src\app\api\account\invitations\[id]\route.test.ts src\app\api\flows\[id]\route.test.ts src\app\api\account\route.test.ts src\app\api\automations\[id]\logs\route.test.ts src\app\api\account\transfer-ownership\route.test.ts src\app\api\flows\[id]\activate\route.test.ts src\app\api\automations\route.test.ts src\app\api\automations\[id]\duplicate\route.test.ts src\app\api\flows\route.post.test.ts src\app\api\flows\route.test.ts src\app\api\account\members\[userId]\route.test.ts src\app\api\account\members\route.test.ts src\app\api\invitations\[token]\redeem\route.test.ts src\app\api\whatsapp\config\route.delete.test.ts src\app\api\whatsapp\config\route.post.test.ts src\app\api\whatsapp\react\route.test.ts src\app\api\whatsapp\config\route.test.ts src\lib\repositories\account-invitation-create.test.ts src\lib\repositories\account-invitation-revoke.test.ts src\lib\repositories\account-member-removal.test.ts src\lib\repositories\account-invitations.test.ts src\lib\repositories\account-member-role.test.ts src\lib\repositories\account-members.test.ts src\lib\repositories\account-ownership-transfer.test.ts src\lib\repositories\accounts.test.ts src\lib\repositories\approved-automation-templates.test.ts src\lib\repositories\approved-broadcast-templates.test.ts src\lib\repositories\automation-create-persistence.test.ts src\lib\repositories\automation-delete-persistence.test.ts src\lib\repositories\automation-duplicate-persistence.test.ts src\lib\repositories\automation-editor.test.ts src\lib\repositories\automation-list.test.ts src\lib\repositories\automation-log-append.test.ts src\lib\repositories\automation-log-create.test.ts src\lib\repositories\automation-log-finalize.test.ts src\lib\repositories\automation-logs.test.ts src\lib\repositories\automation-pending-claim.test.ts src\lib\repositories\automation-pending-finalize.test.ts src\lib\repositories\automation-update-persistence.test.ts src\lib\repositories\broadcast-detail.test.ts src\lib\repositories\automation-pending-schedule.test.ts src\lib\repositories\broadcast-list.test.ts src\lib\repositories\contact-custom-values.test.ts src\lib\repositories\contact-deal-list.test.ts src\lib\repositories\contact-list.test.ts src\lib\repositories\contact-note-list.test.ts src\lib\repositories\contact-tags.test.ts src\lib\repositories\conversation-list.test.ts src\lib\repositories\conversation-messages.test.ts src\lib\repositories\custom-field-list.test.ts src\lib\repositories\flow-create-persistence.test.ts src\lib\repositories\flow-delete-persistence.test.ts src\lib\repositories\flow-editor-load.test.ts src\lib\repositories\flow-header-update.test.ts src\lib\repositories\flow-node-graph-replace.test.ts src\lib\repositories\flow-list.test.ts src\lib\repositories\flow-run-list.test.ts src\lib\repositories\flow-run-event-list.test.ts src\lib\repositories\flow-status-transition.test.ts src\lib\repositories\inbox-approved-templates.test.ts src\lib\repositories\invitation-preview.test.ts src\lib\repositories\invitation-redemption.test.ts src\lib\repositories\message-reaction-persistence.test.ts src\lib\repositories\message-reaction-target.test.ts src\lib\repositories\pipeline-deal-create.test.ts src\lib\repositories\pipeline-deal-delete.test.ts src\lib\repositories\pipeline-deal-details-update.test.ts src\lib\repositories\pipeline-deal-list.test.ts src\lib\repositories\pipeline-deal-stage-move.test.ts src\lib\repositories\pipeline-deal-status-update.test.ts src\lib\repositories\pipeline-list.test.ts src\lib\repositories\pipeline-stage-list.test.ts src\lib\repositories\tag-list.test.ts src\lib\repositories\template-delete-persistence.test.ts src\lib\repositories\template-edit-persistence.test.ts src\lib\repositories\template-editor-detail.test.ts src\lib\repositories\template-lifecycle-config.test.ts src\lib\repositories\template-lifecycle-context.test.ts src\lib\repositories\template-manager-catalog.test.ts src\lib\repositories\template-manager-counts.test.ts src\lib\repositories\template-send-definition.test.ts src\lib\repositories\template-submit-persistence.test.ts src\lib\repositories\template-sync-match.test.ts src\lib\repositories\template-sync-persistence.test.ts src\lib\repositories\whatsapp-config.test.ts
+
+ RUN  v4.1.9 C:/Sistemas/wacrm
+
+stderr | src/app/api/invitations/[token]/redeem/route.test.ts > POST /api/invitations/[token]/redeem > maps repository db_error failures to safe HTTP responses
+[redeem] unexpected repository error: AppError: The database operation failed.
+    at C:/Sistemas/wacrm/src/app/api/invitations/[token]/redeem/route.test.ts:167:53
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2025:60
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10) {
+  code: 'db_error',
+  sqlState: undefined,
+  reason: undefined
+}
+
+stderr | src/app/api/account/route.test.ts > PATCH /api/account PostgreSQL route > keeps unexpected PostgreSQL errors generic
+[PATCH /api/account] PostgreSQL update error: Error: private database detail
+    at C:/Sistemas/wacrm/src/app/api/account/route.test.ts:181:40
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | src/app/api/account/members/route.test.ts > GET /api/account/members PostgreSQL route > keeps database failures generic
+[GET /api/account/members] PostgreSQL fetch error: Error: private database detail
+    at C:/Sistemas/wacrm/src/app/api/account/members/route.test.ts:122:7
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///C:/Sistemas/wacrm/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+·······················································································································································································································································································································································································································································································································································································································································································································································································································································································································································
+
+ Test Files  89 passed (89)
+      Tests  919 passed (919)
+   Start at  20:16:07
+   Duration  132.24s (transform 71.36s, setup 0ms, import 189.81s, tests 4.87s, environment 32ms)
+

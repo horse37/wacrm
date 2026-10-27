@@ -1,0 +1,16 @@
+# A5 round 1 remediation validation — 2026-10-21 21:56 BRT
+
+Scope: documentary provenance/index corrections and task/dashboard records only. No application source, PostgreSQL schema, container, Git ref, commit, push, or deployment was changed.
+
+- Inventory audit: PASS, 37 persisted GPT-6 Luna review records and 37 table rows; no missing, stale, duplicate, or unindexed record.
+- Reused-thread mapping audit: PASS, A3 r1/r2, H-DB-003 blocker r1/r2, and P3-1 A1 r1–r3 each map to exact source turn and final-answer message IDs.
+- Provenance note: PASS, P3-1 r4/r5 are stated as dedicated threads; A4 round-5 implementer synthesis is explicitly labeled derived and non-verbatim.
+- Preliminary A4 source: the independent A5 r1 reviewer directly checked the source thread and confirmed 3 findings/0 caveats. The full response is not preserved verbatim or represented as if it were.
+- Prettier CLI: PASS on review-provenance-index.md, review-a4-independent-20261021-r5.md, and review-a5-independent-20261021-r1.md.
+- Prettier API fragment check: PASS on the newly added A5 round-1 sections in task.md and handoffs/implementer.md. Existing unrelated formatting in those long historical documents was not rewritten.
+- Trailing-whitespace audit: PASS on the five edited Markdown documents.
+- git diff --check: PASS (exit 0). Git emitted line-ending normalization warnings for pre-existing LF files under core.autocrlf; no whitespace errors were reported.
+- Live dashboard: GET /api/status and /dashboard.html both returned HTTP 200; Cache-Control no-store. Task 20261021-113450-6f2c remains in_progress, currentReview REMEDIATION_REQUIRED, nextAction requests A5 round-2 review; branch main, HEAD 7db4abf47dbc94a732f3ab67ac4d53ba660c9a2c, dirtyEntries 1452. API checkedAt 2026-10-22T01:01:44.046Z (2026-10-21 22:01:44 BRT).
+- No tests, build, PostgreSQL, or Docker were needed for this documentation-only correction.
+
+Next: independent GPT-6 Luna read-only re-review of A5. Do not start the webhook slice until A5 receives APPROVE with zero findings and caveats.
